@@ -13,8 +13,7 @@ class VideoStoreTest extends TestCase {
         $customer->addRental(new Rental(new Movie('Inception', Movie::TYPE_REGULAR), 5));
 
 
-        $cevaCuStatement = new CevaCuStatement();
-        $cevaCuStatement->setCustomer($customer);
+        $cevaCuStatement = new CevaCuStatement($customer);
         $this->assertEquals(
             "Rental Record for John\n" .
             "\tStar Wars\t18\n" .

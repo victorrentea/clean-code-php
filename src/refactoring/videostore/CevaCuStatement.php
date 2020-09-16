@@ -8,7 +8,7 @@ class CevaCuStatement
 {
     private Customer $customer;
 
-    public function setCustomer(Customer $customer): void
+    public function __construct(Customer $customer)
     {
         $this->customer = $customer;
     }
