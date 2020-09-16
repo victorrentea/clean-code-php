@@ -83,11 +83,6 @@ class Customer
     private function computeTotalRenterPoints(): int
     {
         return array_reduce($this->rentals, function($sum, Rental $r) {return $sum + $r->computeRenterPoints();}, 0);
-//        $frequentRenterPoints = 0;
-//        foreach ($rentals as $rental) {
-//            $frequentRenterPoints += $rental->computeRenterPoints();
-//        }
-//        return $frequentRenterPoints;
     }
 
     private function formatFooter(): string
@@ -102,9 +97,6 @@ class Customer
         return "You owed $totalAmount\nYou earned $totalPoints frequent renter points\n";
     }
 
-    /**
-     * @return string
-     */
     private function formatHeader(): string
     {
         return 'Rental Record for ' . $this->getName() . "\n";
