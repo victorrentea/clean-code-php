@@ -111,14 +111,12 @@ class Customer
     {
         $frequentRenterPoints = 0;
         foreach ($rentals as $rental) {
-            // add frequent renter points
             $frequentRenterPoints++;
 
             // add bonus for a two day new release rental
-            $movie = $rental->getMovie();
-            $isNewRelease = $movie->isNewRelease();
-            if ($isNewRelease && $rental->getDaysRented() > 1)
+            if ($rental->getMovie()->isNewRelease() && $rental->getDaysRented() >= 2) {
                 $frequentRenterPoints++;
+            }
         }
         return $frequentRenterPoints;
     }
