@@ -6,24 +6,20 @@ namespace victor\refactoring\videostore;
 
 class CevaCuStatement
 {
-    private Customer $customer;
-
-    public function __construct(Customer $customer)
+    public function statement(Customer $customer): string
     {
-        $this->customer = $customer;
+        return $this->formatHeader($customer->getName())
+            . $this->formatBody($customer->getRentals())
+            . $this->formatFooter($customer->getRentals());
     }
 
-    public function statement(): string
-    {
-        return $this->formatHeader()
-            . $this->formatBody()
-            . $this->formatFooter();
-    }
-
-    private function formatBody(): string
+    /**
+     * @param Rental[] $rentals
+     */
+    private function formatBody(array $rentals): string
     {
         $result = "";
-        foreach ($this->customer->getRentals() as $rental) {
+        foreach ($rentals as $rental) {
             $result .= $this->formatBodyLine($rental);
         }
         return $result;
@@ -34,24 +30,27 @@ class CevaCuStatement
         return "\t" . $rental->getMovie()->getTitle() . "\t" . $rental->determineAmountsForLine() . "\n";
     }
 
-    private function computeTotalAmount(): float
+    /**
+     * @param Rental[] $rentals
+     */
+    private function computeTotalAmount(array $rentals): float
     {
         $totalAmount = 0;
-        foreach ($this->customer->getRentals() as $rental) {
+        foreach ($rentals as $rental) {
             $totalAmount += $rental->determineAmountsForLine();
         }
         return $totalAmount;
     }
 
-    private function computeTotalRenterPoints(): int
+    private function computeTotalRenterPoints(array $rentals): int
     {
-        return array_reduce($this->customer->getRentals(), function($sum, Rental $r) {return $sum + $r->computeRenterPoints();}, 0);
+        return array_reduce($rentals, function($sum, Rental $r) {return $sum + $r->computeRenterPoints();}, 0);
     }
 
-    private function formatFooter(): string
+    private function formatFooter(array $rentals): string
     {
-        $totalAmount = $this->computeTotalAmount();
-        $totalPoints = $this->computeTotalRenterPoints();
+        $totalAmount = $this->computeTotalAmount($rentals);
+        $totalPoints = $this->computeTotalRenterPoints($rentals);
         //        return <<<TEXT
         //You owed $totalAmount
         //You earned $frequentRenterPoints frequent renter points
@@ -60,8 +59,8 @@ class CevaCuStatement
         return "You owed $totalAmount\nYou earned $totalPoints frequent renter points\n";
     }
 
-    private function formatHeader(): string
+    private function formatHeader(string $customerName): string
     {
-        return 'Rental Record for ' . $this->customer->getName() . "\n";
+        return 'Rental Record for ' . $customerName . "\n";
     }
 }
