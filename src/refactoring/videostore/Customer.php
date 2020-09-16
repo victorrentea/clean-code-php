@@ -39,13 +39,9 @@ class Customer
                 && $each->getDaysRented() > 1)
                 $frequentRenterPoints++;
         }
-        foreach ($rentals as $each) {
-            // add footer lines
-            $result .= "\t" . $each->getMovie()->getTitle() . "\t"
-                . $this->determineAmountsForLine($each) . "\n";
+        $result .= $this->formatLines($rentals);
 
-        }
-
+        // add footer lines
         $result .= 'You owed ' . $totalAmount . "\n";
         $result .= 'You earned ' . $frequentRenterPoints . " frequent renter points\n";
         return $result;
@@ -84,6 +80,19 @@ class Customer
                 throw new \Exception('Unexpected value ' . $each->getMovie()->getType());
         }
         return $thisAmount;
+    }
+
+
+    /**
+     * @param Rental[] $rentals
+     */
+    private function formatLines(array $rentals): string
+    {
+        $result = "";
+        foreach ($rentals as $rental) {
+            $result .= "\t" . $rental->getMovie()->getTitle() . "\t" . $this->determineAmountsForLine($rental) . "\n";
+        }
+        return $result;
     }
 
 }
