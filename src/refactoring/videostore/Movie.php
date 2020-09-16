@@ -3,55 +3,27 @@ namespace victor\refactoring\videostore;
 
 class Movie
 {
-    const NEW_RELEASE = "NEW_RELEASE";
-    const REGULAR = "REGULAR";
-    const CHILDRENS = "CHILDRENS";
+    public const TYPE_NEW_RELEASE = "NEW_RELEASE";
+    public const TYPE_REGULAR = "REGULAR";
+    public const TYPE_CHILDREN = "CHILDRENS";
 
-    private $title;
+    private string $title;
 
-    private $priceCode;
+    private string $type;
 
-    /**
-     * Movie constructor.
-     * @param string $title
-     * @param string $priceCode
-     */
-    public function __construct($title, $priceCode)
+    public function __construct(string $title, string $type)
     {
         $this->title = $title;
-        $this->priceCode = $priceCode;
+        $this->type = $type;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getTitle()
+    public function getTitle(): string
     {
         return $this->title;
     }
 
-    /**
-     * @param mixed $title
-     */
-    public function setTitle($title)
+    public function getType(): string
     {
-        $this->title = $title;
+        return $this->type;
     }
-
-    /**
-     * @return mixed
-     */
-    public function getPriceCode()
-    {
-        return $this->priceCode;
-    }
-
-    /**
-     * @param mixed $priceCode
-     */
-    public function setPriceCode($priceCode)
-    {
-        $this->priceCode = $priceCode;
-    }
-
 }
