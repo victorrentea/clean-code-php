@@ -21,15 +21,9 @@ class Customer
 
     public function statement(): string
     {
-        $result = 'Rental Record for ' . $this->getName() . "\n";
-
-        $totalAmount = $this->computeTotalAmount($this->rentals);
-
-        $frequentRenterPoints = $this->computeTotalRenterPoints($this->rentals);
-        $result .= $this->formatLines($this->rentals);
-
-        $result .= $this->formatFooter($totalAmount, $frequentRenterPoints);
-        return $result;
+        return $this->formatHeader()
+            . $this->formatBody()
+            . $this->formatFooter();
     }
 
     public function getName(): string
@@ -68,52 +62,52 @@ class Customer
     }
 
 
-    /**
-     * @param Rental[] $rentals
-     */
-    private function formatLines(array $rentals): string
+    private function formatBody(): string
     {
         $result = "";
-        foreach ($rentals as $rental) {
+        foreach ($this->rentals as $rental) {
             $result .= "\t" . $rental->getMovie()->getTitle() . "\t" . $this->determineAmountsForLine($rental) . "\n";
         }
         return $result;
     }
 
-    private function formatFooter(int $totalAmount, int $frequentRenterPoints): string
-
-    {
-//        return <<<TEXT
-//You owed $totalAmount
-//You earned $frequentRenterPoints frequent renter points
-//
-//TEXT;
-        return "You owed {$totalAmount}\nYou earned {$frequentRenterPoints} frequent renter points\n";
-    }
-
-    /**
-     * @param Rental[] $rentals
-     */
-    private function computeTotalAmount(array $rentals): float
+    private function computeTotalAmount(): float
     {
         $totalAmount = 0;
-        foreach ($rentals as $rental) {
+        foreach ($this->rentals as $rental) {
             $totalAmount += $this->determineAmountsForLine($rental);
         }
         return $totalAmount;
     }
 
-    /**
-     * @param Rental[] $rentals
-     */
-    private function computeTotalRenterPoints(array $rentals): int
+    private function computeTotalRenterPoints(): int
     {
-        return array_reduce($rentals, function($sum, Rental $r) {return $sum + $r->computeRenterPoints();}, 0);
+        return array_reduce($this->rentals, function($sum, Rental $r) {return $sum + $r->computeRenterPoints();}, 0);
 //        $frequentRenterPoints = 0;
 //        foreach ($rentals as $rental) {
 //            $frequentRenterPoints += $rental->computeRenterPoints();
 //        }
 //        return $frequentRenterPoints;
+    }
+
+    private function formatFooter(): string
+    {
+        $totalAmount = $this->computeTotalAmount();
+        $totalPoints = $this->computeTotalRenterPoints();
+                //        return <<<TEXT
+        //You owed $totalAmount
+        //You earned $frequentRenterPoints frequent renter points
+        //
+        //TEXT;
+        return "You owed $totalAmount\nYou earned $totalPoints frequent renter points\n";
+    }
+
+    /**
+     * @return string
+     */
+    private function formatHeader(): string
+    {
+        return 'Rental Record for ' . $this->getName() . "\n";
     }
 
 }
