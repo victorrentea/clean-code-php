@@ -27,8 +27,10 @@ class Customer
         $result = 'Rental Record for ' . $this->getName() . "\n";
 
         foreach ($rentals as $each) {
-            $thisAmount = $this->determineAmountsForLine($each);
+            $totalAmount += $this->determineAmountsForLine($each);
+        }
 
+        foreach ($rentals as $each) {
             // add frequent renter points
             $frequentRenterPoints++;
 
@@ -36,18 +38,16 @@ class Customer
             if ($each->getMovie()->getType() == Movie::TYPE_NEW_RELEASE
                 && $each->getDaysRented() > 1)
                 $frequentRenterPoints++;
-
+        }
+        foreach ($rentals as $each) {
             // add footer lines
             $result .= "\t" . $each->getMovie()->getTitle() . "\t"
-                . $thisAmount . "\n";
-            $totalAmount += $thisAmount;
+                . $this->determineAmountsForLine($each) . "\n";
 
         }
 
         $result .= 'You owed ' . $totalAmount . "\n";
         $result .= 'You earned ' . $frequentRenterPoints . " frequent renter points\n";
-
-
         return $result;
     }
 
