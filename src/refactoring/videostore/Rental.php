@@ -43,8 +43,9 @@ class Rental
         return $this->movie->isNewRelease() && $this->daysRented >= 2;
     }
 
-    public function determineAmountsForLine(): float
+    public function computePrice(): float
     {
+//        return $this->movie->computePrice($this->daysRented);
         $thisAmount = 0;
         switch ($this->movie->getType()) {
             case Movie::TYPE_REGULAR:

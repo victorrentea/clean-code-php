@@ -31,7 +31,7 @@ class StatementFormatter
 
     private function formatBodyLine(Rental $rental): string
     {
-        return "\t" . $rental->getMovie()->getTitle() . "\t" . $rental->determineAmountsForLine() . "\n";
+        return "\t" . $rental->getMovie()->getTitle() . "\t" . $rental->computePrice() . "\n";
     }
 
     /**
@@ -41,7 +41,7 @@ class StatementFormatter
     {
         $totalAmount = 0;
         foreach ($rentals as $rental) {
-            $totalAmount += $rental->determineAmountsForLine();
+            $totalAmount += $rental->computePrice();
         }
         return $totalAmount;
     }

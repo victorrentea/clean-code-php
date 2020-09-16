@@ -31,4 +31,16 @@ class Movie
     {
         return $this->type == Movie::TYPE_NEW_RELEASE;
     }
+
+//    public abstract function computePrice(int $daysRented): float;
 }
+//class RegularMovie extends Movie {
+//
+//    public function computePrice(int $daysRented): float
+//    {
+//        $thisAmount = 2;
+//        if ($this->daysRented > 2) {
+//            $thisAmount += ($this->daysRented - 2) * 1.5;
+//        }
+//    }
+//}
