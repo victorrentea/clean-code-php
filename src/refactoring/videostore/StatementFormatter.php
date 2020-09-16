@@ -4,13 +4,17 @@
 namespace victor\refactoring\videostore;
 
 
-class CevaCuStatement
+class StatementFormatter
 {
-    public function statement(Customer $customer): string
+
+    /**
+     * @param Rental[] $rentals
+     */
+    public function formatStatement(string $customerName, array $rentals): string
     {
-        return $this->formatHeader($customer->getName())
-            . $this->formatBody($customer->getRentals())
-            . $this->formatFooter($customer->getRentals());
+        return $this->formatHeader($customerName)
+            . $this->formatBody($rentals)
+            . $this->formatFooter($rentals);
     }
 
     /**

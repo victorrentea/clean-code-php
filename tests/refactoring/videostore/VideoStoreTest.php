@@ -7,13 +7,13 @@ class VideoStoreTest extends TestCase {
 
     public function testRentalStatementFormat(): void
     {
-        $customer = new Customer('John');
-        $customer->addRental(new Rental(new Movie('Star Wars', Movie::TYPE_NEW_RELEASE), 6));
-        $customer->addRental(new Rental(new Movie('Sofia', Movie::TYPE_CHILDREN), 7));
-        $customer->addRental(new Rental(new Movie('Inception', Movie::TYPE_REGULAR), 5));
+        $rentals = [
+            new Rental(new Movie('Star Wars', Movie::TYPE_NEW_RELEASE), 6),
+            new Rental(new Movie('Sofia', Movie::TYPE_CHILDREN), 7),
+            new Rental(new Movie('Inception', Movie::TYPE_REGULAR), 5)];
 
 
-        $cevaCuStatement = new CevaCuStatement();
+        $cevaCuStatement = new StatementFormatter();
         $this->assertEquals(
             "Rental Record for John\n" .
             "\tStar Wars\t18\n" .
@@ -21,6 +21,6 @@ class VideoStoreTest extends TestCase {
             "\tInception\t6.5\n" .
             "You owed 32\n" .
             "You earned 4 frequent renter points\n",
-            ($cevaCuStatement)->statement($customer));
+            ($cevaCuStatement)->formatStatement('John', $rentals));
     }
 }
