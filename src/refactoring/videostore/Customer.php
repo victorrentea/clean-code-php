@@ -21,13 +21,12 @@ class Customer
 
     public function statement(): string
     {
-        $rentals = $this->rentals;
         $result = 'Rental Record for ' . $this->getName() . "\n";
 
-        $totalAmount = $this->computeTotalAmount($rentals);
+        $totalAmount = $this->computeTotalAmount($this->rentals);
 
-        $frequentRenterPoints = $this->computeTotalRenterPoints($rentals);
-        $result .= $this->formatLines($rentals);
+        $frequentRenterPoints = $this->computeTotalRenterPoints($this->rentals);
+        $result .= $this->formatLines($this->rentals);
 
         $result .= $this->formatFooter($totalAmount, $frequentRenterPoints);
         return $result;
@@ -109,7 +108,7 @@ class Customer
      */
     private function computeTotalRenterPoints(array $rentals): int
     {
-        return array_reduce($rentals, function($sum, $r) {return $sum + $r->computeRenterPoints();}, 0);
+        return array_reduce($rentals, function($sum, Rental $r) {return $sum + $r->computeRenterPoints();}, 0);
 //        $frequentRenterPoints = 0;
 //        foreach ($rentals as $rental) {
 //            $frequentRenterPoints += $rental->computeRenterPoints();
