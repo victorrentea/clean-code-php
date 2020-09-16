@@ -109,16 +109,12 @@ class Customer
      */
     private function computeTotalRenterPoints(array $rentals): int
     {
-        $frequentRenterPoints = 0;
-        foreach ($rentals as $rental) {
-            $frequentRenterPoints++;
-
-            // add bonus for a two day new release rental
-            if ($rental->getMovie()->isNewRelease() && $rental->getDaysRented() >= 2) {
-                $frequentRenterPoints++;
-            }
-        }
-        return $frequentRenterPoints;
+        return array_reduce($rentals, function($sum, $r) {return $sum + $r->computeRenterPoints();}, 0);
+//        $frequentRenterPoints = 0;
+//        foreach ($rentals as $rental) {
+//            $frequentRenterPoints += $rental->computeRenterPoints();
+//        }
+//        return $frequentRenterPoints;
     }
 
 }

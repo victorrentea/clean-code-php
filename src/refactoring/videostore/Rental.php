@@ -22,4 +22,19 @@ class Rental
     {
         return $this->movie;
     }
+
+    public function computeRenterPoints(): int
+    {
+        $frequentRenterPoints = 1;
+
+        if ($this->shouldReceiveBonus()) {
+            $frequentRenterPoints++;
+        }
+        return $frequentRenterPoints;
+    }
+
+    private function shouldReceiveBonus(): bool
+    {
+        return $this->movie->isNewRelease() && $this->daysRented >= 2;
+    }
 }
