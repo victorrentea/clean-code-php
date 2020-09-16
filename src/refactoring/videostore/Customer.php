@@ -21,29 +21,15 @@ class Customer
 
     public function statement(): string
     {
-        $totalAmount = 0;
-        $frequentRenterPoints = 0;
         $rentals = $this->rentals;
         $result = 'Rental Record for ' . $this->getName() . "\n";
 
-        foreach ($rentals as $each) {
-            $totalAmount += $this->determineAmountsForLine($each);
-        }
+        $totalAmount = $this->computeTotalAmount($rentals);
 
-        foreach ($rentals as $each) {
-            // add frequent renter points
-            $frequentRenterPoints++;
-
-            // add bonus for a two day new release rental
-            if ($each->getMovie()->getType() == Movie::TYPE_NEW_RELEASE
-                && $each->getDaysRented() > 1)
-                $frequentRenterPoints++;
-        }
+        $frequentRenterPoints = $this->computeTotalRenterPoints($rentals);
         $result .= $this->formatLines($rentals);
 
-        // add footer lines
-        $result .= 'You owed ' . $totalAmount . "\n";
-        $result .= 'You earned ' . $frequentRenterPoints . " frequent renter points\n";
+        $result .= $this->formatFooter($totalAmount, $frequentRenterPoints);
         return $result;
     }
 
@@ -93,6 +79,57 @@ class Customer
             $result .= "\t" . $rental->getMovie()->getTitle() . "\t" . $this->determineAmountsForLine($rental) . "\n";
         }
         return $result;
+    }
+
+    private function formatFooter(int $totalAmount, int $frequentRenterPoints): string
+
+    {
+//        return <<<TEXT
+//You owed $totalAmount
+//You earned $frequentRenterPoints frequent renter points
+//
+//TEXT;
+        return "You owed {$totalAmount}\nYou earned {$frequentRenterPoints} frequent renter points\n";
+    }
+
+    /**
+     * @param Rental[] $rentals
+     */
+    private function computeTotalAmount(array $rentals): float
+    {
+        $totalAmount = 0;
+        foreach ($rentals as $rental) {
+            $totalAmount += $this->determineAmountsForLine($rental);
+        }
+        return $totalAmount;
+    }
+
+    /**
+     * @param Rental[] $rentals
+     */
+    private function computeTotalRenterPoints(array $rentals): int
+    {
+        $frequentRenterPoints = 0;
+        foreach ($rentals as $rental) {
+            // add frequent renter points
+            $frequentRenterPoints++;
+
+            // add bonus for a two day new release rental
+            $movie = $rental->getMovie();
+            $isNewRelease = $this->isNewRelease($movie);
+            if ($isNewRelease && $rental->getDaysRented() > 1)
+                $frequentRenterPoints++;
+        }
+        return $frequentRenterPoints;
+    }
+
+    /**
+     * @param Movie $movie
+     * @return bool
+     */
+    private function isNewRelease(Movie $movie): bool
+    {
+        return $movie->getType()-> == Movie::TYPE_NEW_RELEASE;
     }
 
 }
