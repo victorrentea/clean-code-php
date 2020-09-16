@@ -37,4 +37,29 @@ class Rental
     {
         return $this->movie->isNewRelease() && $this->daysRented >= 2;
     }
+
+    public function determineAmountsForLine(): float
+    {
+        $thisAmount = 0;
+        switch ($this->movie->getType()) {
+            case Movie::TYPE_REGULAR:
+                $thisAmount += 2;
+                if ($this->daysRented > 2) {
+                    $thisAmount += ($this->daysRented - 2) * 1.5;
+                }
+                break;
+            case Movie::TYPE_NEW_RELEASE:
+                $thisAmount += $this->daysRented * 3;
+                break;
+            case Movie::TYPE_CHILDREN:
+                $thisAmount += 1.5;
+                if ($this->daysRented > 3) {
+                    $thisAmount += ($this->daysRented - 3) * 1.5;
+                }
+                break;
+            default:
+                throw new \Exception('Unexpected value ' . $this->movie->getType());
+        }
+        return $thisAmount;
+    }
 }

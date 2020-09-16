@@ -31,51 +31,26 @@ class Customer
         return $this->name;
     }
 
-    /**
-     * @param Rental $each
-     * @return float|int
-     * @throws \Exception
-     */
-    private function determineAmountsForLine(Rental $each)
-    {
-        $thisAmount = 0;
-
-        // determines the amount for each line
-        switch ($each->getMovie()->getType()) {
-            case Movie::TYPE_REGULAR:
-                $thisAmount += 2;
-                if ($each->getDaysRented() > 2)
-                    $thisAmount += ($each->getDaysRented() - 2) * 1.5;
-                break;
-            case Movie::TYPE_NEW_RELEASE:
-                $thisAmount += $each->getDaysRented() * 3;
-                break;
-            case Movie::TYPE_CHILDREN:
-                $thisAmount += 1.5;
-                if ($each->getDaysRented() > 3)
-                    $thisAmount += ($each->getDaysRented() - 3) * 1.5;
-                break;
-            default:
-                throw new \Exception('Unexpected value ' . $each->getMovie()->getType());
-        }
-        return $thisAmount;
-    }
-
 
     private function formatBody(): string
     {
         $result = "";
         foreach ($this->rentals as $rental) {
-            $result .= "\t" . $rental->getMovie()->getTitle() . "\t" . $this->determineAmountsForLine($rental) . "\n";
+            $result .= $this->formatBodyLine($rental);
         }
         return $result;
+    }
+
+    private function formatBodyLine(Rental $rental): string
+    {
+        return "\t" . $rental->getMovie()->getTitle() . "\t" . $rental->determineAmountsForLine() . "\n";
     }
 
     private function computeTotalAmount(): float
     {
         $totalAmount = 0;
         foreach ($this->rentals as $rental) {
-            $totalAmount += $this->determineAmountsForLine($rental);
+            $totalAmount += $rental->determineAmountsForLine();
         }
         return $totalAmount;
     }
