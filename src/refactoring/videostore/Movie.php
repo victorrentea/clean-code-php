@@ -26,4 +26,9 @@ class Movie
     {
         return $this->type;
     }
+
+    public function isNewRelease(): bool
+    {
+        return $this->type == Movie::TYPE_NEW_RELEASE;
+    }
 }

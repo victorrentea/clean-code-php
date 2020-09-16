@@ -116,20 +116,11 @@ class Customer
 
             // add bonus for a two day new release rental
             $movie = $rental->getMovie();
-            $isNewRelease = $this->isNewRelease($movie);
+            $isNewRelease = $movie->isNewRelease();
             if ($isNewRelease && $rental->getDaysRented() > 1)
                 $frequentRenterPoints++;
         }
         return $frequentRenterPoints;
-    }
-
-    /**
-     * @param Movie $movie
-     * @return bool
-     */
-    private function isNewRelease(Movie $movie): bool
-    {
-        return $movie->getType()-> == Movie::TYPE_NEW_RELEASE;
     }
 
 }
