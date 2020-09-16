@@ -27,11 +27,16 @@ class Rental
     {
         $frequentRenterPoints = 1;
 
+
         if ($this->shouldReceiveBonus()) {
-            $frequentRenterPoints++;
+            $frequentRenterPoints++; // "ii mai da un punct" zicea specul
         }
         return $frequentRenterPoints;
     }
+//    public function computeRenterPointsTernar(): int
+//    {
+//        return $this->shouldReceiveBonus() ? 2 : 1;
+//    }
 
     private function shouldReceiveBonus(): bool
     {
@@ -63,3 +68,31 @@ class Rental
         return $thisAmount;
     }
 }
+
+class B
+{
+
+    public function getName(): ?string
+    {
+        return "X";
+    }
+}
+
+class A
+{
+    public function b(): ?B
+    {
+        return null;
+    }
+}
+
+$a = new A();
+//var_dump($a->b()->getName() ?? "");
+
+//var_dump($a->b() ? $a->b()->getName() : "");
+//if ($a->b() &&
+//    $a->b()->c() &&
+//    $a->b()->c()->d()
+//)    {
+//    var_dump($a->b()->c()->d());
+//}
