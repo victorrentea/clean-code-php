@@ -101,6 +101,7 @@ class CarModel
     private $model;
     private $startYear;
     private $endYear;
+//    private Interval $productionYears;
 
     public function __construct(int $startYear, int $endYear, string $model, string $make)
     {
