@@ -6,24 +6,44 @@ namespace victor\clean;
 
 class ManyParamsVO
 {
-    public function placeOrder(Customer $customer)
+    public function placeOrder(FullName $fullName, Address $address)
     {
-        if ($fname === '' || $lname === '') {
+        if ($fullName->getFirstName() === '' || $fullName->getLastName() === '') {
             throw new \Exception();
         }
         echo "Some logic \n";
     }
 }
 
-class Customer  {
-    private string $fname;
-    private string $lname;
-    // Mihai had to put something related to Customer somewere, so he added it here.
-    // +5 fields.
+//class Customer  { // too generic
+//class Order  {  // too generic
+//class OrderAddress  {  // too explicit
+//class PlaceOrderRequest  {  // too explicit. can never be reused in other flows. Overengineering?
+//class OrderDetails  // too vague
+//class OrderData  // too vague
+//class Client { // too vague
+//class CustmerApelative { // ~~ kinda good
+//class CustomerData { // bad suffix
+//class CustomerName { // not reusable enough
+class FullName { // too restrictive
+    private string $firstName;
+    private string $lastName;
 
-    // +4 fields. billing info
+    public function __construct(string $firstName, string $lastName)
+    {
+        $this->firstName = $firstName;
+        $this->lastName = $lastName;
+    }
 
-    private Address $address;
+    public function getFirstName(): string
+    {
+        return $this->firstName;
+    }
+
+    public function getLastName(): string
+    {
+        return $this->lastName;
+    }
 }
 
 class Address
@@ -45,39 +65,29 @@ class AnotherClass
     }
 }
 
+// HOLY ENTITY.hundrends of classes use this Person
 class Person
 {
     private $id;
-    private $firstName;
-    private $lastName;
     private $phone;
+    private FullName $fullName;
 
     public function __construct(string $firstName, string $lastName)
     {
-        $this->firstName = $firstName;
-        $this->lastName = $lastName;
+        $this->fullName = new FullName($firstName, $lastName);
         if ($firstName === '' || $lastName === '') throw new \Exception();
     }
 
-    public function getFirstName(): string
+    public function getFullName(): FullName
     {
-        return $this->firstName;
+        return $this->fullName;
     }
 
-    public function setFirstName(string $firstName): void
-    {
-        $this->firstName = $firstName;
-    }
-
-    public function getLastName(): string
-    {
-        return $this->lastName;
-    }
-
-    public function setLastName(string $lastName): void
-    {
-        $this->lastName = $lastName;
-    }
+    //CHALLENGE
+//    public function setLastName(string $lastName): void
+//    {
+//        $this->lastName = $lastName;
+//    }
 
 }
 
@@ -85,7 +95,7 @@ class PersonService
 {
     public function f(Person $person)
     {
-        $fullName = $person->getFirstName() . ' ' . strtoupper($person->getLastName());
+        $fullName = $person->getFullName()->getFirstName() . ' ' . strtoupper($person->getFullName()->getLastName());
         echo $fullName;
     }
 
