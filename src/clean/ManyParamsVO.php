@@ -44,6 +44,11 @@ class FullName { // too restrictive
     {
         return $this->lastName;
     }
+
+    public function asEnterpriseName(): string
+    {
+        return $this->getFirstName() . ' ' . strtoupper($this->getLastName());
+    }
 }
 
 class Address
@@ -95,8 +100,7 @@ class PersonService
 {
     public function f(Person $person)
     {
-        $fullName = $person->getFullName()->getFirstName() . ' ' . strtoupper($person->getFullName()->getLastName());
-        echo $fullName;
+        echo $person->getFullName()->asEnterpriseName();
     }
 
     public function p(string $city, string $streetName, int $streetNumber)
