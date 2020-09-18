@@ -8,9 +8,7 @@ class ManyParamsVO
 {
     public function placeOrder(FullName $fullName, Address $address)
     {
-        if ($fullName->getFirstName() === '' || $fullName->getLastName() === '') {
-            throw new \Exception();
-        }
+
         echo "Some logic \n";
     }
 }
@@ -31,23 +29,23 @@ class FullName { // too restrictive
 
     public function __construct(string $firstName, string $lastName)
     {
+        if ($firstName === '' || $lastName === '') {
+            throw new \Exception();
+        }
         $this->firstName = $firstName;
         $this->lastName = $lastName;
     }
 
-    public function getFirstName(): string
-    {
-        return $this->firstName;
-    }
-
-    public function getLastName(): string
-    {
-        return $this->lastName;
-    }
-
     public function asEnterpriseName(): string
     {
-        return $this->getFirstName() . ' ' . strtoupper($this->getLastName());
+        return $this->firstName . ' ' . strtoupper($this->lastName);
+    }
+
+    public function withLastName(string $newLastName) : FullName
+    {
+        return new FullName(
+            $this->firstName,
+            $newLastName);
     }
 }
 
@@ -58,13 +56,12 @@ class Address
     private int $streetNumber;
 }
 
-(new ManyParamsVO())->placeOrder('John', 'Doe', 'St. Albergue', 'Paris', 99);
+(new ManyParamsVO())->placeOrder(new FullName('John', 'Doe'), new Address('St. Albergue', 'Paris', 99));
 
 class AnotherClass
 {
     public function otherMethod(string $firstName, string $lastName, int $x)
     {
-        if ($firstName === '' || $lastName === null) throw new \Exception();
 
         echo "Another distant Logic";
     }
@@ -80,7 +77,6 @@ class Person
     public function __construct(string $firstName, string $lastName)
     {
         $this->fullName = new FullName($firstName, $lastName);
-        if ($firstName === '' || $lastName === '') throw new \Exception();
     }
 
     public function getFullName(): FullName
@@ -89,12 +85,19 @@ class Person
     }
 
     //CHALLENGE
-//    public function setLastName(string $lastName): void
-//    {
-//        $this->lastName = $lastName;
-//    }
+    public function changeLastName(string $newLastName): void
+    {
+        $this->fullName = $this->fullName->withLastName($newLastName);
+    }
 
 }
+
+$rita = new Person("Rita", "Turcan");
+$victor = new Person("Victor", "Rentea");
+
+$rita->changeLastName($victor->getFullName());
+
+echo $rita->getFullName()->asEnterpriseName();
 
 class PersonService
 {
