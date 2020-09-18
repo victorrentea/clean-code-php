@@ -57,26 +57,24 @@ class BouleanParameters
 
     function bossLevelStuffFluff(array $tasks)
     {
-        echo "Logic1\n";
-        echo "Logic2\n";
-        echo "Logic3\n";
-        $i = 0;
-        foreach ($tasks as $task) {
-            echo "Logic4 " . $task . "\n";
+        $i = $this->bossBefore($tasks);
 
+        $this->bossAfter($tasks, $i);
+    }
+    function bossLevelStuffFluff323(array $tasks)
+    {
+        $i = $this->bossBefore($tasks);
+
+        foreach ($tasks as $task) {
             // TODO HERE, when call this method, I want MY own custom code to run here
 
             echo "My Logic, that should run when I call this function\n";
             // $this->abstractStep(); // template method
             // $this->missingStep->call(); // composition of the behavior
             // $missingStep->call(); // passing an object to do stuff, not just the boolean
-
-
-            $i++;
-            echo "Logic5 " . $i . "\n";
         }
-        echo "Logic6 " . 1 . "\n";
-        echo "Logic7\n";
+
+        $this->bossAfter($tasks, $i);
     }
 
     function bossLevelStuffNoFluff()
@@ -89,6 +87,38 @@ class BouleanParameters
     function bossLevelNoStuff()
     {
         echo "Logic1\n";
+        echo "Logic7\n";
+    }
+
+    /**
+     * @param array $tasks
+     * @return int
+     */
+    private function bossBefore(array $tasks): int
+    {
+        echo "Logic1\n";
+        echo "Logic2\n";
+        echo "Logic3\n";
+        $i = 0;
+        foreach ($tasks as $task) {
+//            remoteSystem.authenticate(task.user);
+            echo "Logic4 " . $task . "\n";
+        }
+        return $i;
+    }
+
+    /**
+     * @param array $tasks
+     * @param int $i
+     */
+    private function bossAfter(array $tasks, int $i): void
+    {
+        foreach ($tasks as $task) {
+//            remotesystem.callSecuredMethod() RISK
+            $i++;
+            echo "Logic5 " . $i . "\n";
+        }
+        echo "Logic6 " . 1 . "\n";
         echo "Logic7\n";
     }
 
