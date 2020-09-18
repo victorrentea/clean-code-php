@@ -4,36 +4,49 @@
 namespace victor\refactoring;
 
 $boule = new BouleanParameters();
-$boule->bigUglyMethod(1, 2, false);
-$boule->bigUglyMethod(1, 2, false);
-$boule->bigUglyMethod(1, 2, false);
-$boule->bigUglyMethod(1, 2, false);
-$boule->bigUglyMethod(1, 2, false);
+$boule->bigUglyMethod(1, 2);
+$boule->bigUglyMethod(1, 2);
+$boule->bigUglyMethod(1, 2);
+$boule->bigUglyMethod(1, 2);
+$boule->bigUglyMethod(1, 2);
 
 // TODO From my use-case, I call it too, to do more within:
-$boule->bigUglyMethod(1, 2, true);
+$boule->bigUglyMethod323(1, 2);
+
+// TODO From my use-case, I call it too, to do more within:
+$boule->bigUglyMethod987(1, 2);
 
 class BouleanParameters
 {
 
-	function bigUglyMethod(int $a, int $b, bool $cr323) {
+	function bigUglyMethod987(int $a, int $b) {
+        echo "Extra logic before the method here";
+        $this->bigUglyMethod();
+    }
+	function bigUglyMethod(int $a, int $b) {
+        $this->beforeLogic();
+        $this->afterLogic();
+    }
+	function bigUglyMethod323(int $a, int $b) {
+        $this->beforeLogic();
+        echo "My custom logic here, only when I call the functin\n";
+        $this->afterLogic();
+    }
+
+
+    private function beforeLogic(): void
+    {
         echo "Complex Logic\n";
         echo "Complex Logic\n";
         echo "Complex Logic\n";
+    }
 
-        if ($cr323) {
-            echo "My custom logic here, only when I call the functin\n";
-        }
-
-
+    private function afterLogic(): void
+    {
         echo "More Complex Logic\n";
         echo "More Complex Logic\n";
         echo "More Complex Logic\n";
     }
-
-
-
-
 
 
 
@@ -62,4 +75,8 @@ class BouleanParameters
 		}
 		echo "Logic7\n";
 	}
+
+
+
+
 }
