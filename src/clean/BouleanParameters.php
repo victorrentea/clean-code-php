@@ -17,13 +17,13 @@ class BouleanParameters
 {
 
 	function bigUglyMethod(int $a, int $b) {
-        echo "Complex Logic\n";
-        echo "Complex Logic\n";
-        echo "Complex Logic\n";
+        echo "Complex Logic with $a\n";
+        echo "Complex Logic $b\n";
+        echo "Complex Logic $a\n";
 
-        echo "More Complex Logic\n";
-        echo "More Complex Logic\n";
-        echo "More Complex Logic\n";
+        echo "More Complex Logic $a\n";
+        echo "More Complex Logic $a\n";
+        echo "More Complex Logic $b\n";
     }
 
 
