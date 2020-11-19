@@ -33,7 +33,9 @@ class ManyParamsOOP
         $errors = [];
         $sellerId = 1;
         // > de 4/5 din functii au acelasi param in semnatura -===> setXsellerId()
-        $this->validator->setSellerId($sellerId);
+
+//        $this->validator->setSellerId($sellerId);
+
         // 1 poti sa uiti s-o faci. starea lui validator poate sa fie incompleta. ==> bug runtime
         // 2 datorita DepInje-> 1 instanta de Validator / appp => sellerId ramane setat si poate sa 'curga': alte invocari ale validatorului in alte parti,
                 // ar putea sa foloseasca acelasi sellerId din greseala
@@ -53,15 +55,16 @@ class Validator
     private $dep;
     private int $sellerId;
 
-    public function __construct(OtherDependency $dep)
+    public function __construct(OtherDependency $dep, int $sellerId)
     {
         $this->dep = $dep;
-    }
-
-    public function setSellerId(int $sellerId): void
-    {
         $this->sellerId = $sellerId;
     }
+
+//    public function setSellerId(int $sellerId): void
+//    {
+//        $this->sellerId = $sellerId;
+//    }
 
     public function m1(string $a, int $b): array
     {
