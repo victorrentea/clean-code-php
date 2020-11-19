@@ -6,16 +6,42 @@ namespace victor\clean;
 
 class ManyParamsVO
 {
-    public function placeOrder(string $fname, string $lname, string $city, string $streetName, int $streetNumber)
+    private string $firstName;
+
+    /**
+     * @param string $firstName
+     */
+    public function setFirstName(string $firstName): ManyParamsVO
     {
-        if ($fname === '' || $lname === '') {
+        $this->firstName = $firstName;
+        return $this;
+    }
+
+    public function placeOrder( string $lastName, string $city, string $streetName, int $streetNumber)
+    {
+        if ($this->firstName === '' || $lastName != '') {
             throw new \Exception();
         }
+        echo "de livrat la $city  $streetName $streetNumber";
         echo "Some logic \n";
     }
 }
 
-(new ManyParamsVO())->placeOrder('John', 'Doe', 'St. Albergue', 'Paris', 99);
+// temporary field code smell :
+//  daca ai de dat unei functii niste date, nu le pune pe un camp sa le ia ea de acolo, ci da-i-le direct ca param.
+$paramsVO = (new ManyParamsVO())
+    ->setFirstName('John')
+    ->placeOrder('Doe', 'St. Albergue', 'Paris', 99);
+
+
+
+
+
+
+
+
+
+
 
 class AnotherClass {
     public function otherMethod(string $firstName, string $lastName, int $x) {
