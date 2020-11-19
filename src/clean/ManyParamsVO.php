@@ -74,6 +74,11 @@ class PersonFullName {
     {
         return $this->firstName;
     }
+
+    public function asString(): string
+    {
+        return $this->firstName . ' ' . strtoupper($this->lastName);
+    }
 }
 
 
@@ -132,7 +137,7 @@ class AnotherClass {
 
     public function handle(Person $person): string
     {
-        return $person->getFirstName();
+        return $person->getFullName()->getFirstName();
     }
 }
 
@@ -153,7 +158,7 @@ class Person {
     private PersonFullName $fullName;
     private $phone;
 
-    public function __construct(?string $firstName, $lastName)
+    public function __construct(?string $firstName, $lastName) // TODO sa primim direct FullName
     {
         if ($firstName === '' || $lastName === '') {
             throw new \Exception();
@@ -162,14 +167,9 @@ class Person {
         $this->fullName = new PersonFullName($firstName, $lastName);
     }
 
-    public function getFirstName(): string
+    public function getFullName(): PersonFullName
     {
-        return $this->fullName->getFirstName();
-    }
-
-    public function getLastName(): string
-    {
-        return $this->fullName->getLastName();
+        return $this->fullName;
     }
 
 //    public function setLastName(string $lastName): void
@@ -181,16 +181,10 @@ class Person {
 
 class PersonService {
     public function f(Person $person) {
-        $fullName = $person->getFirstName() . ' ' . strtoupper($person->getLastName());
-        $fullName = $person->getFirstName() . ' ' . strtoupper($person->getLastName());
-        $fullName = $person->getFirstName() . ' ' . strtoupper($person->getLastName());
-        $fullName = $person->getFirstName() . ' ' . strtoupper($person->getLastName());
-        $fullName = $person->getFirstName() . ' ' . strtoupper($person->getLastName());
-        $fullName = $person->getFirstName() . ' ' . strtoupper($person->getLastName());
-        $fullName = $person->getFirstName() . ' ' . strtoupper($person->getLastName());
-        echo $fullName;
+        echo $person->getFullName()->asString();
     }
     public function p(string $city, string $streetName, int $streetNumber) {
         echo "Living in " . $city . " on St. " . $streetName . " " . $streetNumber;
     }
+
 }
