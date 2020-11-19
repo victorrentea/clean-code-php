@@ -99,6 +99,7 @@ class BouleanParameters
 
 
 
+    /** @param Task[] $tasks */
     function bossLevelsparta(array $tasks, bool $toteu)
     {
         // Split Loop refactor:
@@ -108,31 +109,12 @@ class BouleanParameters
         // TODO: cand nu e indicat sa sparg forul?
             // cand sunt multe date: milioane -> ce cauti cu ele in memorie!?
             // CAZ VALID: aduci in pagini de pe remote si procezi pagina cu pagina. > trebuie un for
-
-        while(!done) {
-
-            $page= apiCall();
-
-            $this->validateRecords($page);
-
-            $transformed = transform($page);
-
-            persist($transformed);
-        }
-
-        $resp = [];
-        for () {
-
-            $resp []= apiCall();
-        }
-        $dateDePeRemote = call();
-
-        $dateDePeRemote
         $i = 0;
         echo "Logic3\n";
         foreach ($tasks as $task) {
-            $i++;
-            echo "Logic4 " . $task . "\n";
+            $i++; // modifici chestii in afara buclei: nu doar elementul curent.
+            $task->activate();
+//            $tasks[i+1]->getStatus() // foarte rau
         }
 
         foreach ($tasks as $task) {
@@ -143,33 +125,37 @@ class BouleanParameters
         }
         foreach ($tasks as $task) {
 
+            echo "Logic4 " . $task->getStatus() . "\n";
             echo "Logic5 " . $i . "\n";
         }
         echo "Logic6 " . "\n";
     }
 
-    private function validateRecords($page) // 500 elemente
+
+
+}
+
+
+
+
+
+
+$p = new BouleanParameters();
+$p->bossLevelsparta([]);
+
+class Task {
+    private int $status;
+
+    public function getStatus(): int
     {
-        foreach ($page as $record) {
-
-        }
-        foreach ($page as $record) {
-
-        }
-        foreach ($page as $record) {
-
-        }
-        foreach ($page as $record) {
-
-        }
+        return $this->status;
+    }
+    public function activate(): void {
+        $this->status = 'ACTIVE';
     }
 
-    /**
-     * @param int $j
-     * @param int $a
-     * @param int $i
-     * @param int $b
-     */
-
-
+    public function setStatus(int $status): void
+    {
+        $this->status = $status;
+    }
 }
