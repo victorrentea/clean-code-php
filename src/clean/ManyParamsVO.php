@@ -12,9 +12,7 @@ class ManyParamsVO
 
     public function placeOrder(PersonFullName  $fullName, string $city, string $streetName, int $streetNumber)
     {
-        if ($fullName->getFirstName() === '' || $fullName->getLastName() != '') {
-            throw new \Exception();
-        }
+
         echo "de livrat la $city  $streetName $streetNumber";
         echo "Some logic \n";
     }
@@ -61,6 +59,9 @@ class PersonFullName {
 
     public function __construct(string $firstName, string $lastName)
     {
+        if ($firstName === '' || $lastName === '') {
+            throw new \Exception();
+        }
         $this->firstName = $firstName;
         $this->lastName = $lastName;
     }
@@ -125,7 +126,6 @@ class BillingAddress {
 
 class AnotherClass {
     public function otherMethod(PersonFullName $fullName, int $x) {
-    	if ($fullName->getFirstName() === '' || $fullName->getLastName() === null) throw new \Exception();
 
     	echo "Another distant Logic";
     }
@@ -158,13 +158,9 @@ class Person {
     private PersonFullName $fullName;
     private $phone;
 
-    public function __construct(?string $firstName, $lastName) // TODO sa primim direct FullName
+    public function __construct(PersonFullName  $fullName) // TODO sa primim direct FullName
     {
-        if ($firstName === '' || $lastName === '') {
-            throw new \Exception();
-        }
-
-        $this->fullName = new PersonFullName($firstName, $lastName);
+        $this->fullName = $fullName;
     }
 
     public function getFullName(): PersonFullName
