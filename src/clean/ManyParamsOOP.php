@@ -51,11 +51,12 @@ class ManyParamsOOP
         // 1 poti sa uiti s-o faci. starea lui validator poate sa fie incompleta. ==> bug runtime
         // 2 datorita DepInje-> 1 instanta de Validator / appp => sellerId ramane setat si poate sa 'curga': alte invocari ale validatorului in alte parti,
         // ar putea sa foloseasca acelasi sellerId din greseala
-        $errors = array_merge($errors, $validator->m1($x['a'], $x['b']));
-        $errors = array_merge($errors, $validator->m2($x['a'], $x['s'], $x['c']));
-        $errors = array_merge($errors, $validator->m3($x['a'], $x['fileName'], $x['versionId'], $x['reference']));
-        $errors = array_merge($errors, $validator->m4($x['a'], $x['listId'], $x['recordId'], $x['g']));
-        $errors = array_merge($errors, $validator->m5($x['b']));
+        $validator->m1($x['a'], $x['b']);
+        $validator->m2($x['a'], $x['s'], $x['c']);
+        $validator->m3($x['a'], $x['fileName'], $x['versionId'], $x['reference']);
+        $validator->m4($x['a'], $x['listId'], $x['recordId'], $x['g']);
+        $validator->m5($x['b']);
+        $errors = $validator->getErrors();
         if (!empty($errors)) {
             throw new \Exception($errors);
         }
@@ -67,6 +68,7 @@ class Validator
 {
     private OtherDependency $dep;
     private int $sellerId;
+    private array $errors = [];
 
     public function __construct(OtherDependency $dep, int $sellerId)
     {
@@ -74,53 +76,55 @@ class Validator
         $this->sellerId = $sellerId;
     }
 
+    /**
+     * @return string[]
+     */
+    public function getErrors(): array
+    {
+        return $this->errors;
+    }
+
 //    public function setSellerId(int $sellerId): void
 //    {
 //        $this->sellerId = $sellerId;
 //    }
 
-    public function m1(string $a, int $b): array
+    public function m1(string $a, int $b)
     {
         echo "Running for {$this->sellerId}";
         if ($a === '') {
-            return ['a must not be null'];
+            $this->errors[]= 'a must not be null';
         }
-        // stuff
-        return [];
     }
 
-    public function m2(string $a, string $s, int $c): array
+    public function m2(string $a, string $s, int $c)
     {
         echo "Running for {$this->sellerId}";
         if ($c < 0) {
-            return ["negative c"];
+            $this->errors[]="negative c";
         }
         // stuff
-        return [];
 
     }
 
-    public function m3(string $a, string $fileName, int $versionId, string $reference): array
+    public function m3(string $a, string $fileName, int $versionId, string $reference)
     {
         echo "Running for {$this->sellerId}";
         // stuff
-        return [];
 
     }
 
-    public function m4(string $a, int $listId, int $recordId, string $g): array
+    public function m4(string $a, int $listId, int $recordId, string $g)
     {
         echo "Running for {$this->sellerId}";
         // stuff
-        return [];
 
     }
 
-    public function m5(int $b): array
+    public function m5(int $b)
     {
         echo "Running for {$this->sellerId}";
         // stuff
-        return [];
     }
 }
 
