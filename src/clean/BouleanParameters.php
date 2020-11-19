@@ -3,54 +3,52 @@
 
 namespace victor\refactoring;
 
+use function rand;
+use function rand as rand1;
+
 $boule = new BouleanParameters();
-$boule->bigUglyMethod(1, 2, false);
-$boule->bigUglyMethod(1, 2, false);
-$boule->bigUglyMethod(1, 2, false);
-$boule->bigUglyMethod(1, 2, false);
-$boule->bigUglyMethod(1, 2, false);
+$boule->bigUglyMethod(1, 2);
+$boule->bigUglyMethod(1, 2);
+$boule->bigUglyMethod(1, 2);
+$boule->bigUglyMethod(1, 2);
+$boule->bigUglyMethod(1, 2);
 
 // TODO From my use-case, I call it too, to do more within:
-$boule->bigUglyMethodCR322(1, 2);
+//$boule->bigUglyMethodCR322(1, 2);
 
-$boule->bigUglyMethod(1, 2, true);
+$boule->bigUglyMethod456(1, 2);
 
 class BouleanParameters
 {
 
-    function bigUglyMethodCR322(int $a, int $b)
-    {
-        echo "Inainte al meu $a";
-        $this->bigUglyMethod($a, $b, false);
-        echo "Dupa al meu $a";
+//    function bigUglyMethodCR322(int $a, int $b)
+//    {
+//        echo "Inainte al meu $a";
+//
+//        $this->bigUglyMethod($a, $b, false);
+//        echo "Dupa al meu $a";
+//    }
+
+	function bigUglyMethod(int $a, int $b) {
+
+        $i = 7 + rand(1, 5);
+        $j = $this->before2($a, $b);
+
+        $this->afterLogic($j, $a, $i, $b);
     }
 
-	function bigUglyMethod(int $a, int $b, bool $cr456) {
+	function bigUglyMethod456(int $a, int $b) {
 
-        echo "Complex Logic with $a\n";
-        echo "Complex Logic $b\n";
-        echo "Complex Logic $a\n";
+        $i = 7 + rand(1, 5);
+        $j = $this->before2($a, $b);
 
-        if ($cr456) {
-            $this->bigUglyMethod($a, $b, $cr456);
-        }
+        echo "Doar al meu $a";
 
-        echo "More Complex Logic $a\n";
-        echo "More Complex Logic $a\n";
-        echo "More Complex Logic $b\n";
+        $this->afterLogic($j, $a, $i, $b);
     }
 
 
-
-
-
-
-
-
-
-
-
-	// ============== "BOSS" LEVEL: A lot harder to break down =================
+    // ============== "BOSS" LEVEL: A lot harder to break down =================
 
 	function bossLevel(bool $stuff, bool $fluff, array $tasks) {
         $i = 0;
@@ -71,4 +69,40 @@ class BouleanParameters
 		}
 		echo "Logic7\n";
 	}
+
+    /**
+     * @param int $a
+     * @param int $b
+     * @return int
+     */
+    private function before2(int $a, int $b): int
+    {
+        $j = 7 + rand(1, 5);
+        echo "Complex Logic with $a\n";
+        echo "Complex Logic $b\n";
+        echo "Complex Logic $a\n";
+        return $j;
+    }
+
+    /**
+     * @param int $j
+     * @param int $a
+     * @param int $i
+     * @param int $b
+     */
+    private function afterLogic(int $j, int $a, int $i, int $b): void
+    {
+        echo "More Complex $j Logic $a\n";
+        echo "More Complex $i Logic $a\n";
+        echo "More Complex Logic $b\n";
+    }
+
+    /**
+     * @param int $j
+     * @param int $a
+     * @param int $i
+     * @param int $b
+     */
+
+
 }
