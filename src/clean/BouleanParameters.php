@@ -111,20 +111,27 @@ class BouleanParameters
             // CAZ VALID: aduci in pagini de pe remote si procezi pagina cu pagina. > trebuie un for
         $i = 0;
         echo "Logic3\n";
+
         foreach ($tasks as $task) {
             $i++; // modifici chestii in afara buclei: nu doar elementul curent.
             $task->activate();
 //            $tasks[i+1]->getStatus() // foarte rau
+            $remoteSystem->authenticate($task->user);
+//            $runningTask[]=new RunningTask($task,$token );
         }
-
         foreach ($tasks as $task) {
+
             // TODO HERE, when call this method, I want MY own custom code to run here
             if ($toteu) {
                 echo "Custom logic $i";
             }
-        }
-        foreach ($tasks as $task) {
 
+
+
+        }
+        foreach ($tasks as $runningTask) {
+
+            $remoteSystem->doSEcureStuff(hhh, $task->getToken());
             echo "Logic4 " . $task->getStatus() . "\n";
             echo "Logic5 " . $i . "\n";
         }
