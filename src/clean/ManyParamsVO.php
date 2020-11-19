@@ -4,22 +4,15 @@
 namespace victor\clean;
 
 
+
+(new ManyParamsVO())->placeOrder(new PersonFullName('John', 'Doe'), 'St. Albergue', 'Paris', 99);
+
 class ManyParamsVO
 {
-    private string $firstName;
 
-    /**
-     * @param string $firstName
-     */
-    public function setFirstName(string $firstName): ManyParamsVO
+    public function placeOrder(PersonFullName  $fullName, string $city, string $streetName, int $streetNumber)
     {
-        $this->firstName = $firstName;
-        return $this;
-    }
-
-    public function placeOrder( string $lastName, string $city, string $streetName, int $streetNumber)
-    {
-        if ($this->firstName === '' || $lastName != '') {
+        if ($fullName->getFirstName() === '' || $fullName->getLastName() != '') {
             throw new \Exception();
         }
         echo "de livrat la $city  $streetName $streetNumber";
@@ -27,11 +20,93 @@ class ManyParamsVO
     }
 }
 
-// temporary field code smell :
-//  daca ai de dat unei functii niste date, nu le pune pe un camp sa le ia ea de acolo, ci da-i-le direct ca param.
-$paramsVO = (new ManyParamsVO())
-    ->setFirstName('John')
-    ->placeOrder('Doe', 'St. Albergue', 'Paris', 99);
+//class User { // prea generica
+//    string $firstName;
+//    string $lastName;
+//    //cat ai fost tu la baie, colegu a "lasat si el aici" 10 campuri
+//    string email; id; twitter handle;
+//}
+//class SalesPerson { tot 200 camuri}
+class Address {
+    private string $city;
+    private string $streetName;
+    private int $streetNumber;
+
+    public function __construct(string $city, string $streetName, int $streetNumber)
+    {
+        $this->city = $city;
+        $this->streetName = $streetName;
+        $this->streetNumber = $streetNumber;
+    }
+
+    public function getStreetName(): string
+    {
+        return $this->streetName;
+    }
+
+    public function getStreetNumber(): int
+    {
+        return $this->streetNumber;
+    }
+
+    public function getCity(): string
+    {
+        return $this->city;
+    }
+}
+
+class PersonFullName {
+    private string $firstName;
+    private string $lastName;
+
+    public function __construct(string $firstName, string $lastName)
+    {
+        $this->firstName = $firstName;
+        $this->lastName = $lastName;
+    }
+
+    public function getLastName(): string
+    {
+        return $this->lastName;
+    }
+
+    public function getFirstName(): string
+    {
+        return $this->firstName;
+    }
+}
+
+
+
+
+// TODO
+class BillingAddressWeird extends Address {
+    // ce in plus ?
+//    fiscalCode
+//logica diferita
+}
+// preferam compozitia
+class BillingAddress {
+    private Address $address;
+}
+
+
+//class Shopper [50 campuri]
+
+//class Billing - nu fa si d-asta, ca te-ntrebi cu ce diferta
+//class BillingInformation // daca asa-i in api, d-apai asa sa fie
+//class BillingDetails -// aici sunt mai multe campuri
+//class BillingData //wtf!!?
+//class Billing //wtf!!?
+//class BillingPerson {fn,ln,address} //wtf!!?
+//
+//class DeliveryInformation
+//class Information
+//class PersonalData
+//class Customer
+//class CustomerInfo
+//class Info
+
 
 
 
@@ -44,8 +119,8 @@ $paramsVO = (new ManyParamsVO())
 
 
 class AnotherClass {
-    public function otherMethod(string $firstName, string $lastName, int $x) {
-    	if ($firstName === '' || $lastName === null) throw new \Exception();
+    public function otherMethod(PersonFullName $fullName, int $x) {
+    	if ($fullName->getFirstName() === '' || $fullName->getLastName() === null) throw new \Exception();
 
     	echo "Another distant Logic";
     }
@@ -71,49 +146,47 @@ class GeneralException extends \Exception {
 
 
 }
+
+// Entity - din alea sfinte. D-alea de le persisti. Sacred Entities. Holy Grounds
 class Person {
     private $id;
-    private $firstName;
-    private $lastName;
+    private PersonFullName $fullName;
     private $phone;
 
     public function __construct(?string $firstName, $lastName)
     {
-        $this->firstName = $firstName;
-        $this->lastName = $lastName;
-        if ($firstName === '' || $lastName === '') throw new \Exception();
+        if ($firstName === '' || $lastName === '') {
+            throw new \Exception();
+        }
+
+        $this->fullName = new PersonFullName($firstName, $lastName);
     }
 
-
-
-    /**
-     * @throws IOException
-     */
     public function getFirstName(): string
     {
-        throw new GeneralException("Mesaj de dragoste pentru debuggeri", "ERR-CODE1");
-        return $this->firstName;
-    }
-
-    public function setFirstName(string $firstName): void
-    {
-        $this->firstName = $firstName;
+        return $this->fullName->getFirstName();
     }
 
     public function getLastName(): string
     {
-        return $this->lastName;
+        return $this->fullName->getLastName();
     }
 
-    public function setLastName(string $lastName): void
-    {
-        $this->lastName = $lastName;
-    }
+//    public function setLastName(string $lastName): void
+//    {
+//        $this->lastName = $lastName;
+//    }
 
 }
 
 class PersonService {
     public function f(Person $person) {
+        $fullName = $person->getFirstName() . ' ' . strtoupper($person->getLastName());
+        $fullName = $person->getFirstName() . ' ' . strtoupper($person->getLastName());
+        $fullName = $person->getFirstName() . ' ' . strtoupper($person->getLastName());
+        $fullName = $person->getFirstName() . ' ' . strtoupper($person->getLastName());
+        $fullName = $person->getFirstName() . ' ' . strtoupper($person->getLastName());
+        $fullName = $person->getFirstName() . ' ' . strtoupper($person->getLastName());
         $fullName = $person->getFirstName() . ' ' . strtoupper($person->getLastName());
         echo $fullName;
     }
