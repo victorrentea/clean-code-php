@@ -23,23 +23,49 @@ class AnotherClass {
 
     	echo "Another distant Logic";
     }
+
+    public function handle2(Person $person)
+    {
+        $this->handle(new Person());
+    }
+
+    public function handle(Person $person): string
+    {
+        return $person->getFirstName();
+    }
 }
 
+class GeneralException extends \Exception {
+    private string $codeStr;
+    public function __construct($message = "", $codeStr, Throwable $previous = null)
+    {
+        parent::__construct($message, null, $previous);
+        $this->codeStr = $codeStr;
+    }
+
+
+}
 class Person {
     private $id;
     private $firstName;
     private $lastName;
     private $phone;
 
-    public function __construct(string $firstName, string $lastName)
+    public function __construct(?string $firstName, $lastName)
     {
         $this->firstName = $firstName;
         $this->lastName = $lastName;
         if ($firstName === '' || $lastName === '') throw new \Exception();
     }
 
+
+
+    /**
+     * @throws IOException
+     */
     public function getFirstName(): string
     {
+        throw new GeneralException("Mesaj de dragoste pentru debuggeri", "ERR-CODE1");
         return $this->firstName;
     }
 
