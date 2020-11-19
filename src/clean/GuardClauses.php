@@ -9,35 +9,29 @@ class GuardClauses
     private $isSeparated = false;
     private $isRetired = false;
 
-    function getPayAmount()
-    {
-        if (!$this->determineIfDead()) { // network call
-            if (!$this->isSeparated) {
-                if (!$this->isRetired) {
-                    $pay = 1;
-                    // 20 lines of complex logic
-                    // 20 lines of complex logic
-                    // 20 lines of complex logic
-                    // 20 lines of complex logic
-                    // 20 lines of complex logic
-                    // 20 lines of complex logic
-                    // 20 lines of complex logic
-                    // 20 lines of complex logic
-                    // 20 lines of complex logic
-                    $result = $pay;
-                }
-                else {
-                    $result = $this->retiredAmount();
-                }
-            }
-            else $result = $this->separatedAmount();
-        }
-        else {
-            // 1 more line here
+    // ------------
 
-            $result = $this->deadAmount();
+    function getPayAmount(?int $marineId) // cu cat sa platesc soldatii?
+    {
+        if ($this->determineIfDead($marineId)) { // network call 200 ms + blocheaza un thread
+            return $this->deadAmount();
         }
-        return $result;
+        if ($marineId == null) {
+            throw  new \Exception();
+        }
+        if ($this->isSeparated) {
+            return $this->separatedAmount();
+        }
+        if ($this->isRetired) {
+            return $this->retiredAmount();
+        }
+
+        return $this->coputeRegularAmount();
+    }
+
+    private function determineIfDead(int $marineId)
+    {
+        return true;
     }
 
     private function deadAmount()
@@ -45,14 +39,14 @@ class GuardClauses
         return 1;
     }
 
-    private function retiredAmount()
-    {
-        return 2;
-    }
-
     private function separatedAmount()
     {
         return 3;
+    }
+
+    private function retiredAmount()
+    {
+        return 2;
     }
 
     private function normalPayAmount()
@@ -60,9 +54,19 @@ class GuardClauses
         return 4;
     }
 
-    private function determineIfDead()
+    /**
+     * @return int
+     */
+    private function coputeRegularAmount(): int
     {
-        return true;
+        $pay = 1;
+        // 20 lines of complex logic
+        // 20 lines of complex logic
+        // 20 lines of complex logic
+        // 20 lines of complex logic
+        // 20 lines of complex logic
+        $result = $pay;
+        return $result;
     }
 
 }
