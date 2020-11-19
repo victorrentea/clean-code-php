@@ -40,7 +40,6 @@ class ManyParamsOOP
     public function bizLogic(array $x)
     {
 
-        $errors = [];
         $sellerId = 1;
         // > de 4/5 din functii au acelasi param in semnatura -===> setXsellerId()
 
