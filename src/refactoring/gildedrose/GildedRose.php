@@ -9,7 +9,7 @@
 
 namespace victor\refactoring\gildedrose;
 
-class GildedRose
+class GildedRose implements IGildedRose
 {
     private $items;
 

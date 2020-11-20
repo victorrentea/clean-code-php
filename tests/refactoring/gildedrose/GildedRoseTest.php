@@ -10,20 +10,20 @@ class GildedRoseTest extends TestCase
     public function testRentalStatementFormat(): void
     {
         $expected = $this->runSimulation(new GildedRose($this->createData()));
-        $actual = $this->runSimulation(new GildedRose($this->createData()));
+        $actual = $this->runSimulation(new GildedRoseClean($this->createData()));
         self::assertEquals($expected, $actual);
     }
 
-    public function runSimulation(GildedRose $gildedRose): string
+    public function runSimulation(IGildedRose $gildedRose): string
     {
         $s = '';
         $DAYS = 10;
         for ($i = 0; $i < $DAYS; $i++) {
             $s .= "-------- day " . $i . " --------\n";
             $s .= "name, sellIn, quality\n";
+            $gildedRose->tick();
             foreach ($gildedRose->getItems() as $item) {
-                $gildedRose->tick();
-                $s .= sprintf("%s, %.2f, %d\n", $item->name, $item->quality, $item->sellIn);
+                $s .= sprintf("%s, %.2f, %d\n", $item->name, $item->quality(), $item->sellIn);
             }
         }
         return $s;
