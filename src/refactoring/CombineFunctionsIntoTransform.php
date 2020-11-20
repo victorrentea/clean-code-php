@@ -20,7 +20,7 @@ class CombineFunctionsIntoTransform
 
     function metNouaCareDaDateleCalculate(Ticket $ticket) : InvoiceView {
         $view = new InvoiceView();
-        $view->ticket = $ticket;
+        $view->customerName = $ticket->getCustomerName();
         $view->qrCode = self::generateQRCode($ticket->getCode());
         $view->address = self::getAddress($ticket->getEventId());
         return $view;
@@ -35,13 +35,9 @@ class CombineFunctionsIntoTransform
         return $this->formatInvoice($view);
     }
 
-    /**
-     * @param InvoiceView $view
-     * @return string
-     */
     private function formatInvoice(InvoiceView $view): string
     {
-        $invoice = "Invoice for " . $view->ticket->getCustomerName() . "\n";
+        $invoice = "Invoice for " . $view->customerName . "\n";
         $invoice .= "QR Code: " . $view->qrCode . "\n";
         $invoice .= "Address: " . $view->address . "\n";
         $invoice .= "Please arrive 20 minutes before the start of the event\n";
@@ -52,9 +48,10 @@ class CombineFunctionsIntoTransform
 
 // This is a statement: "ASTA E O CLASA PROASTA. INTENTIONAT PROASTA. CA SA NU TREBUIASCA S-O TESTEZ"
 class InvoiceView {
-    public Ticket $ticket;
+    public string $customerName;
     public string $qrCode;
     public string $address;
+
 }
 
 
