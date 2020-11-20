@@ -53,16 +53,14 @@ class CustomerSearchQuery {
         if (isset($this->criteria['name'])) {
             $this->dql .= '    AND p.name = ?    ';
             $this->params[] = $this->criteria['name'];
+
+            // Campurile modificabile e rele.
+            echo "Fac altfel un pic aici treaba";
         }
     }
 
     private function addCategoryCriteria(): void
     {
-        if (isset($this->params['name'])) { // mult mai naspa: tre sa te prinzi ce functie a modificat params INAINTEA ACESTEI LINII
-            // Campurile modificabile e rele.
-
-            echo "Fac altfel un pic aici treaba";
-        }
 
         if (isset($this->criteria['category'])) {
             $this->dql .= ' AND p.category = ?  ';
