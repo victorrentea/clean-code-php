@@ -7,16 +7,19 @@ namespace victor\refactoring;
 class SeparateQueryCommand
 {
 
-    function alertForMiscreant(array $people)
+    function alertForMiscreant(array $people): string
+    {
+        $result = $this->alertForMiscreant_($people);
+        if ($result !== "") {
+            $this->setOffAlarms();
+        }
+        return $result;
+    }
+    function alertForMiscreant_(array $people): string
     {
         foreach ($people as $person) {
-            if ($person === "Don") {
-                $this->setOffAlarms();
-                return "Don";
-            }
-            if ($person === "John") {
-                $this->setOffAlarms();
-                return "John";
+            if (in_array($person, ["Don", "John"])) {
+                return $person;
             }
         }
         return "";
