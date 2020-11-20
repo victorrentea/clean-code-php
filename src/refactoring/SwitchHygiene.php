@@ -9,7 +9,6 @@ use const true as true1;
 
 class SwitchHygiene
 {
-
     function f($messageType): bool {
         echo "Cod inainte";
         switch ($messageType) {
@@ -37,5 +36,6 @@ class SwitchHygiene
         }
         echo "Cod dupa";
     }
+
 
 }
