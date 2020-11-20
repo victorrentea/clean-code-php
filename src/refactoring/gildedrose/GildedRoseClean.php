@@ -35,7 +35,7 @@ class GildedRoseClean implements IGildedRose
     }
 
     // IDEI cum poti sa implementezi logica diferita per tip de ceva
-    // a) Sulfuras->process() + Sulfuras implements Item {name(), quality(), sellin()}
+    // a) Sulfuras->process() + Sulfuras implements/extends Item {name(), quality(), sellin()}
     // b) Sulfuras implements Item { private Item $item; } - Decorator Pattern (TM)
     // c) switch
 
