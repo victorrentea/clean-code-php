@@ -4,20 +4,33 @@
 namespace victor\refactoring;
 
 $hotelCharges = new HotelCharges();
+
 $dayCharge = new HotelDayCharge(100, true, 5);
-$hotelCharges->days[] = $dayCharge;
-$dayCharge->setHotel($hotelCharges);
+
+//$hotelCharges->days[] = $dayCharge;
+$hotelCharges->addDay($dayCharge);
+
 echo 'FEE: ' . $hotelCharges->totalFee . "\n";
-$hotelCharges->computeTotal();
+
+//$hotelCharges->computeTotal();
+
 echo 'FEE: ' . $hotelCharges->totalFee . "\n";
+
 
 
 class HotelCharges
 {
     const BREAKFAST_FEE = 10;
     const PARKING_HOUR_RATE = 2;
-    public $days = [];
+    /** @var HotelDayCharge[] */
+    private $days = [];
     public $totalFee;
+
+    function addDay(HotelDayCharge $dayCharge)
+    {
+        $this->days[] = $dayCharge;
+        $this->computeTotal();
+    }
 
     public function computeTotal()
     {

@@ -22,8 +22,8 @@ class CustomerRepo
 }
 
 
-class CustomerSearchQuery {
-
+class CustomerSearchQuery
+{
     private $params = [];
     private $dql = "SELECT p.id FROM Parent p  WHERE 1=1   ";
 
@@ -53,18 +53,20 @@ class CustomerSearchQuery {
         if (isset($this->criteria['name'])) {
             $this->dql .= '    AND p.name = ?    ';
             $this->params[] = $this->criteria['name'];
-
-            // Campurile modificabile e rele.
-            echo "Fac altfel un pic aici treaba";
         }
     }
 
     private function addCategoryCriteria(): void
     {
+        if (isset($this->params['name'])) { // mult mai naspa: tre sa te prinzi ce functie a modificat params INAINTEA ACESTEI LINII
+            // Campurile modificabile e rele.
 
-        if (isset($this->criteria['category'])) {
-            $this->dql .= ' AND p.category = ?  ';
-            $this->params[] = $this->criteria['category'];
+            echo "Fac altfel un pic aici treaba";
+
+            if (isset($this->criteria['category'])) {
+                $this->dql .= ' AND p.category = ?  ';
+                $this->params[] = $this->criteria['category'];
+            }
         }
     }
 }

@@ -17,6 +17,7 @@ class EncapsulateConditionals
         return $charge - $clientFidelityFactor;
     }
 
+
 }
 
 class Client {
@@ -34,4 +35,9 @@ class RatesPlan {
     public $regularRate;
     public $regularServiceCharge;
     public $summerEnd;
+
+    // orice decizie mica care da boolean bazata majoritar pe campurile unei clase cu date --> metoda care intoarce boolean;
+    function isInSummer($date) {
+        return $date < $this->summerEnd && $date > $this->summerStart;
+    }
 }
