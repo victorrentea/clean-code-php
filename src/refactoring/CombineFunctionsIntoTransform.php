@@ -7,29 +7,55 @@ class CombineFunctionsIntoTransform
 {
     static function generateQRCode(string $code): string
     {
+        // biz logic code
         return "QR" . $code;
     }
 
     static function getAddress(int $eventId): string
     {
+        // cod mult
         return "In vale";
+    }
+
+
+    function metNouaCareDaDateleCalculate(Ticket $ticket) : InvoiceView {
+        $view = new InvoiceView();
+        $view->ticket = $ticket;
+        $view->qrCode = self::generateQRCode($ticket->getCode());
+        $view->address = self::getAddress($ticket->getEventId());
+        return $view;
     }
 
     // ----------- a line -------------
 
     public function generateTicket(Ticket $ticket)
     {
-        $invoice = "Invoice for " . $ticket->getCustomerName() . "\n";
+        $view = $this->metNouaCareDaDateleCalculate($ticket);
 
-        $invoice .= "QR Code: " . self::generateQRCode($ticket->getCode()) . "\n";
-        $invoice .= "Address: " . self::getAddress($ticket->getEventId()) . "\n";
+        return $this->formatInvoice($view);
+    }
+
+    /**
+     * @param InvoiceView $view
+     * @return string
+     */
+    private function formatInvoice(InvoiceView $view): string
+    {
+        $invoice = "Invoice for " . $view->ticket->getCustomerName() . "\n";
+        $invoice .= "QR Code: " . $view->qrCode . "\n";
+        $invoice .= "Address: " . $view->address . "\n";
         $invoice .= "Please arrive 20 minutes before the start of the event\n";
         $invoice .= "In case of emergency, call 0899898989\n";
         return $invoice;
     }
 }
 
-
+// This is a statement: "ASTA E O CLASA PROASTA. INTENTIONAT PROASTA. CA SA NU TREBUIASCA S-O TESTEZ"
+class InvoiceView {
+    public Ticket $ticket;
+    public string $qrCode;
+    public string $address;
+}
 
 
 

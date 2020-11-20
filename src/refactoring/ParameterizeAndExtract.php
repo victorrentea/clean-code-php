@@ -7,13 +7,17 @@ class ParameterizeAndExtract {
 
     function f() {
         echo "Logica f\n";
-        for ($i = 0; $i < 4; $i++) {
+
+        $n = 4444;
+        for ($i = 0; $i < $n; $i++) {
             echo "Cod $i\n";
         }
     }
     function g() {
         echo "Logica g\n";
-        for ($i = 0; $i < 3; $i++) {
+
+        $n = 3;
+        for ($i = 0; $i < $n; $i++) {
             echo "Cod $i\n";
         }
     }
