@@ -10,11 +10,12 @@ $dayCharge = new HotelDayCharge(100, true, 5);
 //$hotelCharges->days[] = $dayCharge;
 $hotelCharges->addDay($dayCharge);
 
-echo 'FEE: ' . $hotelCharges->totalFee . "\n";
+echo 'FEE: ' . $hotelCharges->computeTotal() . "\n";
 
 //$hotelCharges->computeTotal();
+//$hotelCharges->totalFee
 
-echo 'FEE: ' . $hotelCharges->totalFee . "\n";
+echo 'FEE: ' . $hotelCharges->computeTotal() . "\n";
 
 
 
@@ -24,12 +25,17 @@ class HotelCharges
     const PARKING_HOUR_RATE = 2;
     /** @var HotelDayCharge[] */
     private $days = [];
-    public $totalFee;
+//    /** @var int */
+//    private $totalFee;
 
+//    public function getTotalFee(): int
+//    {
+//        return $this->totalFee;
+//    }
     function addDay(HotelDayCharge $dayCharge)
     {
         $this->days[] = $dayCharge;
-        $this->computeTotal();
+//        $this->computeTotal();
     }
 
     public function computeTotal()
