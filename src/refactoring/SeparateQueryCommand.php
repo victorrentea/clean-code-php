@@ -9,13 +9,13 @@ class SeparateQueryCommand
 
     function alertForMiscreant(array $people): string
     {
-        $result = $this->alertForMiscreant_($people);
+        $result = $this->findMiscreant($people);
         if ($result !== "") {
             $this->setOffAlarms();
         }
         return $result;
     }
-    function alertForMiscreant_(array $people): string
+    function findMiscreant(array $people): string
     {
         foreach ($people as $person) {
             if (in_array($person, ["Don", "John"])) {
