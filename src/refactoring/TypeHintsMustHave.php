@@ -13,10 +13,19 @@ class TypeHintsMustHave
         $this->a = $a;
     }
 
+    function observeModel(callable $f) {
+
+    }
+
+    #Inject
     function b(A $a)
     {
-        $a->laLibe();
-        $this->getA()->laLibe();
+        $this->observeModel([$a, "laLiber2"]); // Storm stie
+
+        $a->laLiber2();
+        $s = "laLibe";
+        $a->$s; // KO pt Storm
+        $this->getA()->laLiber2();
     }
     function getA():A {
         return new A();
@@ -27,11 +36,19 @@ class Doi
 {
     function functieOK(A $a)
     {
-        $a->laLibe();
+        $a->laLiber2();
     }
 }
 
 class A
+{
+    function laLiber2()
+    {
+
+    }
+}
+
+class A2
 {
     function laLibe()
     {
