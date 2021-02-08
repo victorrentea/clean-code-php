@@ -4,22 +4,27 @@
 namespace victor\refactoring;
 
 $boule = new BouleanParameters();
-$boule->bigUglyMethod(1, 2);
-$boule->bigUglyMethod(1, 2);
-$boule->bigUglyMethod(1, 2);
-$boule->bigUglyMethod(1, 2);
-$boule->bigUglyMethod(1, 2);
+$boule->bigUglyMethod(1, 2, false);
+$boule->bigUglyMethod(1, 2, false);
+$boule->bigUglyMethod(1, 2, false);
+$boule->bigUglyMethod(1, 2, false);
+$boule->bigUglyMethod(1, 2, false);
+$boule->bigUglyMethod(1, 2, false);
 
-// TODO From my use-case, I call it too, to do more within:
-$boule->bigUglyMethod(1, 2);
+// TODO From my use-case CR323, I call it too, to do more within:
+$boule->bigUglyMethod(1, 2, false);
 
 class BouleanParameters
 {
 
-	function bigUglyMethod(int $a, int $b) {
+	function bigUglyMethod(int $a, int $b, bool $cr323) {
         echo "Complex Logic with $a\n";
         echo "Complex Logic $b\n";
         echo "Complex Logic $a\n";
+
+        if ($cr323) {
+            echo "Logica doar pentru mine Cr323 $a\n";
+        }
 
         echo "More Complex Logic $a\n";
         echo "More Complex Logic $a\n";
