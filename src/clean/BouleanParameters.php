@@ -9,36 +9,29 @@ $boule->bigUglyMethod(1, 2);
 $boule->bigUglyMethod(1, 2);
 $boule->bigUglyMethod(1, 2);
 $boule->bigUglyMethod(1, 2);
+
+// TODO From my use-case, I call it too, to do more within:
 $boule->bigUglyMethod(1, 2);
-
-// TODO From my use-case CR323, I call it too, to do more within:
-$boule->bigUglyMethod323(1, 2);
-
-// $boule->setCr324(true);
-// $boule->bossLevel(...);
 
 class BouleanParameters
 {
 
+	function bigUglyMethod(int $a, int $b) {
+        $this->met($a, $b);
 
-    // EVITA pe cat posibil sa faci clasele de logica stateful.
-    // private $cr324;
-    //
-    // public function setCr324(bool $cr324): void
-    // {
-    //     $this->cr324 = $cr324;
-    // }
+        echo "More Complex Logic $a\n";
+        echo "More Complex Logic $a\n";
+        echo "More Complex Logic $b\n";
+    }
+	function bigUglyMethod2(int $a, int $b) {
+        $this->met($a, $b);
 
-    function bigUglyMethod(int $a, int $b) {
-        $this->m($a,$b);
-        $this->afterLogic($a, $b);
+        echo "More Complex Logic $a\n";
+        echo "More Complex Logic $a\n";
+        echo "More Complex Logic $b\n";
     }
 
-	function bigUglyMethod323(int $a, int $b) {
-        $this->m($a, $b);
-        echo "Logica doar pentru mine Cr323 $a\n";
-        $this->afterLogic($a, $b);
-    }
+
 
 
 
@@ -50,82 +43,34 @@ class BouleanParameters
 
 	// ============== "BOSS" LEVEL: A lot harder to break down =================
 
-	function bossLevelStuffFluff(array $tasks) {
-        $this->beforeBoss($tasks);
-        $this->afterBoss($tasks);
-    }
-	function bossLevelStuffFluff323(array $tasks) {
-        $this->beforeBoss($tasks);
-
+	function bossLevel(bool $stuff, bool $fluff, array $tasks) {
         $i = 0;
-        foreach ($tasks as $task) {
-            $i++;
-            echo "Logica mea " . $i . "\n";
-        }
-
-        $this->afterBoss($tasks);
-    }
-	function bossLevelStuffNoFluff() {
+		$j = 1;
 		echo "Logic1\n";
-        echo "Logic2\n";
+		if ($stuff) {
+            echo "Logic2\n";
+            if ($fluff) {
+                echo "Logic3\n";
+                foreach ($tasks as $task) {
+                    $i++;
+                    echo "Logic4 " . $task . "\n";
+                    // TODO HERE, when call this method, I want MY own custom code to run here
+                    echo "Logic5 " . $i . "\n";
+                }
+				echo "Logic6 " . ($j++) . "\n";
+			}
+		}
 		echo "Logic7\n";
 	}
-	function bossLevelNoStuf() {
-		echo "Logic1\n";
-		echo "Logic7\n";
-	}
 
-
-
-
-
-
-
-
-
-
-
-
-	///==================
-
-    public function m(int $a, int $b): void
+    /**
+     * @param int $a
+     * @param int $b
+     */
+    public function met(int $a, int $b): void
     {
         echo "Complex Logic with $a\n";
         echo "Complex Logic $b\n";
         echo "Complex Logic $a\n";
-    }
-
-    public function afterLogic(int $a, int $b): void
-    {
-        echo "More Complex Logic $a\n";
-        echo "More Complex Logic $a\n";
-        echo "More Complex Logic $b\n";
-    }
-
-    /**
-     * @param array $tasks
-     */
-    public function beforeBoss(array $tasks): void
-    {
-        echo "Logic1\n";
-        echo "Logic2\n";
-        echo "Logic3\n";
-        foreach ($tasks as $task) {
-            echo "Logic4 " . $task . "\n";
-        }
-    }
-
-    /**
-     * @param array $tasks
-     */
-    public function afterBoss(array $tasks): void
-    {
-        $j = 0;
-        foreach ($tasks as $task) {
-            $j++;
-            echo "Logic5 " . $j . "\n";
-        }
-        echo "Logic6 " . 3 . "\n";
-        echo "Logic7\n";
     }
 }
