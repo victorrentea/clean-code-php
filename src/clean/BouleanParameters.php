@@ -51,35 +51,20 @@ class BouleanParameters
 	// ============== "BOSS" LEVEL: A lot harder to break down =================
 
 	function bossLevelStuffFluff(array $tasks) {
-		echo "Logic1\n";
-        echo "Logic2\n";
-        echo "Logic3\n";
-        $j = 0;
+        $this->beforeBoss($tasks);
+        $this->afterBoss($tasks);
+    }
+	function bossLevelStuffFluff323(array $tasks) {
+        $this->beforeBoss($tasks);
+
         $i = 0;
         foreach ($tasks as $task) {
             $i++;
-            // modificari ale starii globale dpdv iteratia curenta,
-            // care date sunt citite ulterior de celelalte foruri
-
-            // externalSystem->authenticate(task->user)
-
-            // INSERT INTO X
-
-            $j++;
-            echo "Logic4 " . $task . "\n";
-        }
-        foreach ($tasks as $task) {
             echo "Logica mea " . $i . "\n";
         }
 
-        foreach ($tasks as $task) {
-            // externalSystem->perfromSecuredTask(task)
-            // SEELCT COUNT INTO X
-            echo "Logic5 " . $i . "\n";
-        }
-        echo "Logic6 " . $j . "\n";
-		echo "Logic7\n";
-	}
+        $this->afterBoss($tasks);
+    }
 	function bossLevelStuffNoFluff() {
 		echo "Logic1\n";
         echo "Logic2\n";
@@ -115,5 +100,32 @@ class BouleanParameters
         echo "More Complex Logic $a\n";
         echo "More Complex Logic $a\n";
         echo "More Complex Logic $b\n";
+    }
+
+    /**
+     * @param array $tasks
+     */
+    public function beforeBoss(array $tasks): void
+    {
+        echo "Logic1\n";
+        echo "Logic2\n";
+        echo "Logic3\n";
+        foreach ($tasks as $task) {
+            echo "Logic4 " . $task . "\n";
+        }
+    }
+
+    /**
+     * @param array $tasks
+     */
+    public function afterBoss(array $tasks): void
+    {
+        $j = 0;
+        foreach ($tasks as $task) {
+            $j++;
+            echo "Logic5 " . $j . "\n";
+        }
+        echo "Logic6 " . 3 . "\n";
+        echo "Logic7\n";
     }
 }
