@@ -4,70 +4,86 @@
 namespace victor\clean;
 
 
+use Exception;
+
 class UtilsVsVO
 {
     public function filterCarModels(CarSearchCriteria $criteria, array $models)
     {
+
+        // $criteriaInterval = new Interval($criteria->getStartYear(), $criteria->getEndYear());
         $result = [];
         /** @var CarModel $model */
         foreach ($models as $model) {
-            if (MathUtil::intervalsIntersect(
-                $model->getStartYear(), $model->getEndYear(),
-                $criteria->getStartYear(), $criteria->getEndYear())) {
-
-                $result [] = $model;
-            }
-            if (MathUtil::intervalsIntersect(
-                $model->getStartYear(), $model->getEndYear(),
-                $criteria->getStartYear(), $criteria->getEndYear())) {
-
+            if ($model->getYearInterval()->intersects($criteria->getYearInterval())) {
                 $result [] = $model;
             }
         }
+        // mai exista si alte filtrari
         return $result;
     }
 
     // http://world.std.com/~swmcd/steven/tech/interval.html
 }
-class X {
-    function f() {
-        $x = MathUtil::intervalsIntersect(1, 3, 2, 4);
-    }
-}
 
-
-class MathUtil { // aka Garbage
-
-    public static function intervalsIntersect(int $start1, int $end1, int $start2, int $end2): bool
+class X
+{
+    function f()
     {
-        return $start1 <= $end2 && $start2 <= $end1;
+        $x = (new Interval(1, 3))->intersects(new Interval(2, 4));
     }
 }
 
+#Embedded
+class Interval
+{
+    private int $start;
+    private int $end;
 
+    public function __construct(int $start, int $end)
+    {
+        if ($start > $end) {
+            throw new \Exception();
+        }
+        $this->start = $start;
+        $this->end = $end;
+    }
 
+    public function intersects(Interval $other): bool
+    {
+        return $this->getStart() <= $other->getEnd() && $other->getStart() <= $this->getEnd();
+    }
+
+    public function getStart(): int
+    {
+        return $this->start;
+    }
+
+    public function getEnd(): int
+    {
+        return $this->end;
+    }
+}
+
+class MathUtil
+{ // aka Garbage
+
+}
 
 
 class CarSearchCriteria
 {
-    private $startYear;
-    private $endYear;
+    private Interval $yearInterval;
 
-    public function __construct(int $startYear, int $endYear)
+    public function __construct($yearInterval)
     {
-        if ($startYear > $endYear) throw new \Exception("start larger than end");
-        $this->startYear = $startYear;
-        $this->endYear = $endYear;
+        $this->yearInterval = $yearInterval;
     }
 
-    public function getStartYear(): int
-    {
-        return $this->startYear;
-    }
 
-    public function getEndYear(): int
+    public function getYearInterval(): Interval
     {
-        return $this->endYear;
+        return $this->yearInterval;
     }
 }
 
@@ -76,25 +92,18 @@ class CarModel
 {
     private $make;
     private $model;
-    private $startYear;
-    private $endYear;
+    #Embeddable
+    private Interval $yearInterval;
 
-    public function __construct(int $startYear, int $endYear, string $model, string $make)
+    public function __construct(Interval $yearInterval, string $model, string $make)
     {
-        if ($startYear > $endYear) throw new \Exception("start larger than end");
-        $this->startYear = $startYear;
-        $this->endYear = $endYear;
+        $this->yearInterval = $yearInterval;
         $this->model = $model;
         $this->make = $make;
     }
 
-    public function getStartYear(): int
+    public function getYearInterval(): Interval
     {
-        return $this->startYear;
-    }
-
-    public function getEndYear(): int
-    {
-        return $this->endYear;
+        return $this->yearInterval;
     }
 }
