@@ -20,73 +20,83 @@ namespace victor\clean;
 
 class ManyParamsOOP
 {
-    private $validator;
+    private OtherDependency $other;
 
-    public function __construct(Validator $validator)
+    public function __construct(OtherDependency $other)
     {
-        $this->validator = $validator;
+        $this->other = $other;
     }
+
 
     public function bizLogic(array $x)
     {
-        $errors = [];
-        $errors = array_merge($errors, $this->validator->m1($x['a'], $x['b']));
-        $errors = array_merge($errors, $this->validator->m2($x['a'], $x['s'], $x['c']));
-        $errors = array_merge($errors, $this->validator->m3($x['a'], $x['fileName'], $x['versionId'], $x['reference']));
-        $errors = array_merge($errors, $this->validator->m4($x['a'], $x['listId'], $x['recordId'], $x['g']));
-        $errors = array_merge($errors, $this->validator->m5($x['b']));
+        $validator = new Validator($this->other);
+        $validator->m1($x['a'], $x['b']);
+        $validator->m2($x['a'], $x['s'], $x['c']);
+        $validator->m3($x['a'], $x['fileName'], $x['versionId'], $x['reference']);
+        $validator->m4($x['a'], $x['listId'], $x['recordId'], $x['g']);
+        $validator->m5($x['b']);
+
+        $errors = $validator->getErrors();
         if (!empty($errors)) {
             throw new \Exception($errors);
         }
     }
 }
-
 class Validator
 {
     private $dep;
+
+    /** @var string[] */
+    private $errors;
 
     public function __construct(OtherDependency $dep)
     {
         $this->dep = $dep;
     }
 
-    public function m1(string $a, int $b): array
+    /**
+     * @return string[]
+     */
+    public function getErrors(): array
+    {
+        return $this->errors;
+    }
+
+    public function m1(string $a, int $b)
     {
         if ($a === '') {
-            return ['a must not be null'];
+            $this->errors[]='a must not be null';
         }
+        if ($b < 0)
+            $this->errors[]='inca ceva';
         // stuff
-        return [];
+        // return [];
     }
 
-    public function m2(string $a, string $s, int $c): array
+    public function m2(string $a, string $s, int $c)
     {
         if ($c < 0) {
-            return ["negative c"];
+            $this->errors[]="negative c";
         }
-        // stuff
-        return [];
 
     }
 
-    public function m3(string $a, string $fileName, int $versionId, string $reference): array
+    public function m3(string $a, string $fileName, int $versionId, string $reference)
     {
         // stuff
-        return [];
 
     }
 
-    public function m4(string $a, int $listId, int $recordId, string $g): array
+    public function m4(string $a, int $listId, int $recordId, string $g)
     {
         // stuff
-        return [];
 
     }
 
-    public function m5(int $b): array
+    public function m5(int $b)
     {
         // stuff
-        return [];
     }
 }
 

@@ -88,6 +88,7 @@ class CarSearchCriteria
 }
 
 
+#Entity
 class CarModel
 {
     private $make;
@@ -100,6 +101,22 @@ class CarModel
         $this->yearInterval = $yearInterval;
         $this->model = $model;
         $this->make = $make;
+    }
+
+    /**
+     * @param string $make
+     */
+    public function setMake(string $make): void
+    {
+        $this->make = $make;
+    }
+
+    /**
+     * @param Interval $yearInterval
+     */
+    public function setYearInterval(Interval $yearInterval): void
+    {
+        $this->yearInterval = $yearInterval;
     }
 
     public function getYearInterval(): Interval
