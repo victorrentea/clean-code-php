@@ -26,6 +26,7 @@ class Sample1
     private Logger $_logger;
     private ?string $page_not_found;
     private $__spider;
+    private $parse;
 
     public function __construct(UrlConfigService $urlConfigService)
     {
@@ -60,66 +61,25 @@ class Sample1
 
     private function tryProcessJson($link, $urlConfig): void
     {
-
         $pageContent = $this->getPageContent($link);
         if ($this->isNotFound($pageContent)) {
             $this->reportNotFound($link);
             return;
         }
 
-        $parse = new ParseXml($pageContent, $this->product, $this->data_json->request_vars);
-        $parse->execute();
-        $category = $parse->getCategory();
-        $params = $parse->getParams();
+        $this->parse = new ParseXml($pageContent, $this->product, $this->data_json->request_vars);
+        $this->parse->execute();
 
-        $done = false;
-        $page = 1;
-        $this->__spider->processing->products[$link] = [];
-        while (!$done) {
-            $data_r = $this->data_json;
-            $params[$data_r->request_page] = $page;
-            $this->_logger->log('output', "{$data_r->request_link} [$page]...");
-
-            $contentBody = $this->fetchPageBody($params, $data_r->request_link);
-
-            $content = [];
-            if (is_object($contentBody)) {
-                $container_r = $this->product->container;
-                $content = $contentBody->$container_r;
-                foreach ($content as $product) {
-                    $p = array('category' => $category, 'got_from' => $link);
-                    $info_r = $this->product->info;
-                    foreach ($info_r as $key => $selector) {
-                        if (!is_object($selector)) {
-                            $p[$key] = $product->$selector;
-                            $replace_r = $this->product->replace;
-                            if (isset($replace_r->$key)) {
-                                $r = $replace_r->$key;
-                                foreach ($r as $pattern => $replacement) {
-                                    $p[$key] = preg_replace($pattern, $replacement, $p[$key]);
-                                }
-                                $p[$key] = htmlspecialchars_decode(trim(strip_tags($p[$key])));
-                            }
-                            $p[$key] = htmlspecialchars_decode($p[$key]);
-                        } else {
-                            $p[$key] = null;
-                        }
-                    }
-                    $this->__spider->processing->products[$link][] = $p;
-                }
-                if (count($content)) {
-                    $page++;
-                }
-            }
+        for ($page = 1; ; $page++) {
+            $this->_logger->log('output', "{$this->data_json->request_link} [$page]...");
+            $wasEmptyPage = $this->processPage($page, $link);
             $this->_logger->log('output', "done\n", false);
 
-            if (!count($content)) {
+            if ($wasEmptyPage) {
                 break;
             }
         }
-        if (count($this->__spider->processing->products[$link]) == 0) {
-            unset($this->__spider->processing->products[$link]);
-        } else {
+        if (isset($this->__spider->processing->products[$link])) {
             $urlConfig = $this->urlConfigService->configureCategoryPage(array(
                     'url' => $link,
                     'linkType' => $urlConfig->getLinkType(),
@@ -157,6 +117,87 @@ class Sample1
         }
     }
 
+    /**
+     * @param int $page
+     * @param $link
+     * @return true if empty page
+     * @throws \Exception
+     */
+    private function processPage(int $page, $link): bool
+    {
+        $params = $this->parse->getParams();
+        $params[$this->data_json->request_page] = $page;
+
+        $dom = $this->fetchJsonContainer($params, $this->data_json->request_link);
+
+        if (!count($dom)) {
+            return true;
+        }
+        foreach ($dom as $productDom) {
+            $p = $this->scrapProduct($productDom);
+            $p['category'] = $this->parse->getCategory();
+            $p['got_from'] = $link;
+
+            if (!isset($this->__spider->processing->products[$link])) {
+                $this->__spider->processing->products[$link] = [];
+            }
+            $this->__spider->processing->products[$link][] = $p;
+        }
+        return false;
+    }
+
+    /**
+     * @param array $params
+     * @param $requestLink
+     * @throws \Exception
+     */
+    private function fetchJsonContainer(array $params, $requestLink)
+    {
+        $this->_curl->__setPost($params);
+        $this->_curl->makeRequest($requestLink);
+        $response = $this->_curl->getLastResponse();
+        $this->_curl->__unsetPost();
+
+        $contentBody = json_decode($response['body']);
+
+        if (!is_object($contentBody)) {
+            return [];
+        }
+        $container_r = $this->product->container;
+        return $contentBody->$container_r;
+    }
+
+    private function scrapProduct($productDom): array
+    {
+        $extractedData = [];
+        foreach ($this->product->info as $key => $selector) {
+            $extractedData[$key] = $this->extractKeyText($key, $selector, $productDom);
+        }
+        return $extractedData;
+    }
+
+    private function extractKeyText(string $key, mixed $selector, $productDom): ?string
+    {
+        if (is_object($selector)) {
+            return null;
+        }
+        $text = $productDom->$selector;
+        $replace = $this->product->replace;
+        if (isset($replace->$key)) {
+            $replacements = $replace->$key;
+            foreach ($replacements as $pattern => $replacement) {
+                $text = preg_replace($pattern, $replacement, $text);
+            }
+            $text = htmlspecialchars_decode(trim(strip_tags($text)));
+        }
+        return htmlspecialchars_decode($text);
+    }
+
+    private function insertProducts(UrlConfig $urlConfig)
+    {
+
+    }
+
     private function fetchPageBody(array $params, string $requestLink)
     {
         $this->_curl->__setPost($params);
@@ -165,11 +206,6 @@ class Sample1
         $this->_curl->__unsetPost();
         $contentBody = json_decode($response['body']);
         return $contentBody;
-    }
-
-    private function insertProducts(UrlConfig $urlConfig)
-    {
-
     }
 
     private function extractCategoryAndParams(string $pageContent): ParseXml
