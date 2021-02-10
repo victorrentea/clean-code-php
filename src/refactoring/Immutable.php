@@ -5,12 +5,12 @@ namespace victor\refactoring;
 
 $immutable = new Immutable(1, new Y(9),["Emagia"]);
 
-var_dump($immutable->getList());
+var_dump($immutable->list());
 
-$immutable->getList()[]="a";
-$immutable->getY()->setGandamStyle(10);
+$immutable->list()[]="a";
+$immutable->y()->setGandamStyle(10);
 
-var_dump($immutable->getList());
+var_dump($immutable->list());
 // var_dump($immutable->getY()->getGandamStyle());
 
 // f($immutable);
@@ -45,12 +45,12 @@ class Immutable
         $this->list = $list;
     }
 
-    public function getList(): array
+    public function list(): array
     {
         return $this->list;
     }
 
-    public function getX(): int
+    public function x(): int
     {
         return $this->x;
     }
@@ -60,7 +60,7 @@ class Immutable
         return new self($newX,$this->y, $this->list);
     }
 
-    public function getY(): Y
+    public function y(): Y
     {
         return $this->y;
     }

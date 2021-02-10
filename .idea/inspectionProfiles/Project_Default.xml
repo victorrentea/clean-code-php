@@ -74,7 +74,6 @@
     <inspection_tool class="PhpDocSignatureInspection" enabled="false" level="WEAK WARNING" enabled_by_default="false" />
     <inspection_tool class="PhpMissingFieldTypeInspection" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="PhpParamsInspection" enabled="false" level="WARNING" enabled_by_default="false" />
-    <inspection_tool class="PhpUnhandledExceptionInspection" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="SecurityAdvisoriesInspection" enabled="true" level="WARNING" enabled_by_default="true">
       <option name="optionConfiguration">
         <list>
