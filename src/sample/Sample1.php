@@ -12,14 +12,18 @@ class Sample1
     private $data_json;
     private CURL $_curl;
 
+
+    private UrlConfigService $urlConfigService;
+
+    public function __construct(UrlConfigService $urlConfigService)
+    {
+        $this->urlConfigService = $urlConfigService;
+    }
+
+
     protected function processJson($urlConfig)
     {
-        /** @var \Web\Spider2Bundle\Service\UrlConfigService $urlConfigService */
-        $urlConfigService = $this->_container->get('urlConfig');
-
-        $link = $urlConfig->getUrl();
-        $link = str_replace("\r", "", $link);
-        $link = str_replace("\n", "", $link);
+        $link = $urlConfig->getUrl();  // TODO responsabilitatea lui URLConfig sa curete URLul
 
         $job = $this->monitoringService->initialConfigJob(array(
             'jobType'     => $this->monitoringService->getJobTypeById(\Spider\DataStorageBundle\Entity\JobType::CATEGORY),
@@ -123,7 +127,7 @@ class Sample1
             if (count($this->__spider->processing->products[$link]) == 0) {
                 unset($this->__spider->processing->products[$link]);
             } else {
-                $urlConfig = $urlConfigService->configureCategoryPage(array(
+                $urlConfig = $this->urlConfigService->configureCategoryPage(array(
                         'url'          => $link,
                         'linkType'     => $urlConfig->getLinkType(),
                         'emagCategory' => $urlConfig->getEmagCategory(),
