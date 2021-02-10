@@ -4,13 +4,14 @@
 namespace victor\sample;
 
 
-
 use function Cassandra\Type;
 
 
-function pq(string $selector):array {
+function pq(string $selector): array
+{
 
 }
+
 class Sample1
 {
 
@@ -31,10 +32,6 @@ class Sample1
         $this->urlConfigService = $urlConfigService;
     }
 
-    private static function getPqValue(array $z, mixed $value): string
-    {
-
-    }
 
     function careDeterminaPageNotFound()
     {
@@ -69,55 +66,33 @@ class Sample1
             $this->reportNotFound($link);
             return;
         }
-        // prepare request
-        $x = \phpQuery::newDocument($pageContent);
-        $info_r = $this->product->info;
-        $container_r = $this->product->container;
 
-        $replace_r = $this->product->replace;
-
-        $category = Sample1::determineCategory($this->product->replace, $this->product->category);
-
-        $params = [];
-        $data_r = $this->data_json;
-        foreach ($data_r->request_vars as $var_name => $value) {
-            $temp = null;
-            if (is_object($value)) {
-                $y = pq($value->selector);
-                foreach ($y as $z) {
-                    $z = pq($z);
-                    $params[$var_name] = self::getPqValue($z, $value);
-                    break;
-                }
-            } else {
-                $params[$var_name] = $value;
-            }
-        }
-        $x->unloadDocument();
+        $parse = new ParseXml($pageContent, $this->product, $this->data_json->request_vars);
+        $parse->execute();
+        $category = $parse->getCategory();
+        $params = $parse->getParams();
 
         $done = false;
         $page = 1;
         $this->__spider->processing->products[$link] = [];
         while (!$done) {
-
+            $data_r = $this->data_json;
             $params[$data_r->request_page] = $page;
             $this->_logger->log('output', "{$data_r->request_link} [$page]...");
-            $this->_curl->__setPost($params);
-            $this->_curl->makeRequest($data_r->request_link);
 
-            $response = $this->_curl->getLastResponse();
-            $content = json_decode($response['body']);
-            if (is_object($content)) {
-                $content = $content->$container_r;
-            } else {
-                $content = [];
-            }
-            if (count($content)) {
+            $contentBody = $this->fetchPageBody($params, $data_r->request_link);
+
+            $content = [];
+            if (is_object($contentBody)) {
+                $container_r = $this->product->container;
+                $content = $contentBody->$container_r;
                 foreach ($content as $product) {
                     $p = array('category' => $category, 'got_from' => $link);
+                    $info_r = $this->product->info;
                     foreach ($info_r as $key => $selector) {
                         if (!is_object($selector)) {
                             $p[$key] = $product->$selector;
+                            $replace_r = $this->product->replace;
                             if (isset($replace_r->$key)) {
                                 $r = $replace_r->$key;
                                 foreach ($r as $pattern => $replacement) {
@@ -132,13 +107,15 @@ class Sample1
                     }
                     $this->__spider->processing->products[$link][] = $p;
                 }
-                $page++;
-            } else {
-                $done = true;
+                if (count($content)) {
+                    $page++;
+                }
             }
-            $this->_curl->__unsetPost();
             $this->_logger->log('output', "done\n", false);
 
+            if (!count($content)) {
+                break;
+            }
         }
         if (count($this->__spider->processing->products[$link]) == 0) {
             unset($this->__spider->processing->products[$link]);
@@ -180,25 +157,14 @@ class Sample1
         }
     }
 
-    private static function determineCategory(ReplaceR $replace_r, CategoryR $category_r): string
+    private function fetchPageBody(array $params, string $requestLink)
     {
-        $category = '';
-        if (is_object($category_r)) {
-            $category_pq = pq($category_r->selector);
-            foreach ($category_pq as $c) {
-                $c = pq($c);
-                $category = self::getPqValue($c, $category_r);
-                break;
-            }
-            if (isset($replace_r->category)) {
-                $r = $replace_r->category;
-                foreach ($r as $pattern => $replacement) {
-                    $category = preg_replace($pattern, $replacement, $category);
-                }
-                $category = trim(strip_tags($category));
-            }
-        }
-        return $category;
+        $this->_curl->__setPost($params);
+        $this->_curl->makeRequest($requestLink);
+        $response = $this->_curl->getLastResponse();
+        $this->_curl->__unsetPost();
+        $contentBody = json_decode($response['body']);
+        return $contentBody;
     }
 
     private function insertProducts(UrlConfig $urlConfig)
@@ -206,4 +172,118 @@ class Sample1
 
     }
 
+    private function extractCategoryAndParams(string $pageContent): ParseXml
+    {
+        $x = \phpQuery::newDocument($pageContent); // asta &*#!&$*^%&@! ei pune pe campuri statice invizibile mie niste stare. care permite fct pq sa functioenze
+        $category = Sample1::determineCategory($this->product->replace, $this->product->category);
+        $params = Sample1::determineParams($this->data_json->request_vars);
+        $x->unloadDocument();
+        return new ParseXml($category, $params);
+    }
 }
+
+class ParseXml
+{
+    private string $pageContent;
+    private Product $product;
+    private array $request_vars;
+
+    private string $category; // out
+    private array $params; // out
+
+    public function __construct(string $pageContent, Product $product, array $request_vars)
+    {
+        $this->pageContent = $pageContent;
+        $this->product = $product;
+        $this->request_vars = $request_vars;
+    }
+
+    public function execute(): void
+    {
+        $x = \phpQuery::newDocument($this->pageContent); // asta &*#!&$*^%&@! ei pune pe campuri statice invizibile mie niste stare. care permite fct pq sa functioenze
+        $this->category = self::determineCategory($this->product->replace, $this->product->category);
+        $this->params = self::determineParams($this->request_vars);
+        $x->unloadDocument();
+    }
+
+    private static function determineCategory(ReplaceR $replace_r, PQR $category_r): string
+    {
+        if (!is_object($category_r)) {
+            return '';
+        }
+        $category = self::computeFirstPQValue($category_r);
+        if (isset($replace_r->category)) {
+            $r = $replace_r->category;
+            foreach ($r as $pattern => $replacement) {
+                $category = preg_replace($pattern, $replacement, $category);
+            }
+            $category = trim(strip_tags($category));
+        }
+        return $category;
+    }
+
+    private static function computeFirstPQValue(PQR $value): string
+    {
+        $y = pq($value->selector);
+        if (empty($y)) {
+            return '';
+        }
+        $y0 = reset($y);
+        return self::getPqValue(pq($y0), $value);
+    }
+
+    private static function getPqValue(array $z, PQR $value): string
+    {
+
+    }
+
+    private static function determineParams($request_vars): array
+    {
+        $params = [];
+        foreach ($request_vars as $var_name => $value) {
+            $temp = self::determineParamValue($value);
+            if ($temp != '') {
+                $params[$var_name] = $temp;
+            }
+        }
+        return $params;
+    }
+
+    private static function determineParamValue(PQR $value)
+    {
+        if (!is_object($value)) {
+            return $value;
+        }
+        return self::computeFirstPQValue($value);
+    }
+
+    public function getCategory(): string
+    {
+        return $this->category;
+    }
+
+    public function getParams(): array
+    {
+        return $this->params;
+    }
+}
+// class XmlParseResult {
+//     private string $category;
+//     private array $params;
+//
+//     public function __construct(string $category, array $params)
+//     {
+//         $this->category = $category;
+//         $this->params = $params;
+//     }
+//
+//     public function getCategory(): string
+//     {
+//         return $this->category;
+//     }
+//
+//     public function getParams(): array
+//     {
+//         return $this->params;
+//     }
+// }

@@ -4,7 +4,7 @@
 namespace victor\sample;
 
 
-class CategoryR
+class PQR
 {
 
     public string $selector;
