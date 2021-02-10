@@ -36,7 +36,7 @@ class Sample1
 
     function careDeterminaPageNotFound()
     {
-        $this->page_not_found = ceva gasit sau null
+        // $this->page_not_found = ceva gasit sau null
     }
 
     /**
@@ -79,7 +79,7 @@ class Sample1
                 break;
             }
         }
-        if (isset($this->__spider->processing->products[$link])) {
+        if ($this->someDataFound($link)) {
             $urlConfig = $this->urlConfigService->configureCategoryPage(array(
                     'url' => $link,
                     'linkType' => $urlConfig->getLinkType(),
@@ -204,8 +204,7 @@ class Sample1
         $this->_curl->makeRequest($requestLink);
         $response = $this->_curl->getLastResponse();
         $this->_curl->__unsetPost();
-        $contentBody = json_decode($response['body']);
-        return $contentBody;
+        return json_decode($response['body']);
     }
 
     private function extractCategoryAndParams(string $pageContent): ParseXml
@@ -215,6 +214,15 @@ class Sample1
         $params = Sample1::determineParams($this->data_json->request_vars);
         $x->unloadDocument();
         return new ParseXml($category, $params);
+    }
+
+    /**
+     * @param $link
+     * @return bool
+     */
+    private function someDataFound($link): bool
+    {
+        return isset($this->__spider->processing->products[$link]);
     }
 }
 
