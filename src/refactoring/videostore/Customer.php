@@ -1,87 +1,82 @@
 <?php
+
 namespace victor\refactoring\videostore;
 
 class Customer
 {
-    public function __construct(string $name) {
+    private string $name;
+    /**
+     * @var Rental[]
+     */
+    private array $rentals = array();
+
+    public function __construct(string $name)
+    {
         $this->name = $name;
     }
 
-    public function addRental (Rental $rental) {
+    public function addRental(Rental $rental)
+    {
         $this->rentals[] = $rental;
     }
 
 
-    /**
-     * @return string
-     */
-    public function getName () {
+    public function getName(): string
+    {
         return $this->name;
     }
 
 
-    /**
-     * @param $name string
-     */
-    public function setName ($name) {
+    public function setName(string $name)
+    {
         $this->name = $name;
     }
 
-    /**
-     * @return string
-     */
-    public function statement () {
-        $totalAmount 			= 0;
-        $frequentRenterPoints 	= 0;
-        $rentals 				= $this->rentals;
-        $result 			= 'Rental Record for ' . $this->getName() . "\n";
+    public function generateStatement(): string
+    {
+        return $this->createHeader()
+            . $this->createBody()
+            . $this->createFooter();
+    }
 
-        foreach ($rentals as $each) {
-            $thisAmount = 0;
+    private function createHeader(): string
+    {
+        return "Rental Record for {$this->name}\n";
+    }
 
-            // determines the amount for each line
-            switch ($each->getMovie()->getPriceCode()) {
-                case Movie::REGULAR:
-                    $thisAmount += 2;
-                    if ($each->getDaysRented() > 2)
-                        $thisAmount += ($each->getDaysRented() - 2) * 1.5;
-                    break;
-                case Movie::NEW_RELEASE:
-                    $thisAmount += $each->getDaysRented() * 3;
-                    break;
-                case Movie::CHILDRENS:
-                    $thisAmount += 1.5;
-                    if ($each->getDaysRented() > 3)
-                        $thisAmount += ($each->getDaysRented () - 3) * 1.5;
-                    break;
-            }
-
-            // add frequent renter points
-            $frequentRenterPoints++;
-
-            // add bonus for a two day new release rental
-            if ($each->getMovie()->getPriceCode() == Movie::NEW_RELEASE
-                && $each->getDaysRented() > 1)
-                $frequentRenterPoints++;
-
-            // add footer lines
-            $result .= "\t" . $each->getMovie()->getTitle() . "\t"
-                . $thisAmount . "\n";
-            $totalAmount += $thisAmount;
-
+    private function createBody(): string
+    {
+        $result = "";
+        foreach ($this->rentals as $rental) {
+            $result .= "\t" . $rental->getMovie()->getTitle() . "\t" . $rental->computePrice() . "\n";
         }
-
-        $result .= 'You owed ' . $totalAmount . "\n";
-        $result .= 'You earned ' . $frequentRenterPoints . " frequent renter points\n";
-
-
         return $result;
     }
 
+    private function createFooter(): string
+    {
+        $totalPrice = $this->computeTotalPrice();
+        $frequentRenterPoints = $this->computeTotalPoints();
+        return 'You owed ' . $totalPrice . "\n"
+            . 'You earned ' . $frequentRenterPoints . " frequent renter points\n";
+    }
 
-    private $name;
-    /**
-     * @var Rental[]
-     */
-    private $rentals = array();
+    private function computeTotalPrice(): float
+    {
+        $totalPrice = 0;
+        foreach ($this->rentals as $rental) {
+            $totalPrice += $rental->computePrice();
+        }
+        return $totalPrice;
+    }
+
+    private function computeTotalPoints(): int
+    {
+        $frequentRenterPoints = 0;
+        foreach ($this->rentals as $rental) {
+            $frequentRenterPoints += $rental->addFrequentRenterPoints();
+        }
+        return $frequentRenterPoints;
+    }
+
 }
