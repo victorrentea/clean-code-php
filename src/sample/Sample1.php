@@ -28,13 +28,14 @@ class Sample1
     private $__spider;
     private $parse;
 
+
     public function __construct(UrlConfigService $urlConfigService)
     {
         $this->urlConfigService = $urlConfigService;
     }
 
 
-    function careDeterminaPageNotFound()
+    function careDeterminaPageNotFound(): int
     {
         // $this->page_not_found = ceva gasit sau null
     }
@@ -45,6 +46,8 @@ class Sample1
     private function processJson(UrlConfig $urlConfig)
     {
         $link = $urlConfig->getUrl();  // TODO responsabilitatea lui URLConfig sa curete URLul
+
+
 
         $job = $this->monitoringService->initChildJob($link, JobType::CATEGORY);
         $this->monitoringService->publishJob($job);
@@ -58,6 +61,7 @@ class Sample1
             $this->monitoringService->terminateJob();
         }
     }
+
 
     private function tryProcessJson($link, $urlConfig): void
     {
