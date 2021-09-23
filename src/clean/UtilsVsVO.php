@@ -3,17 +3,43 @@
 
 namespace victor\clean;
 
+// class CevaDinDb {
+//     private CevaDinDbMaiSpecific $abc;
+//     private string $d;
+//     private string $e;
+//     private string $f;
+//     private string $g;
+//     private string $h;
+//     private string $i;
+// }
+// class CevaDinDbMaiSpecific {
+//     private string $a;
+//     private string $b;
+//     private string $c;
+// }
+// class SearchCriteria {
+//     publi string $name;
+//     publi string $phone;
+//     publi string $address;
+//     publi string $age;
+// }
+
+echo "#sieu ". UtilsVsVO::intervalsIntersect(new Interval(2012, 2018), new Interval(2005, 2013)) . "\n";
+echo "#sieu ". UtilsVsVO::intervalsIntersect(new Interval(2012, 2018), new Interval(2005, 2013)) . "\n";
+echo "#sieu ". UtilsVsVO::intervalsIntersect(new Interval(2012, 2018), new Interval(2005, 2013)) . "\n";
+echo "#sieu ". UtilsVsVO::intervalsIntersect(new Interval(2012, 2018), new Interval(2005, 2013)) . "\n";
 
 class UtilsVsVO
 {
+
+    /**
+     * @param CarModel[] $models
+     */
     public function filterCarModels(CarSearchCriteria $criteria, array $models)
     {
         $result = [];
-        /** @var CarModel $model */
         foreach ($models as $model) {
-            if ($this->intervalsIntersect(
-                $model->getStartYear(), $model->getEndYear(),
-                $criteria->getStartYear(), $criteria->getEndYear())) {
+            if (UtilsVsVO::intervalsIntersect(new Interval($model->getStartYear(), $model->getEndYear()), new Interval($criteria->getStartYear(), $criteria->getEndYear()))) {
 
                 $result [] = $model;
             }
@@ -21,10 +47,30 @@ class UtilsVsVO
         return $result;
     }
 
-    // http://world.std.com/~swmcd/steven/tech/interval.html
-    private function intervalsIntersect(int $start1, int $end1, int $start2, int $end2): bool
+    public static function intervalsIntersect(Interval $interval1, Interval $interval2): bool
     {
-        return $start1 <= $end2 && $start2 <= $end1;
+
+        return $interval1->getStart() <= $interval2->getEnd() && $interval2->getStart() <= $interval1->getEnd();
+    }
+    // http://world.std.com/~swmcd/steven/tech/interval.html
+}
+class Interval {
+    private int $start;
+    private int $end;
+
+    public function __construct(int $start, int $end)
+    {
+        $this->start = $start;
+        $this->end = $end;
+    }
+
+    public function getEnd(): int
+    {
+        return $this->end;
+    }
+    public function getStart(): int
+    {
+        return $this->start;
     }
 }
 
@@ -33,6 +79,7 @@ class CarSearchCriteria
 {
     private $startYear;
     private $endYear;
+    // samd
 
     public function __construct(int $startYear, int $endYear)
     {
@@ -77,5 +124,10 @@ class CarModel
     public function getEndYear(): int
     {
         return $this->endYear;
+    }
+
+    public function getYearInterval()
+    {
+        return [$this->startYear, $this->endYear];
     }
 }
