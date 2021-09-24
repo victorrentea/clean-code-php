@@ -24,10 +24,10 @@ namespace victor\clean;
 //     publi string $age;
 // }
 
-echo "#sieu ". UtilsVsVO::intervalsIntersect(new Interval(2012, 2018), new Interval(2005, 2013)) . "\n";
-echo "#sieu ". UtilsVsVO::intervalsIntersect(new Interval(2012, 2018), new Interval(2005, 2013)) . "\n";
-echo "#sieu ". UtilsVsVO::intervalsIntersect(new Interval(2012, 2018), new Interval(2005, 2013)) . "\n";
-echo "#sieu ". UtilsVsVO::intervalsIntersect(new Interval(2012, 2018), new Interval(2005, 2013)) . "\n";
+echo "#sieu ". (new Interval(2012, 2018))->intersects(new Interval(2005, 2013)) . "\n";
+echo "#sieu ". (new Interval(2012, 2018))->intersects(new Interval(2005, 2013)) . "\n";
+echo "#sieu ". (new Interval(2012, 2018))->intersects(new Interval(2005, 2013)) . "\n";
+echo "#sieu ". (new Interval(2012, 2018))->intersects(new Interval(2005, 2013)) . "\n";
 
 class UtilsVsVO
 {
@@ -38,21 +38,15 @@ class UtilsVsVO
     public function filterCarModels(CarSearchCriteria $criteria, array $models)
     {
         $result = [];
+        $criteriaInterval = new Interval($criteria->getStartYear(), $criteria->getEndYear());
         foreach ($models as $model) {
-            if (UtilsVsVO::intervalsIntersect(new Interval($model->getStartYear(), $model->getEndYear()), new Interval($criteria->getStartYear(), $criteria->getEndYear()))) {
-
+            if ($model->getYearInterval()->intersects($criteriaInterval)) {
                 $result [] = $model;
             }
         }
         return $result;
     }
 
-    public static function intervalsIntersect(Interval $interval1, Interval $interval2): bool
-    {
-
-        return $interval1->getStart() <= $interval2->getEnd() && $interval2->getStart() <= $interval1->getEnd();
-    }
-    // http://world.std.com/~swmcd/steven/tech/interval.html
 }
 class Interval {
     private int $start;
@@ -60,10 +54,17 @@ class Interval {
 
     public function __construct(int $start, int $end)
     {
+        if ($start > $end) throw new \Exception("start larger than end");
         $this->start = $start;
         $this->end = $end;
     }
 
+
+    // http://world.std.com/~swmcd/steven/tech/interval.html
+    public function intersects(Interval $other): int
+    {
+        return $this->getStart() <= $other->getEnd() && $other->getStart() <= $this->getEnd();
+    }
     public function getEnd(): int
     {
         return $this->end;
@@ -100,34 +101,85 @@ class CarSearchCriteria
 }
 
 
-class CarModel
+// cate campuri are entitatea aia a voastra MARE
+// 50 Order
+function m(Product $product) {
+}
+
+
+class CarModel // mapata pe baza !! PANICA
 {
-    private $make;
+    private string $make;
     private $model;
-    private $startYear;
-    private $endYear;
+    private Interval $yearInterval;
 
     public function __construct(int $startYear, int $endYear, string $model, string $make)
     {
-        if ($startYear > $endYear) throw new \Exception("start larger than end");
-        $this->startYear = $startYear;
-        $this->endYear = $endYear;
+        $this->yearInterval = new Interval($startYear, $endYear);
         $this->model = $model;
+        $this->make = $make;
+        $this->validateMe();
+    }
+
+    public function validateMe(): void {
+        $this->validateMake($this->make);
+        $this->validateModel($this->model);
+        if ($this->make == null && $this->model == null) {
+            throw new \Exception();
+        }
+        // e ok cu model=null dar atunci make nu mai poate fi NULL
+
+        // make:BMW model:A5  -- asta cam miroase a DB SELECT ..
+        // adresa: Daca ai pus Apartament, trebuie si Etaj. Dar pot totodata ambele lipsi
+        // street number ===> Street Name
+    }
+
+
+    public function setMake(string $make): void
+    {
+        $this->validateMake($make);
         $this->make = $make;
     }
 
-    public function getStartYear(): int
+
+    public function getYearInterval(): Interval
     {
-        return $this->startYear;
+        return $this->yearInterval;
     }
 
-    public function getEndYear(): int
+    public function setYearInterval(Interval $yearInterval): void
     {
-        return $this->endYear;
+        $this->yearInterval = $yearInterval;
     }
 
-    public function getYearInterval()
+    private function validateMake(string $make): void
     {
-        return [$this->startYear, $this->endYear];
+        if ($make == "" || strlen($make) < 3) {
+            throw new \Exception("Empty make");
+        }
     }
+
+}
+
+// in codul existen, inlocuiest
+// $carModel->getStartYear() cu
+// $carModel->getYearInterval()->getStart()
+
+class CustomerId {
+    private int $id;
+}
+class Order {
+    private StreetAddress $streetAddress;
+}
+class StreetAddress {
+    private string $name;
+    private ?int $number;
+
+    public function __construct(string $name, ?int $number)
+    {
+        $this->name = $name;
+        $this->number = $number;
+    }
+
+
 }
