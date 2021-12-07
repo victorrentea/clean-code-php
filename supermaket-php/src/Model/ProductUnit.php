@@ -20,3 +20,7 @@ class ProductUnit extends Enum
 
     private const KILO = 'kilo';
 }
+enum Status {
+    case DRAFT;
+    case A;
+}

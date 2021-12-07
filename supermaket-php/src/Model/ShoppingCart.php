@@ -63,7 +63,7 @@ class ShoppingCart
                 $offer = $offers[$p];
                 $unitPrice = $catalog->getUnitPrice($p);
                 $discount = null;
-                $x = 1;
+                $x =1;
                 if ($offer->getOfferType()->equals(SpecialOfferType::THREE_FOR_TWO())) {
                     $x = 3;
                 } elseif ($offer->getOfferType()->equals(SpecialOfferType::TWO_FOR_AMOUNT())) {
