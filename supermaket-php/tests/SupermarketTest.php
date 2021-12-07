@@ -59,13 +59,13 @@ class SupermarketTest extends TestCase
         $this->cart = new ShoppingCart();
         $this->teller = new Teller($this->catalog);
 
-        $this->toothbrush = new Product('toothbrush', ProductUnit::EACH());
+        $this->toothbrush = new Product('toothbrush', ProductUnit::EACH);
         $this->catalog->addProduct($this->toothbrush, 0.99);
-        $this->rice = new Product('rice', ProductUnit::EACH());
+        $this->rice = new Product('rice', ProductUnit::EACH);
         $this->catalog->addProduct($this->rice, 2.99);
-        $this->apples = new Product('apples', ProductUnit::KILO());
+        $this->apples = new Product('apples', ProductUnit::KILO);
         $this->catalog->addProduct($this->apples, 1.99);
-        $this->cherryTomatoes = new Product('cherry tomato box', ProductUnit::EACH());
+        $this->cherryTomatoes = new Product('cherry tomato box', ProductUnit::EACH);
         $this->catalog->addProduct($this->cherryTomatoes, 0.69);
 
         $this->printer = new ReceiptPrinter(40);

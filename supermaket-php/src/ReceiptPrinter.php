@@ -82,7 +82,7 @@ class ReceiptPrinter
 
     private static function presentQuantity(ReceiptItem $item): string
     {
-        return $item->getProduct()->getUnit()->equals(ProductUnit::EACH()) ?
+        return $item->getProduct()->getUnit() == ProductUnit::EACH ?
             sprintf('%x', $item->getQuantity()) :
             sprintf('%.3F', $item->getQuantity());
     }
