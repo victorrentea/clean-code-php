@@ -14,7 +14,7 @@ class ProductQuantity
     /**
      * @var float
      */
-    private $quantity;
+    private float $quantity;
 
     public function __construct(Product $product, float $weight)
     {
