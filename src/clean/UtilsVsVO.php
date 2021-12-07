@@ -6,25 +6,60 @@ namespace victor\clean;
 
 class UtilsVsVO
 {
+    /**
+     * @param CarModel[] $models
+     */
     public function filterCarModels(CarSearchCriteria $criteria, array $models)
     {
         $result = [];
-        /** @var CarModel $model */
-        foreach ($models as $model) {
-            if ($this->intervalsIntersect(
-                $model->getStartYear(), $model->getEndYear(),
-                $criteria->getStartYear(), $criteria->getEndYear())) {
 
+        foreach ($models as $model) {
+            $modelInterval = new Interval($model->getStartYear(), $model->getEndYear());
+            $criteriaInterval = new Interval($criteria->getStartYear(), $criteria->getEndYear());
+            if ($modelInterval->intersects($criteriaInterval)) {
                 $result [] = $model;
             }
         }
         return $result;
     }
 
-    // http://world.std.com/~swmcd/steven/tech/interval.html
-    private function intervalsIntersect(int $start1, int $end1, int $start2, int $end2): bool
+}
+
+// class Timestamp {
+//     private int $timestamp;
+//
+//     public function __construct(int $timestamp)
+//     {
+//         if ($timestamp nu e data valida) {
+//             throw
+//     }
+//         $this->timestamp = $timestamp;
+//     }
+//
+// }
+class Interval {
+    private int $start;
+    private int $end;
+
+    public function __construct(int $start, int $end)
     {
-        return $start1 <= $end2 && $start2 <= $end1;
+        if ($start > $end) {
+            throw new \Exception("start larger than end");
+        }
+        $this->start = $start;
+        $this->end = $end;
+    }
+    public function intersects(Interval $other): bool
+    {
+        return $this->getStart() <= $other->getEnd() && $other->getStart() <= $this->getEnd();
+    }
+    public function getStart(): int
+    {
+        return $this->start;
+    }
+    public function getEnd(): int
+    {
+        return $this->end;
     }
 }
 
@@ -57,16 +92,18 @@ class CarModel
 {
     private $make;
     private $model;
-    private $startYear;
-    private $endYear;
+    private Interval $interval;
 
-    public function __construct(int $startYear, int $endYear, string $model, string $make)
+    public function __construct(Interval $interval, string $model, string $make)
     {
-        if ($startYear > $endYear) throw new \Exception("start larger than end");
-        $this->startYear = $startYear;
-        $this->endYear = $endYear;
         $this->model = $model;
         $this->make = $make;
+        $this->interval = $interval;
+    }
+
+    public function getInterval(): Interval
+    {
+        return $this->interval;
     }
 
     public function getStartYear(): int
