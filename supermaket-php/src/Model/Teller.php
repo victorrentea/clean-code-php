@@ -8,10 +8,7 @@ use Ds\Map;
 
 class Teller
 {
-    /**
-     * @var SupermarketCatalog
-     */
-    private $catalog;
+    private SupermarketCatalog $catalog;
 
     /**
      * @var Map [Product => Offer]
@@ -32,14 +29,10 @@ class Teller
     public function checkoutArticlesFrom(ShoppingCart $cart): Receipt
     {
         $receipt = new Receipt();
-        $productQuantities = $cart->getItems();
-        foreach ($productQuantities as $pq) {
-            $p = $pq->getProduct();
-            $quantity = $pq->getQuantity();
-            $unitPrice = $this->catalog->getUnitPrice($p);
-            $price = $quantity * $unitPrice;
-            $receipt->addProduct($p, $quantity, $unitPrice, $price);
-
+        foreach ($cart->getItems() as $productQuantity) {
+            $unitPrice = $this->catalog->getUnitPrice($productQuantity->getProduct());
+            $totalPrice = $productQuantity->getQuantity() * $unitPrice;
+            $receipt->addProduct($productQuantity->getProduct(), $productQuantity->getQuantity(), $unitPrice, $totalPrice);
         }
 
         $cart->handleOffers($receipt, $this->offers, $this->catalog);
