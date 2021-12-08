@@ -7,9 +7,13 @@ use Supermarket\Model\Product;
 
 class PercentDiscountOffer implements ProductOffer
 {
-    private readonly Product $product;
+    private readonly Product $product; // TODO de expus cu getter din interfata
     private readonly float $discountPercentage;
 
+    public function getProduct(): Product
+    {
+        return $this->product;
+    }
     public function __construct(Product $product, float $discountPercentage)
     {
         $this->discountPercentage = $discountPercentage;

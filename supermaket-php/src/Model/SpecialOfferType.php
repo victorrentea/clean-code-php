@@ -6,6 +6,7 @@ namespace Supermarket\Model;
 
 use MyCLabs\Enum\Enum;
 
+// TODO fa-l sa dispara p'asta
 enum SpecialOfferType
 {
     case THREE_FOR_TWO;

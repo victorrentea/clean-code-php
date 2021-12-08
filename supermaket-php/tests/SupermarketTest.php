@@ -6,7 +6,13 @@ namespace Tests;
 
 use ApprovalTests\Approvals;
 use PHPUnit\Framework\TestCase;
-use Supermarket\Model\{Product, ProductUnit, Receipt, ShoppingCart, SpecialOfferType, Teller};
+use Supermarket\Model\{offer\QuantityDiscountOffer,
+    Product,
+    ProductUnit,
+    Receipt,
+    ShoppingCart,
+    SpecialOfferType,
+    Teller};
 use Supermarket\ReceiptPrinter;
 
 class SupermarketTest extends TestCase
@@ -168,7 +174,7 @@ class SupermarketTest extends TestCase
     public function testFiveForYDiscount(): void
     {
         $this->cart->addItemQuantity($this->apples, 5);
-        $this->teller->addSpecialOffer(SpecialOfferType::FIVE_FOR_AMOUNT, $this->apples, 6.99);
+        $this->teller->addSpecialOffer_(new QuantityDiscountOffer($this->apples,5, 6.99));
 
         Approvals::verifyString($this->printReceipt());
     }
@@ -176,7 +182,7 @@ class SupermarketTest extends TestCase
     public function testFiveForYDiscountWithSix(): void
     {
         $this->cart->addItemQuantity($this->apples, 6);
-        $this->teller->addSpecialOffer(SpecialOfferType::FIVE_FOR_AMOUNT, $this->apples, 6.99);
+        $this->teller->addSpecialOffer_(new QuantityDiscountOffer($this->apples,5, 6.99));
 
         Approvals::verifyString($this->printReceipt());
     }
@@ -184,7 +190,7 @@ class SupermarketTest extends TestCase
     public function testFiveForYDiscountWithSixteen(): void
     {
         $this->cart->addItemQuantity($this->apples, 16);
-        $this->teller->addSpecialOffer(SpecialOfferType::FIVE_FOR_AMOUNT, $this->apples, 6.99);
+        $this->teller->addSpecialOffer_(new QuantityDiscountOffer($this->apples,5, 6.99));
 
         Approvals::verifyString($this->printReceipt());
     }
@@ -192,7 +198,7 @@ class SupermarketTest extends TestCase
     public function testFiveForYDiscountWithFour(): void
     {
         $this->cart->addItemQuantity($this->apples, 4);
-        $this->teller->addSpecialOffer(SpecialOfferType::FIVE_FOR_AMOUNT, $this->apples, 6.99);
+        $this->teller->addSpecialOffer_(new QuantityDiscountOffer($this->apples,5, 6.99));
 
         Approvals::verifyString($this->printReceipt());
     }

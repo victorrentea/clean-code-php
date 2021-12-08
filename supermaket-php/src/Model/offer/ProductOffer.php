@@ -8,5 +8,5 @@ use Supermarket\Model\Product;
 interface ProductOffer
 {
     public function getDiscount(Product $product, float $quantity, float $unitPrice): ?Discount;
-
+    public function getProduct(): Product;
 }

@@ -24,4 +24,9 @@ class ThreeForTwoOffer implements ProductOffer
         $discountedAmount = $unitPrice * intdiv($quantityAsInt, 3);
         return new Discount($product, '3 for 2', -$discountedAmount);
     }
+
+    public function getProduct(): Product
+    {
+        return $this->product;
+    }
 }

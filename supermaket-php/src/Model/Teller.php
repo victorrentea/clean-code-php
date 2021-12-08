@@ -6,6 +6,7 @@ namespace Supermarket\Model;
 
 use Ds\Map;
 use Supermarket\Model\offer\PercentDiscountOffer;
+use Supermarket\Model\offer\ProductOffer;
 use Supermarket\Model\offer\QuantityDiscountOffer;
 use Supermarket\Model\offer\ThreeForTwoOffer;
 
@@ -24,10 +25,14 @@ class Teller
         $this->offers = new Map();
     }
 
-    // public function addSpecialOffer___(ProductOffer $offer): void
-    // {
-    //     $this->offers[]=$offer;
-    // }
+    // TODO de add intr-o lista
+    public function addSpecialOffer_(ProductOffer $offer): void
+    {
+    // TODO pastreaza regula sa ai o singura oferta per produs
+        $this->offers[$offer->getProduct()]=$offer;
+    }
+
+    // TODO de sters
     public function addSpecialOffer(SpecialOfferType $offerType, Product $product, float $argument): void
     {
         $this->offers[$product] = match ($offerType) {
@@ -36,7 +41,6 @@ class Teller
             SpecialOfferType::FIVE_FOR_AMOUNT => new QuantityDiscountOffer($product, 5, $argument),
             SpecialOfferType::THREE_FOR_TWO => new ThreeForTwoOffer($product)
         };
-
     }
 
     public function checkoutArticlesFrom(ShoppingCart $cart): Receipt

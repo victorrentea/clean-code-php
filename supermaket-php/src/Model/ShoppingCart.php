@@ -41,7 +41,17 @@ class ShoppingCart
          * @var Product $product
          * @var float $quantity
          */
+
+        // TODO in loc sa intorci array asociat, intoarce lista <ProductQuantity>
         $productQuantities = $this->consolidateQuantities();
+
+        // TODO [ProductQuantities]
+
+        // foreach ($offers as $product => $offer) {
+        //     if !($productQuantities->hasKey($product)) {
+        //         continue;
+        //     }
+// }
 
         foreach ($productQuantities as $product => $quantity) { // 3
             if (!$offers->hasKey($product)) {

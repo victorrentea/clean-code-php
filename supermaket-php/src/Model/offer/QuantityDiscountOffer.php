@@ -12,6 +12,10 @@ class QuantityDiscountOffer implements ProductOffer
     private readonly int $quantity;
     private readonly float $price;
 
+    public function getProduct(): Product
+    {
+        return $this->product;
+    }
     public function __construct(Product $product, int $offerQuantity, float $price)
     {
         $this->quantity = $offerQuantity;
