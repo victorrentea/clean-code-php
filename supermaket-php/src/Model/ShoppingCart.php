@@ -63,37 +63,29 @@ class ShoppingCart
                 $offer = $offers[$p];
                 $unitPrice = $catalog->getUnitPrice($p);
                 $discount = null;
-                $x =1;
-                if ($offer->getOfferType() == SpecialOfferType::THREE_FOR_TWO) {
-                    $x = 3;
+
+                if ($offer->getOfferType() == SpecialOfferType::THREE_FOR_TWO) {// TODO pret in special offer
+                    if ($quantityAsInt >= 3) {
+                        $discountAmount = $quantity * $unitPrice - (intdiv($quantityAsInt, 3) * 2 * $unitPrice +
+                                $quantityAsInt % 3 * $unitPrice);
+                        $discount = new Discount($p, '3 for 2', -$discountAmount);
+                    }
                 } elseif ($offer->getOfferType() == SpecialOfferType::TWO_FOR_AMOUNT) {
-                    $x = 2;
                     if ($quantityAsInt >= 2) {
-                        $total = $offer->getArgument() * intdiv($quantityAsInt, $x) + $quantityAsInt % 2 * $unitPrice;
+                        $total = $offer->getArgument() * intdiv($quantityAsInt, 2) + $quantityAsInt % 2 * $unitPrice;
                         $discountN = $unitPrice * $quantity - $total;
                         $discount = new Discount($p, "2 for {$offer->getArgument()}", -1 * $discountN);
                     }
-                }
-
-                if ($offer->getOfferType() == SpecialOfferType::FIVE_FOR_AMOUNT) {
-                    $x = 5;
-                }
-                $numberOfXs = intdiv($quantityAsInt, $x);
-                if ($offer->getOfferType() == SpecialOfferType::THREE_FOR_TWO && $quantityAsInt > 2) {
-                    $discountAmount = $quantity * $unitPrice - ($numberOfXs * 2 * $unitPrice + $quantityAsInt % 3 * $unitPrice);
-                    $discount = new Discount($p, '3 for 2', -$discountAmount);
-                }
-
-                if ($offer->getOfferType() == SpecialOfferType::TEN_PERCENT_DISCOUNT) {
-                    $discount = new Discount(
-                        $p,
-                        "{$offer->getArgument()}% off",
+                } elseif ($offer->getOfferType() == SpecialOfferType::FIVE_FOR_AMOUNT) {
+                    if ($quantityAsInt >= 5) {
+                        $numberOfXs = intdiv($quantityAsInt, 5);
+                        $discountTotal = $unitPrice * $quantity - ($offer->getArgument() * $numberOfXs + $quantityAsInt % 5 * $unitPrice);
+                        $discount = new Discount($p, "5 for {$offer->getArgument()}", -$discountTotal);
+                    }
+                } elseif ($offer->getOfferType() == SpecialOfferType::TEN_PERCENT_DISCOUNT) {
+                    $discount = new Discount($p, "{$offer->getArgument()}% off",
                         -$quantity * $unitPrice * $offer->getArgument() / 100.0
                     );
-                }
-                if ($offer->getOfferType() == SpecialOfferType::FIVE_FOR_AMOUNT && $quantityAsInt >= 5) {
-                    $discountTotal = $unitPrice * $quantity - ($offer->getArgument() * $numberOfXs + $quantityAsInt % 5 * $unitPrice);
-                    $discount = new Discount($p, "${x} for {$offer->getArgument()}", -$discountTotal);
                 }
 
                 if ($discount !== null) {
