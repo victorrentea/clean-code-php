@@ -74,26 +74,12 @@ class ShoppingCart
 
     private function getDiscount(Offer $offer, float $quantity, float $unitPrice, Product $p): ?Discount
     {
-        switch ($offer->getOfferType()) {
-            case SpecialOfferType::THREE_FOR_TWO :
-            {
-                return $this->createThreeForTwoDiscount($quantity, $unitPrice, $p);
-            }
-            case SpecialOfferType::TWO_FOR_AMOUNT:
-            {
-                return $this->createTwoForAmountDiscount($offer, $unitPrice, $quantity, $p);
-            }
-            case SpecialOfferType::FIVE_FOR_AMOUNT:
-            {
-                return $this->createFiveForAmountDiscount($unitPrice, $quantity, $offer, $p);
-            }
-            case SpecialOfferType::TEN_PERCENT_DISCOUNT:
-            {
-                return $this->createTenPerecentDiscount($p, $offer, $quantity, $unitPrice);
-            }
-            default:
-                throw new \Exception("Unexpected value {$offer->getOfferType()}");
-        }
+        return match ($offer->getOfferType()) {
+            SpecialOfferType::THREE_FOR_TWO  => $this->createThreeForTwoDiscount($quantity, $unitPrice, $p),
+            SpecialOfferType::TWO_FOR_AMOUNT => $this->createTwoForAmountDiscount($offer, $unitPrice, $quantity, $p),
+            SpecialOfferType::FIVE_FOR_AMOUNT => $this->createFiveForAmountDiscount($unitPrice, $quantity, $offer, $p),
+            SpecialOfferType::TEN_PERCENT_DISCOUNT => $this->createTenPerecentDiscount($p, $offer, $quantity, $unitPrice),
+        };
     }
 
     private function createThreeForTwoDiscount(float $quantity, float $unitPrice, Product $p): ?Discount

@@ -15,7 +15,6 @@ enum SpecialOfferType
     case TWO_FOR_AMOUNT;
 
     case FIVE_FOR_AMOUNT;
-
 }
 
 
