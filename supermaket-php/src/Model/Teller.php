@@ -35,6 +35,7 @@ class Teller
     // TODO de sters
     public function addSpecialOffer(SpecialOfferType $offerType, Product $product, float $argument): void
     {
+
         $this->offers[$product] = match ($offerType) {
             SpecialOfferType::TEN_PERCENT_DISCOUNT => new PercentDiscountOffer($product, $argument),
             SpecialOfferType::TWO_FOR_AMOUNT => new QuantityDiscountOffer($product, 2, $argument),
@@ -46,6 +47,7 @@ class Teller
     public function checkoutArticlesFrom(ShoppingCart $cart): Receipt
     {
         $receipt = new Receipt();
+
         foreach ($cart->getItems() as $productQuantity) {
             $unitPrice = $this->catalog->getUnitPrice($productQuantity->getProduct());
             $totalPrice = $productQuantity->getQuantity() * $unitPrice;

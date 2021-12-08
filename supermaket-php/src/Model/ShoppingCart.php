@@ -45,18 +45,18 @@ class ShoppingCart
         // TODO in loc sa intorci array asociat, intoarce lista <ProductQuantity>
         $productQuantities = $this->consolidateQuantities();
 
-        // TODO [ProductQuantities]
+        // TODO array[ProductQuantities]
 
         // foreach ($offers as $product => $offer) {
         //     if !($productQuantities->hasKey($product)) {
         //         continue;
         //     }
-// }
 
-        foreach ($productQuantities as $product => $quantity) { // 3
-            if (!$offers->hasKey($product)) {
-                continue;
-            }
+// }
+        // [Product => ProductOffer]
+        $applicableQuantities = $productQuantities->filter(fn(Product $pq) => $offers->hasKey($pq));
+
+        foreach ($applicableQuantities as $product => $quantity) { // 3
             /** @var ProductOffer $offer */
             $offer = $offers[$product];
             $unitPrice = $catalog->getUnitPrice($product);
