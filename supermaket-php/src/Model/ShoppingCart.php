@@ -74,10 +74,6 @@ class ShoppingCart
         if ($quantityAsInt < 3) {
             return null;
         }
-        // $extraItemsNotInOffer = $quantityAsInt % 3;
-        // $discountedQuantity = intdiv($quantityAsInt, 3) * 2 + $extraItemsNotInOffer;
-        // $finalQuantity = $quantity - $discountedQuantity;
-        // $discountAmount = $unitPrice * ($finalQuantity);
         $discountedAmount = $unitPrice * intdiv($quantityAsInt, 3);
         return new Discount($product, '3 for 2', -$discountedAmount);
     }
