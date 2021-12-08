@@ -13,16 +13,6 @@ class ShoppingCart
      */
     private $items = [];
 
-    /**
-     * @var Map [Product => quantity]
-     */
-    private Map $productQuantities;
-
-    public function __construct()
-    {
-        $this->productQuantities = new Map();
-    }
-
     public function addItem(Product $product): void
     {
         $this->addItemQuantity($product, 1.0);
@@ -31,12 +21,8 @@ class ShoppingCart
     public function addItemQuantity(Product $product, float $quantity): void
     {
         $this->items[] = new ProductQuantity($product, $quantity);  // 1
-
-        if (!$this->productQuantities->hasKey($product)) {
-            $this->productQuantities[$product] = 0;
-        }
-        $this->productQuantities[$product] += $quantity; // 2
     }
+
     /**
      * @return ProductQuantity[]
      */
@@ -44,26 +30,30 @@ class ShoppingCart
     {
         return $this->items;
     }
+
     /**
      * @param Map $offers [Product => Offer]
      */
     public function handleOffers(Receipt $receipt, Map $offers, SupermarketCatalog $catalog): void
     {
         /**
-         * @var Product $p
+         * @var Product $product
          * @var float $quantity
          */
-        foreach ($this->productQuantities as $p => $quantity) { // 3
-            if ($offers->hasKey($p)) {
-                /** @var Offer $offer */
-                $offer = $offers[$p];
-                $unitPrice = $catalog->getUnitPrice($p);
+        $productQuantities = $this->consolidateQuantities();
 
-                $discount = $this->getDiscount($offer, $quantity, $unitPrice, $p);
+        foreach ($productQuantities as $product => $quantity) { // 3
+            if (!$offers->hasKey($product)) {
+                continue;
+            }
+            /** @var Offer $offer */
+            $offer = $offers[$product];
+            $unitPrice = $catalog->getUnitPrice($product);
 
-                if ($discount !== null) {
-                    $receipt->addDiscount($discount);
-                }
+            $discount = $this->getDiscount($offer, $quantity, $unitPrice, $product);
+
+            if ($discount !== null) {
+                $receipt->addDiscount($discount);
             }
         }
     }
@@ -71,9 +61,9 @@ class ShoppingCart
     private function getDiscount(Offer $offer, float $quantity, float $unitPrice, Product $product): ?Discount
     {
         return match ($offer->getOfferType()) {
-            SpecialOfferType::THREE_FOR_TWO  => $this->createThreeForTwoDiscount($product, $quantity, $unitPrice),
-            SpecialOfferType::TWO_FOR_AMOUNT => $this->createTwoForAmountDiscount($product, $quantity, $unitPrice, $offer),
-            SpecialOfferType::FIVE_FOR_AMOUNT => $this->createFiveForAmountDiscount($product, $quantity, $unitPrice, $offer),
+            SpecialOfferType::THREE_FOR_TWO => $this->createThreeForTwoDiscount($product, $quantity, $unitPrice),
+            SpecialOfferType::TWO_FOR_AMOUNT => $this->createDiscountForQuantity(2, $product, $quantity, $unitPrice, $offer),
+            SpecialOfferType::FIVE_FOR_AMOUNT => $this->createDiscountForQuantity(5, $product, $quantity, $unitPrice, $offer),
             SpecialOfferType::TEN_PERCENT_DISCOUNT => $this->createTenPerecentDiscount($product, $quantity, $unitPrice, $offer),
         };
     }
@@ -81,37 +71,15 @@ class ShoppingCart
     private function createThreeForTwoDiscount(Product $product, float $quantity, float $unitPrice): ?Discount
     {
         $quantityAsInt = (int)$quantity;
-        $discount= null;
-        if ($quantityAsInt >= 3) {
-            $discountAmount = $quantity * $unitPrice - (intdiv($quantityAsInt, 3) * 2 * $unitPrice +
-                    $quantityAsInt % 3 * $unitPrice);
-            $discount = new Discount($product, '3 for 2', -$discountAmount);
+        if ($quantityAsInt < 3) {
+            return null;
         }
-        return $discount;
-    }
-
-    private function createTwoForAmountDiscount(Product $product, float $quantity, float $unitPrice, Offer $offer): ?Discount
-    {
-        $quantityAsInt = (int)$quantity;
-        $discount = null;
-        if ($quantityAsInt >= 2) {
-            $total = $offer->getArgument() * intdiv($quantityAsInt, 2) + $quantityAsInt % 2 * $unitPrice;
-            $discountN = $unitPrice * $quantity - $total;
-            $discount = new Discount($product, "2 for {$offer->getArgument()}", -1 * $discountN);
-        }
-        return $discount;
-    }
-
-    private function createFiveForAmountDiscount(Product $product, float $quantity, float $unitPrice, Offer $offer): ?Discount
-    {
-        $quantityAsInt = (int)$quantity;
-        $discount = null;
-        if ($quantityAsInt >= 5) {
-            $numberOfXs = intdiv($quantityAsInt, 5);
-            $discountTotal = $unitPrice * $quantity - ($offer->getArgument() * $numberOfXs + $quantityAsInt % 5 * $unitPrice);
-            $discount = new Discount($product, "5 for {$offer->getArgument()}", -$discountTotal);
-        }
-        return $discount;
+        // $extraItemsNotInOffer = $quantityAsInt % 3;
+        // $discountedQuantity = intdiv($quantityAsInt, 3) * 2 + $extraItemsNotInOffer;
+        // $finalQuantity = $quantity - $discountedQuantity;
+        // $discountAmount = $unitPrice * ($finalQuantity);
+        $discountedAmount = $unitPrice * intdiv($quantityAsInt, 3);
+        return new Discount($product, '3 for 2', -$discountedAmount);
     }
 
     private function createTenPerecentDiscount(Product $product, float $quantity, float $unitPrice, Offer $offer): ?Discount
@@ -119,5 +87,31 @@ class ShoppingCart
         return new Discount($product, "{$offer->getArgument()}% off",
             -$quantity * $unitPrice * $offer->getArgument() / 100.0
         );
+    }
+
+    /**
+     * @return Map
+     */
+    private function consolidateQuantities(): Map
+    {
+        $productQuantities = new Map();
+        foreach ($this->items as $item) {
+            if (!$productQuantities->hasKey($item->getProduct())) {
+                $productQuantities[$item->getProduct()] = 0;
+            }
+            $productQuantities[$item->getProduct()] += $item->getQuantity(); // 2
+        }
+        return $productQuantities;
+    }
+
+    private function createDiscountForQuantity(int $offerQuantity, Product $product, float $quantity, float $unitPrice, Offer $offer): ?Discount
+    {
+        $quantityAsInt = (int)$quantity;
+        $discount = null;
+        if ($quantityAsInt >= $offerQuantity) {
+            $discount = $unitPrice * $quantity - ($offer->getArgument() * intdiv($quantityAsInt, $offerQuantity) + $quantityAsInt % $offerQuantity * $unitPrice);
+            $discount = new Discount($product, "$offerQuantity for {$offer->getArgument()}", -$discount);
+        }
+        return $discount;
     }
 }
