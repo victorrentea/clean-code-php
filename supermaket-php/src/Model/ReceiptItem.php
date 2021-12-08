@@ -6,31 +6,19 @@ namespace Supermarket\Model;
 
 class ReceiptItem
 {
-    /**
-     * @var Product
-     */
-    private $product;
+    private Product $product;
 
-    /**
-     * @var float
-     */
-    private $quantity;
+    private float $quantity;
 
-    /**
-     * @var float
-     */
-    private $price;
+    private float $unitPrice;
 
-    /**
-     * @var float
-     */
-    private $totalPrice;
+    private float $totalPrice;
 
     public function __construct(Product $product, float $quantity, float $price, float $totalPrice)
     {
         $this->product = $product;
         $this->quantity = $quantity;
-        $this->price = $price;
+        $this->unitPrice = $price;
         $this->totalPrice = $totalPrice;
     }
 
@@ -44,9 +32,9 @@ class ReceiptItem
         return $this->quantity;
     }
 
-    public function getPrice(): float
+    public function getUnitPrice(): float
     {
-        return $this->price;
+        return $this->unitPrice;
     }
 
     public function getTotalPrice(): float

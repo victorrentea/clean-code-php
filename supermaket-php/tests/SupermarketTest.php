@@ -97,7 +97,7 @@ class SupermarketTest extends TestCase
         $this->cart->addItem($this->toothbrush);
         $this->cart->addItem($this->toothbrush);
         $this->teller->addSpecialOffer(
-            SpecialOfferType::THREE_FOR_TWO(),
+            SpecialOfferType::THREE_FOR_TWO,
             $this->toothbrush,
             $this->catalog->getUnitPrice($this->toothbrush)
         );
@@ -109,7 +109,7 @@ class SupermarketTest extends TestCase
     {
         $this->cart->addItem($this->toothbrush);
         $this->teller->addSpecialOffer(
-            SpecialOfferType::THREE_FOR_TWO(),
+            SpecialOfferType::THREE_FOR_TWO,
             $this->toothbrush,
             $this->catalog->getUnitPrice($this->toothbrush)
         );
@@ -125,7 +125,7 @@ class SupermarketTest extends TestCase
         $this->cart->addItem($this->toothbrush);
         $this->cart->addItem($this->toothbrush);
         $this->teller->addSpecialOffer(
-            SpecialOfferType::THREE_FOR_TWO(),
+            SpecialOfferType::THREE_FOR_TWO,
             $this->toothbrush,
             $this->catalog->getUnitPrice($this->toothbrush)
         );
@@ -143,7 +143,7 @@ class SupermarketTest extends TestCase
     public function testPercentDiscount(): void
     {
         $this->cart->addItem($this->rice);
-        $this->teller->addSpecialOffer(SpecialOfferType::TEN_PERCENT_DISCOUNT(), $this->rice, 10.0);
+        $this->teller->addSpecialOffer(SpecialOfferType::TEN_PERCENT_DISCOUNT, $this->rice, 10.0);
 
         Approvals::verifyString($this->printReceipt());
     }
@@ -152,7 +152,7 @@ class SupermarketTest extends TestCase
     {
         $this->cart->addItem($this->cherryTomatoes);
         $this->cart->addItem($this->cherryTomatoes);
-        $this->teller->addSpecialOffer(SpecialOfferType::TWO_FOR_AMOUNT(), $this->cherryTomatoes, 0.99);
+        $this->teller->addSpecialOffer(SpecialOfferType::TWO_FOR_AMOUNT, $this->cherryTomatoes, 0.99);
 
         Approvals::verifyString($this->printReceipt());
     }
@@ -160,7 +160,7 @@ class SupermarketTest extends TestCase
     public function testXForYDiscountWithInsufficientInBasket(): void
     {
         $this->cart->addItem($this->cherryTomatoes);
-        $this->teller->addSpecialOffer(SpecialOfferType::TWO_FOR_AMOUNT(), $this->cherryTomatoes, 0.99);
+        $this->teller->addSpecialOffer(SpecialOfferType::TWO_FOR_AMOUNT, $this->cherryTomatoes, 0.99);
 
         Approvals::verifyString($this->printReceipt());
     }
@@ -168,7 +168,7 @@ class SupermarketTest extends TestCase
     public function testFiveForYDiscount(): void
     {
         $this->cart->addItemQuantity($this->apples, 5);
-        $this->teller->addSpecialOffer(SpecialOfferType::FIVE_FOR_AMOUNT(), $this->apples, 6.99);
+        $this->teller->addSpecialOffer(SpecialOfferType::FIVE_FOR_AMOUNT, $this->apples, 6.99);
 
         Approvals::verifyString($this->printReceipt());
     }
@@ -176,7 +176,7 @@ class SupermarketTest extends TestCase
     public function testFiveForYDiscountWithSix(): void
     {
         $this->cart->addItemQuantity($this->apples, 6);
-        $this->teller->addSpecialOffer(SpecialOfferType::FIVE_FOR_AMOUNT(), $this->apples, 6.99);
+        $this->teller->addSpecialOffer(SpecialOfferType::FIVE_FOR_AMOUNT, $this->apples, 6.99);
 
         Approvals::verifyString($this->printReceipt());
     }
@@ -184,7 +184,7 @@ class SupermarketTest extends TestCase
     public function testFiveForYDiscountWithSixteen(): void
     {
         $this->cart->addItemQuantity($this->apples, 16);
-        $this->teller->addSpecialOffer(SpecialOfferType::FIVE_FOR_AMOUNT(), $this->apples, 6.99);
+        $this->teller->addSpecialOffer(SpecialOfferType::FIVE_FOR_AMOUNT, $this->apples, 6.99);
 
         Approvals::verifyString($this->printReceipt());
     }
@@ -192,7 +192,7 @@ class SupermarketTest extends TestCase
     public function testFiveForYDiscountWithFour(): void
     {
         $this->cart->addItemQuantity($this->apples, 4);
-        $this->teller->addSpecialOffer(SpecialOfferType::FIVE_FOR_AMOUNT(), $this->apples, 6.99);
+        $this->teller->addSpecialOffer(SpecialOfferType::FIVE_FOR_AMOUNT, $this->apples, 6.99);
 
         Approvals::verifyString($this->printReceipt());
     }

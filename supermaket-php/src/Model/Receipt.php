@@ -4,19 +4,21 @@ declare(strict_types=1);
 
 namespace Supermarket\Model;
 
+use JetBrains\PhpStorm\Pure;
+
 class Receipt
 {
     /**
      * @var Discount[]
      */
-    private $discounts = [];
+    private array $discounts = [];
 
     /**
      * @var ReceiptItem[]
      */
-    private $items = [];
+    private array $items = [];
 
-    public function getTotalPrice(): float
+    #[Pure] public function getTotalPrice(): float
     {
         $total = 0.0;
         foreach ($this->items as $item) {
@@ -28,9 +30,9 @@ class Receipt
         return $total;
     }
 
-    public function addProduct(Product $product, float $quantity, float $price, float $totalPrice): void
+    public function addProduct(Product $product, float $quantity, float $unitPrice, float $totalPrice): void
     {
-        $this->items[] = new ReceiptItem($product, $quantity, $price, $totalPrice);
+        $this->items[] = new ReceiptItem($product, $quantity, $unitPrice, $totalPrice);
     }
 
     /**

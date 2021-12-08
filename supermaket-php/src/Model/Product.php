@@ -5,18 +5,13 @@ declare(strict_types=1);
 namespace Supermarket\Model;
 
 use Ds\Hashable;
+use JetBrains\PhpStorm\Pure;
 
 class Product implements Hashable
 {
-    /**
-     * @var string
-     */
-    private $name;
+    private readonly string $name;
 
-    /**
-     * @var ProductUnit
-     */
-    private $unit;
+    private readonly ProductUnit $unit;
 
     public function __construct(string $name, ProductUnit $unit)
     {
@@ -34,17 +29,15 @@ class Product implements Hashable
         return $this->unit;
     }
 
-    /**
-     * @param Product $obj
-     */
-    public function equals($obj): bool
+    /** @param Product $obj */
+    #[Pure] public function equals($obj): bool
     {
         return $obj instanceof self &&
             $this->getName() === $obj->getName() &&
             $this->getUnit() === $obj->getUnit();
     }
 
-    public function hash()
+    #[Pure] public function hash()
     {
         return "{$this->getName()}__{$this->getUnit()}";
     }

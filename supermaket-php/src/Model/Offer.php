@@ -6,20 +6,11 @@ namespace Supermarket\Model;
 
 class Offer
 {
-    /**
-     * @var Product
-     */
-    private $product;
+    private Product $product; // TODO possible bug
 
-    /**
-     * @var SpecialOfferType
-     */
-    private $offerType;
+    private SpecialOfferType $offerType;
 
-    /**
-     * @var float
-     */
-    private $argument;
+    private float $argument;
 
     public function __construct(SpecialOfferType $offerType, Product $product, float $argument)
     {

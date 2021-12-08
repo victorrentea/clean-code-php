@@ -6,15 +6,9 @@ namespace Supermarket\Model;
 
 class ProductQuantity
 {
-    /**
-     * @var Product
-     */
-    private $product;
+    private readonly Product $product;
 
-    /**
-     * @var float
-     */
-    private float $quantity;
+    private readonly float $quantity;
 
     public function __construct(Product $product, float $weight)
     {

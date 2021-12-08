@@ -6,23 +6,15 @@ namespace Supermarket\Model;
 
 use MyCLabs\Enum\Enum;
 
-/**
- * Class SpecialOfferType
- *
- * @method static SpecialOfferType THREE_FOR_TWO
- * @method static SpecialOfferType TEN_PERCENT_DISCOUNT
- * @method static SpecialOfferType TWO_FOR_AMOUNT
- * @method static SpecialOfferType FIVE_FOR_AMOUNT
- * @method bool equals(SpecialOfferType $type = null)
- * @package Supermarket
- */
-class SpecialOfferType extends Enum
+enum SpecialOfferType
 {
-    private const THREE_FOR_TWO = 0;
+    case THREE_FOR_TWO;
 
-    private const TEN_PERCENT_DISCOUNT = 1;
+    case TEN_PERCENT_DISCOUNT;
 
-    private const TWO_FOR_AMOUNT = 2;
+    case TWO_FOR_AMOUNT;
 
-    private const FIVE_FOR_AMOUNT = 3;
+    case FIVE_FOR_AMOUNT;
 }
+
+

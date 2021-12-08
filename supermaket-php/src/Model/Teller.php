@@ -39,6 +39,7 @@ class Teller
             $unitPrice = $this->catalog->getUnitPrice($p);
             $price = $quantity * $unitPrice;
             $receipt->addProduct($p, $quantity, $unitPrice, $price);
+
         }
 
         $cart->handleOffers($receipt, $this->offers, $this->catalog);
