@@ -46,7 +46,7 @@ class ShoppingCart
             if (!$offers->hasKey($product)) {
                 continue;
             }
-            /** @var Offer $offer */
+            /** @var IOffer $offer */
             $offer = $offers[$product];
             $unitPrice = $catalog->getUnitPrice($product);
 
@@ -58,7 +58,7 @@ class ShoppingCart
         }
     }
 
-    private function getDiscount(Offer $offer, float $quantity, float $unitPrice, Product $product): ?Discount
+    private function getDiscount(IOffer $offer, float $quantity, float $unitPrice, Product $product): ?Discount
     {
         return match ($offer->getOfferType()) {
             SpecialOfferType::THREE_FOR_TWO => $this->createThreeForTwoDiscount($product, $quantity, $unitPrice),
@@ -78,7 +78,7 @@ class ShoppingCart
         return new Discount($product, '3 for 2', -$discountedAmount);
     }
 
-    private function createTenPerecentDiscount(Product $product, float $quantity, float $unitPrice, Offer $offer): ?Discount
+    private function createTenPerecentDiscount(Product $product, float $quantity, float $unitPrice, IOffer $offer): ?Discount
     {
         return new Discount($product, "{$offer->getArgument()}% off",
             -$quantity * $unitPrice * $offer->getArgument() / 100.0
@@ -100,7 +100,7 @@ class ShoppingCart
         return $productQuantities;
     }
 
-    private function createDiscountForQuantity(int $offerQuantity, Product $product, float $quantity, float $unitPrice, Offer $offer): ?Discount
+    private function createDiscountForQuantity(int $offerQuantity, Product $product, float $quantity, float $unitPrice, IOffer $offer): ?Discount
     {
         $quantityAsInt = (int)$quantity;
         $discount = null;

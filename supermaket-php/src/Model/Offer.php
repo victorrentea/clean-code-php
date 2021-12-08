@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Supermarket\Model;
 
-class Offer
+class Offer implements IOffer
 {
     private Product $product; // TODO possible bug
 
