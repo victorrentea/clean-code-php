@@ -74,46 +74,68 @@ class ShoppingCart
 
     private function getDiscount(Offer $offer, float $quantity, float $unitPrice, Product $p): ?Discount
     {
-        $discount = null;
-        $quantityAsInt = (int)$quantity;
-
         switch ($offer->getOfferType()) {
             case SpecialOfferType::THREE_FOR_TWO :
             {
-                if ($quantityAsInt >= 3) {
-                    $discountAmount = $quantity * $unitPrice - (intdiv($quantityAsInt, 3) * 2 * $unitPrice +
-                            $quantityAsInt % 3 * $unitPrice);
-                    $discount = new Discount($p, '3 for 2', -$discountAmount);
-                }
-                return $discount;
+                return $this->createThreeForTwoDiscount($quantity, $unitPrice, $p);
             }
             case SpecialOfferType::TWO_FOR_AMOUNT:
             {
-                if ($quantityAsInt >= 2) {
-                    $total = $offer->getArgument() * intdiv($quantityAsInt, 2) + $quantityAsInt % 2 * $unitPrice;
-                    $discountN = $unitPrice * $quantity - $total;
-                    $discount = new Discount($p, "2 for {$offer->getArgument()}", -1 * $discountN);
-                }
-                return $discount;
+                return $this->createTwoForAmountDiscount($offer, $unitPrice, $quantity, $p);
             }
             case SpecialOfferType::FIVE_FOR_AMOUNT:
             {
-                if ($quantityAsInt >= 5) {
-                    $numberOfXs = intdiv($quantityAsInt, 5);
-                    $discountTotal = $unitPrice * $quantity - ($offer->getArgument() * $numberOfXs + $quantityAsInt % 5 * $unitPrice);
-                    $discount = new Discount($p, "5 for {$offer->getArgument()}", -$discountTotal);
-                }
-                return $discount;
+                return $this->createFiveForAmountDiscount($unitPrice, $quantity, $offer, $p);
             }
             case SpecialOfferType::TEN_PERCENT_DISCOUNT:
             {
-                return new Discount($p, "{$offer->getArgument()}% off",
-                    -$quantity * $unitPrice * $offer->getArgument() / 100.0
-                );
+                return $this->createTenPerecentDiscount($p, $offer, $quantity, $unitPrice);
             }
             default:
                 throw new \Exception("Unexpected value {$offer->getOfferType()}");
-
         }
+    }
+
+    private function createThreeForTwoDiscount(float $quantity, float $unitPrice, Product $p): ?Discount
+    {
+        $quantityAsInt = (int)$quantity;
+        $discount= null;
+        if ($quantityAsInt >= 3) {
+            $discountAmount = $quantity * $unitPrice - (intdiv($quantityAsInt, 3) * 2 * $unitPrice +
+                    $quantityAsInt % 3 * $unitPrice);
+            $discount = new Discount($p, '3 for 2', -$discountAmount);
+        }
+        return $discount;
+    }
+
+    private function createTwoForAmountDiscount(Offer $offer, float $unitPrice, float $quantity, Product $p): ?Discount
+    {
+        $quantityAsInt = (int)$quantity;
+        $discount = null;
+        if ($quantityAsInt >= 2) {
+            $total = $offer->getArgument() * intdiv($quantityAsInt, 2) + $quantityAsInt % 2 * $unitPrice;
+            $discountN = $unitPrice * $quantity - $total;
+            $discount = new Discount($p, "2 for {$offer->getArgument()}", -1 * $discountN);
+        }
+        return $discount;
+    }
+
+    private function createFiveForAmountDiscount(float $unitPrice, float $quantity, Offer $offer, Product $p): ?Discount
+    {
+        $quantityAsInt = (int)$quantity;
+        $discount = null;
+        if ($quantityAsInt >= 5) {
+            $numberOfXs = intdiv($quantityAsInt, 5);
+            $discountTotal = $unitPrice * $quantity - ($offer->getArgument() * $numberOfXs + $quantityAsInt % 5 * $unitPrice);
+            $discount = new Discount($p, "5 for {$offer->getArgument()}", -$discountTotal);
+        }
+        return $discount;
+    }
+
+    private function createTenPerecentDiscount(Product $p, Offer $offer, float $quantity, float $unitPrice): ?Discount
+    {
+        return new Discount($p, "{$offer->getArgument()}% off",
+            -$quantity * $unitPrice * $offer->getArgument() / 100.0
+        );
     }
 }
