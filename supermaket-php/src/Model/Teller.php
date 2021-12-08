@@ -23,7 +23,13 @@ class Teller
 
     public function addSpecialOffer(SpecialOfferType $offerType, Product $product, float $argument): void
     {
-        $this->offers[$product] = new Offer($offerType, $product, $argument);
+        $this->offers[$product] = match ($offerType) {
+            SpecialOfferType::TEN_PERCENT_DISCOUNT => new PercentDiscountOffer($argument),
+            SpecialOfferType::TWO_FOR_AMOUNT => new QuantityDiscountOffer(2, $argument),
+            SpecialOfferType::FIVE_FOR_AMOUNT => new QuantityDiscountOffer(5, $argument),
+            SpecialOfferType::THREE_FOR_TWO => new ThreeForTwoOffer()
+        };
+
     }
 
     public function checkoutArticlesFrom(ShoppingCart $cart): Receipt

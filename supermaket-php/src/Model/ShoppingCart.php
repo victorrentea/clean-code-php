@@ -47,7 +47,7 @@ class ShoppingCart
             if (!$offers->hasKey($product)) {
                 continue;
             }
-            /** @var IOffer $offer */
+            /** @var Offer $offer */
             $offer = $offers[$product];
             $unitPrice = $catalog->getUnitPrice($product);
 
