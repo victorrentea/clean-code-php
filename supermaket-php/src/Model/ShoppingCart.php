@@ -16,7 +16,7 @@ class ShoppingCart
     /**
      * @var Map [Product => quantity]
      */
-    private $productQuantities;
+    private Map $productQuantities;
 
     public function __construct()
     {
@@ -30,15 +30,13 @@ class ShoppingCart
 
     public function addItemQuantity(Product $product, float $quantity): void
     {
-        $this->items[] = new ProductQuantity($product, $quantity);
-        if ($this->productQuantities->hasKey($product)) {
-            $newAmount = $this->productQuantities[$product] + $quantity;
-            $this->productQuantities[$product] = $newAmount;
-        } else {
-            $this->productQuantities[$product] = $quantity;
-        }
-    }
+        $this->items[] = new ProductQuantity($product, $quantity);  // 1
 
+        if (!$this->productQuantities->hasKey($product)) {
+            $this->productQuantities[$product] = 0;
+        }
+        $this->productQuantities[$product] += $quantity; // 2
+    }
     /**
      * @return ProductQuantity[]
      */
@@ -46,7 +44,6 @@ class ShoppingCart
     {
         return $this->items;
     }
-
     /**
      * @param Map $offers [Product => Offer]
      */
@@ -56,8 +53,7 @@ class ShoppingCart
          * @var Product $p
          * @var float $quantity
          */
-        foreach ($this->productQuantities as $p => $quantity) {
-            $quantityAsInt = (int)$quantity;
+        foreach ($this->productQuantities as $p => $quantity) { // 3
             if ($offers->hasKey($p)) {
                 /** @var Offer $offer */
                 $offer = $offers[$p];
