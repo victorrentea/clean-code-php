@@ -4,7 +4,7 @@ namespace Supermarket\Model;
 
 use JetBrains\PhpStorm\Pure;
 
-class QuantityDiscountOffer implements Offer
+class QuantityDiscountOffer implements ProductOffer
 {
     private readonly int $quantity;
     private readonly float $price;

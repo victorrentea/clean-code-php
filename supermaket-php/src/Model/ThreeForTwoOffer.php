@@ -2,7 +2,7 @@
 
 namespace Supermarket\Model;
 
-class ThreeForTwoOffer implements Offer
+class ThreeForTwoOffer implements ProductOffer
 {
 
     public function getDiscount(Product $product, float $quantity, float $unitPrice): ?Discount

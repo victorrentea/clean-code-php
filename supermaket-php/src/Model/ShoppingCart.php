@@ -35,7 +35,7 @@ class ShoppingCart
     /**
      * @param Map $offers [Product => Offer]
      */
-    public function handleOffers(Receipt $receipt, Map $offers, SupermarketCatalog $catalog): void
+    public function handleProductOffers(Receipt $receipt, Map $offers, SupermarketCatalog $catalog): void
     {
         /**
          * @var Product $product
@@ -47,7 +47,7 @@ class ShoppingCart
             if (!$offers->hasKey($product)) {
                 continue;
             }
-            /** @var Offer $offer */
+            /** @var ProductOffer $offer */
             $offer = $offers[$product];
             $unitPrice = $catalog->getUnitPrice($product);
 

@@ -2,7 +2,7 @@
 
 namespace Supermarket\Model;
 
-class PercentDiscountOffer implements Offer
+class PercentDiscountOffer implements ProductOffer
 {
 
     private readonly float $discountPercentage;

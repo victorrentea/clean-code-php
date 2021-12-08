@@ -21,6 +21,10 @@ class Teller
         $this->offers = new Map();
     }
 
+    // public function addSpecialOffer___(Product $product, Offer $offer): void
+    // {
+    //
+    // }
     public function addSpecialOffer(SpecialOfferType $offerType, Product $product, float $argument): void
     {
         $this->offers[$product] = match ($offerType) {
@@ -41,7 +45,7 @@ class Teller
             $receipt->addProduct($productQuantity->getProduct(), $productQuantity->getQuantity(), $unitPrice, $totalPrice);
         }
 
-        $cart->handleOffers($receipt, $this->offers, $this->catalog);
+        $cart->handleProductOffers($receipt, $this->offers, $this->catalog);
 
         return $receipt;
     }
