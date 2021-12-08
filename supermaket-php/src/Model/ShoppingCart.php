@@ -21,7 +21,7 @@ class ShoppingCart
 
     public function addItemQuantity(Product $product, float $quantity): void
     {
-        $this->items[] = new ProductQuantity($product, $quantity);  // 1
+        $this->items[] = new ProductQuantity($product, $quantity);
     }
 
     /**
