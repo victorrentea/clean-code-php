@@ -5,6 +5,9 @@ declare(strict_types=1);
 namespace Supermarket\Model;
 
 use Ds\Map;
+use Supermarket\Model\offer\PercentDiscountOffer;
+use Supermarket\Model\offer\QuantityDiscountOffer;
+use Supermarket\Model\offer\ThreeForTwoOffer;
 
 class Teller
 {

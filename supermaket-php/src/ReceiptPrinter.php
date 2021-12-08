@@ -64,6 +64,8 @@ class ReceiptPrinter
 
     protected function presentTotal(Receipt $receipt): string
     {
+
+        $wow = $receipt->getTotalPrice();
         $name = 'Total: ';
         $value = self::presentPrice($receipt->getTotalPrice());
         return $this->formatLineWithWhitespace($name, $value);

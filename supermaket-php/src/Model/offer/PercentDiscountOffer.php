@@ -1,6 +1,9 @@
 <?php
 
-namespace Supermarket\Model;
+namespace Supermarket\Model\offer;
+
+use Supermarket\Model\Discount;
+use Supermarket\Model\Product;
 
 class PercentDiscountOffer implements ProductOffer
 {

@@ -1,8 +1,10 @@
 <?php
 
-namespace Supermarket\Model;
+namespace Supermarket\Model\offer;
 
 use JetBrains\PhpStorm\Pure;
+use Supermarket\Model\Discount;
+use Supermarket\Model\Product;
 
 class QuantityDiscountOffer implements ProductOffer
 {

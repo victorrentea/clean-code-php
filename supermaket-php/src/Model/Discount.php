@@ -6,11 +6,11 @@ namespace Supermarket\Model;
 
 class Discount
 {
-    private Product $product;
+    private readonly Product $product;
 
-    private string $description;
+    private readonly string $description;
 
-    private float $discount;
+    private readonly float $discount;
 
     public function __construct(Product $product, string $description, float $discount)
     {

@@ -8,11 +8,11 @@ class ReceiptItem
 {
     private Product $product;
 
-    private float $quantity;
+    private readonly float $quantity;
 
-    private float $unitPrice;
+    private readonly float $unitPrice;
 
-    private float $totalPrice;
+    private readonly float $totalPrice;
 
     public function __construct(Product $product, float $quantity, float $price, float $totalPrice)
     {

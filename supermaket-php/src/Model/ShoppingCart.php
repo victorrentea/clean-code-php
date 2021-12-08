@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Supermarket\Model;
 
 use Ds\Map;
-use function Symfony\Component\String\u;
+use Supermarket\Model\offer\ProductOffer;
 
 class ShoppingCart
 {
