@@ -6,13 +6,15 @@ use JetBrains\PhpStorm\Pure;
 
 class QuantityDiscountOffer implements ProductOffer
 {
+    private readonly Product $product;
     private readonly int $quantity;
     private readonly float $price;
 
-    public function __construct(int $offerQuantity, float $price)
+    public function __construct(Product $product, int $offerQuantity, float $price)
     {
         $this->quantity = $offerQuantity;
         $this->price = $price;
+        $this->product = $product;
     }
 
     #[Pure] public function getDiscount(Product $product, float $quantity, float $unitPrice): ?Discount

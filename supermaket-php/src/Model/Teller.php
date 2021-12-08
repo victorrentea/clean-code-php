@@ -21,17 +21,17 @@ class Teller
         $this->offers = new Map();
     }
 
-    // public function addSpecialOffer___(Product $product, Offer $offer): void
+    // public function addSpecialOffer___(ProductOffer $offer): void
     // {
-    //
+    //     $this->offers[]=$offer;
     // }
     public function addSpecialOffer(SpecialOfferType $offerType, Product $product, float $argument): void
     {
         $this->offers[$product] = match ($offerType) {
-            SpecialOfferType::TEN_PERCENT_DISCOUNT => new PercentDiscountOffer($argument),
-            SpecialOfferType::TWO_FOR_AMOUNT => new QuantityDiscountOffer(2, $argument),
-            SpecialOfferType::FIVE_FOR_AMOUNT => new QuantityDiscountOffer(5, $argument),
-            SpecialOfferType::THREE_FOR_TWO => new ThreeForTwoOffer()
+            SpecialOfferType::TEN_PERCENT_DISCOUNT => new PercentDiscountOffer($product, $argument),
+            SpecialOfferType::TWO_FOR_AMOUNT => new QuantityDiscountOffer($product, 2, $argument),
+            SpecialOfferType::FIVE_FOR_AMOUNT => new QuantityDiscountOffer($product, 5, $argument),
+            SpecialOfferType::THREE_FOR_TWO => new ThreeForTwoOffer($product)
         };
 
     }

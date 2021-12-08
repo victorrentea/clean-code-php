@@ -5,6 +5,13 @@ namespace Supermarket\Model;
 class ThreeForTwoOffer implements ProductOffer
 {
 
+    private readonly Product $product;
+
+    public function __construct(Product $product)
+    {
+        $this->product = $product;
+    }
+
     public function getDiscount(Product $product, float $quantity, float $unitPrice): ?Discount
     {
         $quantityAsInt = (int)$quantity;
