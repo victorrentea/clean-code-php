@@ -31,12 +31,14 @@ $obiect->bigUglyMethodCR323(1, 2);
 class BouleanParameters
 {
 
-	function bigUglyMethod(int $a, int $b) {
+    function bigUglyMethod(int $a, int $b)
+    {
         $this->logicStart($a, $b);
         $this->logicEnd($a, $b);
     }
 
-	function bigUglyMethodCR323(int $a, int $b) {
+    function bigUglyMethodCR323(int $a, int $b)
+    {
         $this->logicStart($a, $b);
         echo "LOgica de-a ta FIX AICI IN ACEST LOC\n";
         $this->logicEnd($a, $b);
@@ -57,94 +59,72 @@ class BouleanParameters
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
     // ============== "BOSS" LEVEL: A lot harder to break down =================
 
-    function bossLevel(bool $stuff, bool $fluff, array $tasks/*, callable $f*/) {
-        $i = 0;
-		$j = 1;
-		echo "Logic1\n";
-		if (!$stuff) {
-            echo "Logic7()\n";
-            return;
-        }
-        echo "Logic2\n";
-        if (!$fluff) {
-            echo "Logic7()\n";
-            return;
-        }
-        echo "Logic3\n";
+
+    function bossLevelStuffFluff323(array $tasks) {
+        $this->bossStart($tasks);
 
         foreach ($tasks as $task) {
+            echo "Doar al meu pe cr323\n";
+        }
+        $this->bossEnd($tasks);
+    }
+    function bossLevelStuffFluff(array $tasks) {
+        $this->bossStart($tasks);
+        $this->bossEnd($tasks);
+    }
+    function bossLevelStuffNoFluff() {
+        echo "Logic1\n";
+        echo "Logic2\n";
+        echo "Logic7\n";
+    }
+    function bossLevelNoStuff() {
+        echo "Logic1\n";
+        echo "Logic7\n";
+    }
+
+    private function bossStart(array $tasks): void
+    {
+        echo "Logic1\n";
+        echo "Logic2\n";
+        echo "Logic3\n";
+        foreach ($tasks as $task1) {
+            echo "Logic4 " . $task1 . "\n";
+        }
+    }
+
+    private function bossEnd(array $tasks): void
+    {
+        $i = 0;
+        foreach ($tasks as $task) {
             $i++;
-            echo "Logic4 " . $task . "\n";
-            // $f();
-            if ($euOChem) {
-                echo "Logica mea\n";
-            }
             echo "Logic5 " . $i . "\n";
         }
-        // for for for
+        $j = 1;
+        // ATENTIE! daca MUSAI trebuie rulat Logic4 urmat de Logic5 pt acelasi task, atunci NU SPARGE FORUL > BUGURI
         echo "Logic6 " . ($j++) . "\n";
-        echo "Logic7()\n";
-	}
+        echo "Logic7\n";
+    }
+
 }
 
-// global $x = "de asta pleaca devii din PHP";
+// emag, acum 6 ani:
+// "noi folosi structuri array nu tipuri"
+// array si nu Person:
+// Victor (PANICAT) cum adica !?
+// Da, ca e mai eficient.
+// Victor (PANICAT) cum adica !?
+// E mai rapid.
+// Victor (PANICAT) cum adica !?
+// La runtime.
+// Coleg PHP 7 > BA NU. nu mai e
 
-// supervariabila
-// class OClasa {
+$ar = [
+    "campu1"=>1,
+    "campu2"=>"Mama",
 
-//     private bool $cr323 = false;
-//
-//     public function setEuOChem(bool $cr323): void
-//     {
-//         $this->euOChem = $cr323;
-//     }
-//     function bossLevel(bool $stuff, bool $fluff, array $tasks) {
-//         $i = 0;
-//         $j = 1;
-//         echo "Logic1\n";
-//         if (!$stuff) {
-//             echo "Logic7()\n";
-//             return;
-//         }
-//         echo "Logic2\n";
-//         if (!$fluff) {
-//             echo "Logic7()\n";
-//             return;
-//         }
-//         echo "Logic3\n";
-//
-//         foreach ($tasks as $task) {
-//             $i++;
-//             echo "Logic4 " . $task . "\n";
-//             if ($cr323) {
-//                 echo "Logica mea\n";
-//             }
-//             echo "Logic5 " . $i . "\n";
-//         }
-//         echo "Logic6 " . ($j++) . "\n";
-//         echo "Logic7()\n";
-//     }
-// }
-//
-// interface OInterfata
-// {
-//     function bossLevel(bool $stuff, bool $fluff, array $tasks);
-// }
-//
-// class Object1 implements OInterfata {
-//
-// }
+];
+
+function f(array $a) {
+}
