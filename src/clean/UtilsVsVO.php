@@ -6,23 +6,33 @@ namespace victor\clean;
 
 class UtilsVsVO
 {
-    public function filterCarModels(CarSearchCriteria $criteria, array $models)
+    /**
+     * @param CarModel[] $carModels
+     */
+    public function filterCarModels(CarSearchCriteria $criteria, array $carModels)
     {
         $result = [];
-        /** @var CarModel $model */
-        foreach ($models as $model) {
-            if ($this->intervalsIntersect(
-                $model->getStartYear(), $model->getEndYear(),
+        // /** @var CarModel $carModel */
+        foreach ($carModels as $carModel) {
+            if (MathUtil::intervalsIntersect(
+                $carModel->getStartYear(), $carModel->getEndYear(),
                 $criteria->getStartYear(), $criteria->getEndYear())) {
 
-                $result [] = $model;
+                $result [] = $carModel;
             }
         }
         return $result;
     }
 
     // http://world.std.com/~swmcd/steven/tech/interval.html
-    private function intervalsIntersect(int $start1, int $end1, int $start2, int $end2): bool
+}
+
+
+// class MathService { // nu-mi place ca ma gandesc  ca tre s-o iau injectata din symph
+// class MathHelper {
+class MathUtil {
+
+    public static function intervalsIntersect(int $start1, int $end1, int $start2, int $end2): bool
     {
         return $start1 <= $end2 && $start2 <= $end1;
     }
@@ -51,6 +61,11 @@ class CarSearchCriteria
         return $this->endYear;
     }
 }
+
+
+
+
+
 
 
 class CarModel

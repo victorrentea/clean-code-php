@@ -11,31 +11,22 @@ class GuardClauses
 
     function getPayAmount()
     {
-        if (!$this->determineIfDead()) { // network call
-            if (!$this->isSeparated) {
-                if (!$this->isRetired) {
-                    $pay = 1;
-                    // 20 lines of complex logic
-                    // 20 lines of complex logic
-                    // 20 lines of complex logic
-                    // 20 lines of complex logic
-                    // 20 lines of complex logic
-                    // 20 lines of complex logic
-                    // 20 lines of complex logic
-                    // 20 lines of complex logic
-                    // 20 lines of complex logic
-                    $result = $pay;
-                }
-                else {
-                    $result = $this->retiredAmount();
-                }
-            }
-            else $result = $this->separatedAmount();
+        if ($this->determineIfDead()) {
+            return $this->deadAmount();
         }
-        else {
-            // 1 more line here
-
-            $result = $this->deadAmount();
+            if ($this->isSeparated) {
+               return $this->separatedAmount();
+            }
+        if (!$this->isRetired) {
+            $pay = 1;
+            // 20 lines of complex logic
+            // 20 lines of complex logic
+            // 20 lines of complex logic
+            // 20 lines of complex logic
+            // 20 lines of complex logic
+            $result = $pay;
+        } else {
+            $result = $this->retiredAmount();
         }
         return $result;
     }
