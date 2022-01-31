@@ -21,8 +21,4 @@ class Rental
     {
         return $this->movie;
     }
-
-
-
-
 }
