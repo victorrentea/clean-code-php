@@ -17,7 +17,7 @@ class UtilsVsVO
             $criteriaInterval = new Interval($criteria->getStartYear(), $criteria->getEndYear());
             $modelInterval = new Interval($carModel->getStartYear(), $carModel->getEndYear());
 
-            if (MathUtil::intervalsIntersect($modelInterval, $criteriaInterval)) {
+            if ($modelInterval->intersects($criteriaInterval)) {
                 $result [] = $carModel;
             }
         }
@@ -26,15 +26,12 @@ class UtilsVsVO
 
     // http://world.std.com/~swmcd/steven/tech/interval.html
 }
-echo MathUtil::intervalsIntersect(new Interval(1, 3), new Interval(2, 4));
+echo (new Interval(1, 3))->intersects((new Interval(2, 4)));
 
 // class MathService { // nu-mi place ca ma gandesc  ca tre s-o iau injectata din symph
 // class MathHelper {
 class MathUtil {
 
-    public static function intervalsIntersect(Interval $interval1, Interval $interval2): bool {
-        return $interval1->getStart() <= $interval2->getEnd() && $interval2->getStart() <= $interval1->getEnd();
-    }
 }
 
 class Interval {
@@ -45,6 +42,10 @@ class Interval {
     {
         $this->start = $start;
         $this->end = $end;
+    }
+
+    public function intersects(Interval $other): bool {
+        return $this->start <= $other->end && $other->start <= $this->end;
     }
 
     public function getStart(): int
