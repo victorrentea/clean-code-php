@@ -15,9 +15,7 @@ class UtilsVsVO
         // /** @var CarModel $carModel */
         foreach ($carModels as $carModel) {
             $criteriaInterval = new Interval($criteria->getStartYear(), $criteria->getEndYear());
-            $modelInterval = new Interval($carModel->getStartYear(), $carModel->getEndYear());
-
-            if ($modelInterval->intersects($criteriaInterval)) {
+            if ($carModel->getYearInterval()->intersects($criteriaInterval)) {
                 $result [] = $carModel;
             }
         }
@@ -40,6 +38,8 @@ class Interval {
 
     public function __construct(int $start, int $end)
     {
+        // AICI
+        if ($start > $end) throw new \Exception("mama ta care te-a facut");
         $this->start = $start;
         $this->end = $end;
     }
@@ -86,31 +86,61 @@ class CarSearchCriteria
 
 
 
-
+// DDD   " VALUE OJBECTS"
 
 class CarModel
 {
     private $make;
     private $model;
-    private $startYear;
-    private $endYear;
+    // private $startYear;
+    // private $endYear;
+    /** @ORM\Embedded(class="AppBundle\Entity\Embeddable\Interval") */
+    private Interval $yearInterval;
 
     public function __construct(int $startYear, int $endYear, string $model, string $make)
     {
-        if ($startYear > $endYear) throw new \Exception("start larger than end");
-        $this->startYear = $startYear;
-        $this->endYear = $endYear;
+        $this->yearInterval = new Interval($startYear, $endYear);
+
         $this->model = $model;
         $this->make = $make;
     }
 
-    public function getStartYear(): int
-    {
-        return $this->startYear;
-    }
 
-    public function getEndYear(): int
+    public function getYearInterval(): Interval
     {
-        return $this->endYear;
+        return new Interval($this->startYear, $this->endYear);
     }
 }
+
+// class ProductName {
+//     private string $name;
+// }
+
+$carModel = new CarModel(2015, 2022, "Ford", "Focus");
+echo $carModel->getYearInterval()->getStart();
+echo $carModel->getYearInterval()->getStart();
+echo $carModel->getYearInterval()->getStart();
+echo $carModel->getYearInterval()->getStart();
+
+
+class Customer {
+    private bool $isGenius;
+
+    public function isGenius(): bool
+    {
+        return $this->isGenius;
+    }
+    function getDiscount():int {
+        $discount = 1;
+        if ($this->isGenius()) {
+            $discount += 3;
+        }
+        return $discount;
+    }
+}
+
+$customer = new Customer();
+
+$discount = $customer->getDiscount();
+
+echo $discount;
