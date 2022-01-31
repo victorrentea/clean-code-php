@@ -30,30 +30,69 @@ class Customer
         $this->name = $name;
     }
 
-        // CAND NU repeti un apel de functie
-        // - bug1 - face chestii (side effects) aka INSERT, send rabbit, gherman, ...
-        // - bug2 - intoarce altceva la al doilea apel - nu e IDEMPOTENTA (corect NU e REFERENTIAL TRANSPARENT)
-        // - concern - performanta (dureaza timp)
+    // CAND NU repeti un apel de functie
+    // - bug1 - face chestii (side effects) aka INSERT, send rabbit, gherman, ...
+    // - bug2 - intoarce altceva la al doilea apel - nu e IDEMPOTENTA (corect NU e REFERENTIAL TRANSPARENT)
+    // - concern - performanta (dureaza timp)
 
-        // PURE function  = nu face side effects si intoarce acelasi rezultat apelata cu aceiasi param
+    // PURE function  = nu face side effects si intoarce acelasi rezultat apelata cu aceiasi param
 
+    // TODO clasa Formatter care sa primeasca datele:  {rentals, customer, totalPoints, totalPrice} aka Split Phase refactor:
+    // introduci un obiect care se plimba intre partea care calculeaza chestii si partea care doar formateaza
     public function generateStatement(): string
     {
+        return $this->generateHeader()
+            . $this->generateBody()
+            . $this->generateFooter();
+    }
+
+    private function generateFooter(): string
+    {
+        return 'You owed ' . $this->computeTotalPrice() . "\n"
+            . 'You earned ' . $this->computeTotalPoints() . " frequent renter points\n";
+    }
+
+    private function generateHeader(): string
+    {
+        return 'Rental Record for ' . $this->getName() . "\n";
+    }
+
+    private function generateStatementLine(Rental $rental): string
+    {
+        return "\t" . $rental->getMovie()->getTitle() . "\t" . $rental->computePrice() . "\n";
+    }
+
+    /**
+     * @return float|int
+     * @throws \Exception
+     */
+    private function computeTotalPrice()
+    {
         $totalPrice = 0;
-        $frequentRenterPoints = 0;
-        $result = 'Rental Record for ' . $this->getName() . "\n";
-
         foreach ($this->rentals as $rental) {
-            $frequentRenterPoints += $rental->getFrequentRenterPoints();
-
-            // add footer lines
-            $result .= "\t" . $rental->getMovie()->getTitle() . "\t" . $rental->computePrice() . "\n";
-
             $totalPrice += $rental->computePrice();
         }
+        return $totalPrice;
+    }
 
-        $result .= 'You owed ' . $totalPrice . "\n";
-        $result .= 'You earned ' . $frequentRenterPoints . " frequent renter points\n";
+    /**
+     * @return int
+     */
+    private function computeTotalPoints(): int
+    {
+        $frequentRenterPoints = 0;
+        foreach ($this->rentals as $rental) {
+            $frequentRenterPoints += $rental->getFrequentRenterPoints();
+        }
+        return $frequentRenterPoints;
+    }
+
+    private function generateBody(): string
+    {
+        $result = "";
+        foreach ($this->rentals as $rental) {
+            $result .= $this->generateStatementLine($rental);
+        }
         return $result;
     }
 
