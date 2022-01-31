@@ -30,4 +30,9 @@ class Movie
         return $this->priceCode;
     }
 
+    public function isNewRelease(): bool
+    {
+        return $this->getPriceCode() == Movie::NEW_RELEASE;
+    }
+
 }
