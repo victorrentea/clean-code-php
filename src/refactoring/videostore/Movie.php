@@ -1,11 +1,14 @@
 <?php
 namespace victor\refactoring\videostore;
 
+// enum MovieType {
+//
+// }
 class Movie
 {
     const NEW_RELEASE = "NEW_RELEASE";
     const REGULAR = "REGULAR";
-    const CHILDREN = "CHILDRENS"; // daca cumva "CHILDRENS" apare in JS/HTML/DB -> NU ATINGI! parte din APIul tau
+    const CHILDREN = "CHILDREN";
 
     private string $title;
 
