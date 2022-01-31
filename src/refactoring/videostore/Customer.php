@@ -89,6 +89,10 @@ class Customer
 
     private function generateBody(): string
     {
+        // foreach($this->rentals as &$v) { }
+        // foreach($this->rentals as $v) { }
+        // php STAN
+
         $result = "";
         foreach ($this->rentals as $rental) {
             $result .= $this->generateStatementLine($rental);
