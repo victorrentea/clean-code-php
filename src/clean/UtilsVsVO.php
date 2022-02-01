@@ -4,6 +4,19 @@
 namespace victor\clean;
 
 
+use function victor\refactoring\horror;
+
+
+function horrorDeLaMircea(int $id): void {
+    $arr2 = [1];
+    foreach ($arr2 as $id) { // variable hoisting suprascrie param long live stan!
+        echo "Frate! $id";
+    }
+    echo "\nCeva cu $id trebuia 6 aici \n";
+}
+
+horrorDeLaMircea(6);
+
 class UtilsVsVO
 {
     /**
@@ -15,7 +28,7 @@ class UtilsVsVO
         // /** @var CarModel $carModel */
         foreach ($carModels as $carModel) {
             $criteriaInterval = new Interval($criteria->getStartYear(), $criteria->getEndYear());
-            if ($carModel->getYearInterval()->intersects($criteriaInterval)) {
+            if ($carModel->yearInterval()->intersects($criteriaInterval)) {
                 $result [] = $carModel;
             }
         }
@@ -105,11 +118,39 @@ class CarModel
         $this->make = $make;
     }
 
+    // public function getStartYear()
+    // {
+    //     return $this->yearInterval->getStart();
+    // }
 
-    public function getYearInterval(): Interval
+    public function yearInterval(): Interval
     {
-        return new Interval($this->startYear, $this->endYear);
+        return $this->yearInterval;
     }
+
+    public function setMake(string $make): CarModel
+    {
+        $this->make = $make;
+        return $this;
+    }
+
+    public function setModel(string $model): CarModel
+    {
+        $this->model = $model;
+        return $this;
+    }
+
+    public function setYearInterval(Interval $yearInterval): CarModel
+    {
+        $this->yearInterval = $yearInterval;
+        return $this;
+    }
+    // public function getYearInterval(): Interval
+    // {
+    //     return new Interval($this->startYear, $this->endYear);
+    // }
+
+
 }
 
 // class ProductName {
@@ -117,10 +158,11 @@ class CarModel
 // }
 
 $carModel = new CarModel(2015, 2022, "Ford", "Focus");
-echo $carModel->getYearInterval()->getStart();
-echo $carModel->getYearInterval()->getStart();
-echo $carModel->getYearInterval()->getStart();
-echo $carModel->getYearInterval()->getStart();
+echo $carModel->yearInterval()->getStart(); // BINE
+// echo $carModel->getStartYear(); // RAU in 2022
+echo $carModel->yearInterval()->getStart();
+echo $carModel->yearInterval()->getStart();
+echo $carModel->yearInterval()->getStart();
 
 
 class Customer {
@@ -144,3 +186,7 @@ $customer = new Customer();
 $discount = $customer->getDiscount();
 
 echo $discount;
+
+
+// $c = TestData::aCustomer()->withName(null);
+

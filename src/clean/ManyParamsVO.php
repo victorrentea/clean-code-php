@@ -6,26 +6,45 @@ namespace victor\clean;
 
 class ManyParamsVO
 {
+    // public function placeOrder(PlaceOrderCommand $command) {
     public function placeOrder(string $fname, string $lname, string $city, string $streetName, int $streetNumber)
     {
         if ($fname === '' || $lname === '') {
             throw new \Exception();
         }
-        echo "Some logic \n";
+        echo "Some logic $city $streetName $streetNumber\n";
     }
+}
+// class Customer
+// {
+//     private PersonName $fname;
+//     private string $lname;
+//     private Addres $city;
+//     private string $streetName;
+//     private int $streetNumber;
+// }
+
+// class PersonName {
+class PersonName
+{
+    private string $firstName;
+    private string $lastName;
 }
 
 (new ManyParamsVO())->placeOrder('John', 'Doe', 'St. Albergue', 'Paris', 99);
 
-class AnotherClass {
-    public function otherMethod(string $firstName, string $lastName, int $x) {
-    	if ($firstName === '' || $lastName === null) throw new \Exception();
+class AnotherClass
+{
+    public function otherMethod(string $firstName, string $lastName, int $x)
+    {
+        if ($firstName === '' || $lastName === null) throw new \Exception();
 
-    	echo "Another distant Logic";
+        echo "Another distant Logic";
     }
 }
 
-class Person {
+class Person
+{
     private $id;
     private $firstName;
     private $lastName;
@@ -60,12 +79,16 @@ class Person {
 
 }
 
-class PersonService {
-    public function f(Person $person) {
+class PersonService
+{
+    public function f(Person $person)
+    {
         $fullName = $person->getFirstName() . ' ' . strtoupper($person->getLastName());
         echo $fullName;
     }
-    public function p(string $city, string $streetName, int $streetNumber) {
+
+    public function p(string $city, string $streetName, int $streetNumber)
+    {
         echo "Living in " . $city . " on St. " . $streetName . " " . $streetNumber;
     }
 }

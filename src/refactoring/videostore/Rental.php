@@ -53,6 +53,8 @@ class Rental
         }
         return $frequentRenterPoints;
     }
+
+    // ENTITATILE SUNT CEL MAI SACRU COD DIN APP TA. aici pui doar ce-ai mai sfant.
 }
 // TODO Movie sa devina clasa abstracta cu 3 subtipuri, una per tip de film
 //class RegularMovie extends Movie {

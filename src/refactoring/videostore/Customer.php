@@ -57,16 +57,15 @@ class Customer
         return 'Rental Record for ' . $this->getName() . "\n";
     }
 
-    private function generateStatementLine(Rental $rental): string
+    //  M V C < cel mai vechi design pattern din istorie: nu pui prezentare in domeniu. DE CE ?
+    // pentru ca e foarte specifica, ne reutilizabila.
+    // are prea multa legatura cu statementul
+    public function generateStatementLine(Rental $rental): string
     {
         return "\t" . $rental->getMovie()->getTitle() . "\t" . $rental->computePrice() . "\n";
     }
 
-    /**
-     * @return float|int
-     * @throws \Exception
-     */
-    private function computeTotalPrice()
+    private function computeTotalPrice():float
     {
         $totalPrice = 0;
         foreach ($this->rentals as $rental) {
@@ -75,9 +74,6 @@ class Customer
         return $totalPrice;
     }
 
-    /**
-     * @return int
-     */
     private function computeTotalPoints(): int
     {
         $frequentRenterPoints = 0;
@@ -95,7 +91,7 @@ class Customer
 
         $result = "";
         foreach ($this->rentals as $rental) {
-            $result .= $this->generateStatementLine($rental);
+            $result .= $rental->generateStatementLine();
         }
         return $result;
     }
