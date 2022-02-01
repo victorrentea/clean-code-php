@@ -10,6 +10,9 @@ class Movie
     const REGULAR = "REGULAR";
     const CHILDREN = "CHILDREN";
 
+    // private string $minAge; // attribut in plus doar pentru un anumit tip => subclasa. ==> sublcasa ChildrenMovie sau constrangeri diferite
+
+    // private bool $newRelease;
     private string $title;
 
     private string $priceCode;

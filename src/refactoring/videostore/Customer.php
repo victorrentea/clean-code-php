@@ -91,7 +91,7 @@ class Customer
 
         $result = "";
         foreach ($this->rentals as $rental) {
-            $result .= $rental->generateStatementLine();
+            $result .= $this->generateStatementLine($rental);
         }
         return $result;
     }
