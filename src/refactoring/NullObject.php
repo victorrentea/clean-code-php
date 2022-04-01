@@ -22,7 +22,7 @@ class NullObject
 class Customer
 {
 
-    public function getName()
+    public function getName(): string
     {
         return "blah";
     }

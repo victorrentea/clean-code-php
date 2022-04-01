@@ -15,7 +15,7 @@ class SplitVariable
         return $inputValue;
     }
 
-    function distanceTravelled($scenario, $time)
+    function distanceTravelled($scenario, $time): float|int
     {
         $acc = $scenario->primaryForce / $scenario->mass;
         $primaryTime = min($time, $scenario->delay);

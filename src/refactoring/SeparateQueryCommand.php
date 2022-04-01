@@ -7,7 +7,7 @@ namespace victor\refactoring;
 class SeparateQueryCommand
 {
 
-    function alertForMiscreant(array $people)
+    function alertForMiscreant(array $people): string
     {
         foreach ($people as $person) {
             if ($person === "Don") {

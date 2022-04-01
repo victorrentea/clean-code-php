@@ -8,7 +8,8 @@ class SplitPhase
 {
 
     // Example 2:
-    function priceOrder(Product $product, int $quantity, ShippingMethod $shippingMethod) {
+    function priceOrder(Product $product, int $quantity, ShippingMethod $shippingMethod): float|int
+    {
         $basePrice = $product->getBasePrice() * $quantity;
         $discount = max($quantity - $product->getDiscountThreshold(), 0)
             * $product->getBasePrice() * $product->getDiscountRate();
@@ -34,12 +35,12 @@ class ShippingMethod {
     {
     }
 
-    public function getDiscountedFee()
+    public function getDiscountedFee(): int
     {
         return 0;
     }
 
-    public function getFeePerCase()
+    public function getFeePerCase(): int
     {
         return 0;
     }

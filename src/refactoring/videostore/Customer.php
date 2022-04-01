@@ -12,10 +12,8 @@ class Customer
     }
 
 
-    /**
-     * @return string
-     */
-    public function getName () {
+    public function getName (): string
+    {
         return $this->name;
     }
 
@@ -27,10 +25,8 @@ class Customer
         $this->name = $name;
     }
 
-    /**
-     * @return string
-     */
-    public function statement () {
+    public function statement (): string
+    {
         $totalAmount 			= 0;
         $frequentRenterPoints 	= 0;
         $rentals 				= $this->rentals;

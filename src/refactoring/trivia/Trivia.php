@@ -36,13 +36,16 @@ class Trivia {
             array_push($this->rockQuestions, $this->createRockQuestion($i));
         }
     }
-    function createRockQuestion($index){
+    function createRockQuestion($index): string
+    {
         return "Rock Question " . $index;
     }
-    function isPlayable() {
+    function isPlayable(): bool
+    {
         return ($this->howManyPlayers() >= 2);
     }
-    function add($playerName) {
+    function add($playerName): bool
+    {
         array_push($this->players, $playerName);
         $this->places[$this->howManyPlayers()] = 0;
         $this->purses[$this->howManyPlayers()] = 0;
@@ -51,7 +54,8 @@ class Trivia {
         echoln("They are player number " . count($this->players));
         return true;
     }
-    function howManyPlayers() {
+    function howManyPlayers(): int
+    {
         return count($this->players);
     }
     function  roll($roll) {
@@ -92,7 +96,8 @@ class Trivia {
         if ($this->currentCategory() == "Rock")
             echoln(array_shift($this->rockQuestions));
     }
-    function currentCategory() {
+    function currentCategory(): string
+    {
         if ($this->places[$this->currentPlayer] == 0) return "Pop";
         if ($this->places[$this->currentPlayer] == 4) return "Pop";
         if ($this->places[$this->currentPlayer] == 8) return "Pop";
@@ -104,7 +109,8 @@ class Trivia {
         if ($this->places[$this->currentPlayer] == 10) return "Sports";
         return "Rock";
     }
-    function wasCorrectlyAnswered() {
+    function wasCorrectlyAnswered(): bool
+    {
         if ($this->inPenaltyBox[$this->currentPlayer]){
             if ($this->isGettingOutOfPenaltyBox) {
                 echoln("Answer was correct!!!!");
@@ -135,7 +141,8 @@ class Trivia {
             return $winner;
         }
     }
-    function wrongAnswer(){
+    function wrongAnswer(): bool
+    {
         echoln("Question was incorrectly answered");
         echoln($this->players[$this->currentPlayer] . " was sent to the penalty box");
         $this->inPenaltyBox[$this->currentPlayer] = true;
@@ -143,7 +150,8 @@ class Trivia {
         if ($this->currentPlayer == count($this->players)) $this->currentPlayer = 0;
         return true;
     }
-    function didPlayerWin() {
+    function didPlayerWin(): bool
+    {
         return !($this->purses[$this->currentPlayer] == 6);
     }
 }

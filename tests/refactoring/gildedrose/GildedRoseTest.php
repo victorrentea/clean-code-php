@@ -29,9 +29,6 @@ class GildedRoseTest extends TestCase
         return $s;
     }
 
-    /**
-     * @return array
-     */
     public function createData(): array
     {
         return [

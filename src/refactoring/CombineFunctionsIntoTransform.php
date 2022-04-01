@@ -17,7 +17,7 @@ class CombineFunctionsIntoTransform
 
     // ----------- a line -------------
 
-    public function generateTicket(Ticket $ticket)
+    public function generateTicket(Ticket $ticket): string
     {
         $invoice = "Invoice for " . $ticket->getCustomerName() . "\n";
 
@@ -34,17 +34,17 @@ class CombineFunctionsIntoTransform
 class Ticket
 {
 
-    public function getCustomerName()
+    public function getCustomerName(): string
     {
         return "EU";
     }
 
-    public function getCode()
+    public function getCode(): string
     {
         return "12313213214";
     }
 
-    public function getEventId()
+    public function getEventId(): string
     {
         return "1351";
     }

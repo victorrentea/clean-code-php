@@ -67,19 +67,19 @@ class OfferRepo {
 }
 class Offer {
 
-    public function hasSpecialDeal()
+    public function hasSpecialDeal(): bool
     {
         return true;
     }
 }
 class Profile {
 
-    public function canCancelOffers()
+    public function canCancelOffers(): bool
     {
         return true;
     }
 
-    public function isAdmin()
+    public function isAdmin(): bool
     {
         return false;
     }

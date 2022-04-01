@@ -22,10 +22,7 @@ class Movie
         $this->priceCode = $priceCode;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getTitle()
+    public function getTitle(): mixed
     {
         return $this->title;
     }
@@ -38,10 +35,7 @@ class Movie
         $this->title = $title;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getPriceCode()
+    public function getPriceCode(): mixed
     {
         return $this->priceCode;
     }

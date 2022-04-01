@@ -9,7 +9,7 @@ class GuardClauses
     private $isSeparated = false;
     private $isRetired = false;
 
-    function getPayAmount()
+    function getPayAmount(): int
     {
         if (!$this->determineIfDead()) { // network call
             if (!$this->isSeparated) {
@@ -40,27 +40,27 @@ class GuardClauses
         return $result;
     }
 
-    private function deadAmount()
+    private function deadAmount(): int
     {
         return 1;
     }
 
-    private function retiredAmount()
+    private function retiredAmount(): int
     {
         return 2;
     }
 
-    private function separatedAmount()
+    private function separatedAmount(): int
     {
         return 3;
     }
 
-    private function normalPayAmount()
+    private function normalPayAmount(): int
     {
         return 4;
     }
 
-    private function determineIfDead()
+    private function determineIfDead(): bool
     {
         return true;
     }
