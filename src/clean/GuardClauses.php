@@ -63,3 +63,8 @@ class GuardClauses
     }
 
 }
+
+//
+//foreach (null as $item) {
+//    echo "wtf";
+//}
