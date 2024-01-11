@@ -4,10 +4,6 @@
 namespace victor\refactoring;
 
 
-function undevaDeparteCodVechiFaraTH(BouleanParameters $p) {
-    $p->bigUglyMethod(1, 1);
-}
-
 $boule = new BouleanParameters();
 $boule->bigUglyMethod(1, 2);
 $boule->bigUglyMethod(1, 2);
@@ -15,31 +11,26 @@ $boule->bigUglyMethod(1, 2);
 $boule->bigUglyMethod(1, 2);
 $boule->bigUglyMethod(1, 2);
 
-// TODO From my use-case, I call it too, to do more within:
+// TODO EU din  my use-case CR323, I call it too, to do more within:
 $boule->bigUglyMethod(1, 2);
 
 class BouleanParameters
 {
 
-	function bigUglyMethod(int $ip, int $dnsNameNumber) {
+	function bigUglyMethod(int $ip, int $dnsNameCount, bool $boulean = false) {
         echo "Complex Logic with $ip\n";
-        echo "Complex Logic $dnsNameNumber\n";
+        echo "Complex Logic $dnsNameCount\n";
         echo "Complex Logic $ip\n";
         $money = 1;
 
+        if ($boulean) {
+            echo "Ceva doar pentru CR323";
+        }
 
         echo "More Complex Logic $ip\n";
         echo "More Complex Logic $ip\n";
-        echo "More Complex Logic $dnsNameNumber\n $money";
+        echo "More Complex Logic $dnsNameCount\n $money";
     }
-
-
-
-
-
-
-
-
 
 
 
