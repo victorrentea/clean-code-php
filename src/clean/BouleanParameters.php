@@ -3,6 +3,11 @@
 
 namespace victor\refactoring;
 
+
+function undevaDeparteCodVechiFaraTH(BouleanParameters $p) {
+    $p->bigUglyMethod(1, 1);
+}
+
 $boule = new BouleanParameters();
 $boule->bigUglyMethod(1, 2);
 $boule->bigUglyMethod(1, 2);
@@ -16,14 +21,16 @@ $boule->bigUglyMethod(1, 2);
 class BouleanParameters
 {
 
-	function bigUglyMethod(int $a, int $b) {
-        echo "Complex Logic with $a\n";
-        echo "Complex Logic $b\n";
-        echo "Complex Logic $a\n";
+	function bigUglyMethod(int $ip, int $dnsNameCount) {
+        echo "Complex Logic with $ip\n";
+        echo "Complex Logic $dnsNameCount\n";
+        echo "Complex Logic $ip\n";
+        $money = 1;
 
-        echo "More Complex Logic $a\n";
-        echo "More Complex Logic $a\n";
-        echo "More Complex Logic $b\n";
+
+        echo "More Complex Logic $ip\n";
+        echo "More Complex Logic $ip\n";
+        echo "More Complex Logic $dnsNameCount\n $money";
     }
 
 
