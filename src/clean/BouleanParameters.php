@@ -25,6 +25,11 @@ class BouleanParameters
 
         if ($boulean) {
             echo "Ceva doar pentru CR323";
+            echo "Ceva doar pentru CR323";
+            echo "Ceva doar pentru CR323";
+            echo "Ceva doar pentru CR323";
+            echo "Ceva doar pentru CR323";
+            echo "Ceva doar pentru CR323";
         }
 
         echo "More Complex Logic $ip\n";
