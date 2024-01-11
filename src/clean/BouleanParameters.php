@@ -12,26 +12,31 @@ $boule->bigUglyMethod(1, 2);
 $boule->bigUglyMethod(1, 2);
 
 // TODO EU din  my use-case CR323, I call it too, to do more within:
-$boule->bigUglyMethod(1, 2);
+$boule->bigUglyMethodDocker(1, 2);
 
 class BouleanParameters
 {
 
-	function bigUglyMethod(int $ip, int $dnsNameCount, bool $boulean = false) {
-        echo "Complex Logic with $ip\n";
-        echo "Complex Logic $dnsNameCount\n";
-        echo "Complex Logic $ip\n";
-        $money = 1;
+	function bigUglyMethod(int $ip, int $dnsNameCount) {
+        $money = $this->initPyWorker($ip, $dnsNameCount);
+        $this->audit($ip, $dnsNameCount, $money);
+    }
 
-        if ($boulean) {
-            echo "Ceva doar pentru CR323";
-            echo "Ceva doar pentru CR323";
-            echo "Ceva doar pentru CR323";
-            echo "Ceva doar pentru CR323";
-            echo "Ceva doar pentru CR323";
-            echo "Ceva doar pentru CR323";
-        }
+	function bigUglyMethodDocker(int $ip, int $dnsNameCount) {
+        $money = $this->initPyWorker($ip, $dnsNameCount);
 
+        echo "Ceva doar pentru CR323";
+        echo "Ceva doar pentru CR323";
+        echo "Ceva doar pentru CR323";
+        echo "Ceva doar pentru CR323";
+        echo "Ceva doar pentru CR323";
+        echo "Ceva doar pentru CR323";
+
+        $this->audit($ip, $dnsNameCount, $money);
+    }
+
+    private function audit(int $ip, int $dnsNameCount, int $money)
+    {
         echo "More Complex Logic $ip\n";
         echo "More Complex Logic $ip\n";
         echo "More Complex Logic $dnsNameCount\n $money";
@@ -60,4 +65,18 @@ class BouleanParameters
 		}
 		echo "Logic7\n";
 	}
+
+    /**
+     * @param int $ip
+     * @param int $dnsNameCount
+     * @return int
+     */
+    public function initPyWorker(int $ip, int $dnsNameCount): int
+    {
+        echo "Complex Logic with $ip\n";
+        echo "Complex Logic $dnsNameCount\n";
+        echo "Complex Logic $ip\n";
+        $money = 1;
+        return $money;
+    }
 }
