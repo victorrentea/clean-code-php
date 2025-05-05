@@ -7,43 +7,46 @@ namespace victor\clean;
 class UtilsVsVO
 {
     /**
-     * @param CarModel[] $models
+     * @param CarModel[] $carModels
      * @return CarModel[]
      */
-    public function filterCarModels(CarSearchCriteria $criteria, array $models)
+    public function filterCarModels(CarSearchCriteria $criteria, array $carModels): array
     {
-        $result = [];
-        foreach ($models as $model) {
-            if (MathUtil::intervalsIntersect(
-                new Interval($model->getStartYear(), $model->getEndYear()),
-                new Interval($criteria->getStartYear(), $criteria->getEndYear()))) {
+//        $result = [];
+//        foreach ($carModels as $carModel) {
+//            if ($carModel->getYearInterval()->doesIntersect($criteria->getYearInterval())) {
+//                $result [] = $carModel;
+//            }
+//        }
+//        return $result;
 
-                $result [] = $model;
-            }
-        }
-        return $result;
+
+//        return array_map() // => produce a collection of another type
+//        return array_walk() // return true; just traverses the collection ~ foreach << avoid
+//        return array_reduce() // uses an expression to aggregate a single resulting value
+
+//        return array_filter($carModels,function (CarModel $carModel) use ($criteria) {
+//            return $carModel->getYearInterval()->doesIntersect($criteria->getYearInterval());
+//        });
+
+        return array_filter($carModels, fn(CarModel $carModel) =>
+            $carModel->getYearInterval()->doesIntersect($criteria->getYearInterval()));
     }
-
-
 }
 
-class MathUtil
-{
-    public static function intervalsIntersect(Interval $interval1, Interval $interval2): bool
-    {
-        return $interval1->getStart() <= $interval2->getEnd() && $interval2->getStart() <= $interval1->getEnd();
-    }
-}
 
 
 // Value Object design pattern = 💖immutable object lacking PK
 /**@Embeddable*/
-public readonly class Interval{
+readonly class Interval{
     public function __construct(
         private int $start,
         private int $end
-    )
-    {}
+    ){}
+    public function doesIntersect(Interval $other): bool
+    { // behavior next to state = OOP. IFF you can CHANGE this class
+        return $this->start <= $other->end && $other->start <= $this->end;
+    }
     public function getStart(): int
     {
         return $this->start;
@@ -53,6 +56,9 @@ public readonly class Interval{
         return $this->end;
     }
 }
+
+echo new Interval(1,4)->doesIntersect(new Interval(2,5));
+echo new Interval(1,4)->doesIntersect(new Interval(2,5));
 
 class CarSearchCriteria
 {
@@ -76,6 +82,11 @@ class CarSearchCriteria
     public function getEndYear(): int
     {
         return $this->endYear;
+    }
+
+    public function getYearInterval(): Interval
+    {
+        return new Interval($this->getStartYear(), $this->getEndYear());
     }
 }
 
@@ -104,5 +115,10 @@ class CarModel
     public function getEndYear(): int
     {
         return $this->endYear;
+    }
+
+    public function getYearInterval(): Interval
+    {
+        return new Interval($this->getStartYear(), $this->getEndYear());
     }
 }
