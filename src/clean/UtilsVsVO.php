@@ -6,14 +6,17 @@ namespace victor\clean;
 
 class UtilsVsVO
 {
+    /**
+     * @param CarModel[] $models
+     * @return CarModel[]
+     */
     public function filterCarModels(CarSearchCriteria $criteria, array $models)
     {
         $result = [];
-        /** @var CarModel $model */
         foreach ($models as $model) {
-            if ($this->intervalsIntersect(
-                $model->getStartYear(), $model->getEndYear(),
-                $criteria->getStartYear(), $criteria->getEndYear())) {
+            if (MathUtil::intervalsIntersect(
+                new Interval($model->getStartYear(), $model->getEndYear()),
+                new Interval($criteria->getStartYear(), $criteria->getEndYear()))) {
 
                 $result [] = $model;
             }
@@ -21,13 +24,41 @@ class UtilsVsVO
         return $result;
     }
 
-    // http://world.std.com/~swmcd/steven/tech/interval.html
-    private function intervalsIntersect(int $start1, int $end1, int $start2, int $end2): bool
+
+}
+
+class MathUtil
+{
+    public static function intervalsIntersect(Interval $interval1, Interval $interval2): bool
     {
-        return $start1 <= $end2 && $start2 <= $end1;
+        return self::isBeforeOrEqual($interval1, $interval2) && self::isBeforeOrEqual($interval2, $interval1);
+    }
+// an abstraction (a method) which doen't bring enough value
+// = accidental extraction; the name is not suggesting the start of the first interval is compared with the end of the second
+    public static function isBeforeOrEqual(Interval $interval1, Interval $interval2): bool
+    {
+        return $interval1->getStart() <= $interval2->getEnd();
     }
 }
 
+
+// Value Object design pattern = 💖immutable object lacking PK
+/**@Embeddable*/
+public readonly class Interval{
+    public function __construct(
+        private int $start,
+        private int $end
+    )
+    {}
+    public function getStart(): int
+    {
+        return $this->start;
+    }
+    public function getEnd(): int
+    {
+        return $this->end;
+    }
+}
 
 class CarSearchCriteria
 {
@@ -36,7 +67,9 @@ class CarSearchCriteria
 
     public function __construct(int $startYear, int $endYear)
     {
-        if ($startYear > $endYear) throw new \Exception("start larger than end");
+        if ($startYear > $endYear) {
+            throw new \Exception("start larger than end");
+        }
         $this->startYear = $startYear;
         $this->endYear = $endYear;
     }
