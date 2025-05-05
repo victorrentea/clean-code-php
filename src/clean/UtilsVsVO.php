@@ -31,13 +31,7 @@ class MathUtil
 {
     public static function intervalsIntersect(Interval $interval1, Interval $interval2): bool
     {
-        return self::isBeforeOrEqual($interval1, $interval2) && self::isBeforeOrEqual($interval2, $interval1);
-    }
-// an abstraction (a method) which doen't bring enough value
-// = accidental extraction; the name is not suggesting the start of the first interval is compared with the end of the second
-    public static function isBeforeOrEqual(Interval $interval1, Interval $interval2): bool
-    {
-        return $interval1->getStart() <= $interval2->getEnd();
+        return $interval1->getStart() <= $interval2->getEnd() && $interval2->getStart() <= $interval1->getEnd();
     }
 }
 
