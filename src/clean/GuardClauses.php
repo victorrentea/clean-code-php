@@ -9,34 +9,30 @@ class GuardClauses
     private $isSeparated = false;
     private $isRetired = false;
 
+    /**
+     * this public method should be called for....
+     * @return int
+     * @throws \Exception
+     */
     function getPayAmount()
     {
-        if (!$this->determineIfDead()) { // network call
-            if (!$this->isSeparated) {
-                if (!$this->isRetired) {
-                    $pay = 1;
-                    // 20 lines of complex logic
-                    // 20 lines of complex logic
-                    // 20 lines of complex logic
-                    // 20 lines of complex logic
-                    // 20 lines of complex logic
-                    // 20 lines of complex logic
-                    // 20 lines of complex logic
-                    // 20 lines of complex logic
-                    // 20 lines of complex logic
-                    $result = $pay;
-                }
-                else {
-                    $result = $this->retiredAmount();
-                }
-            }
-            else $result = $this->separatedAmount();
+        if ($this->determineIfDead()) { // guard
+            return $this->deadAmount();
         }
-        else {
-            // 1 more line here
 
-            $result = $this->deadAmount();
+        // as per REG-151-115612
+        if ($this->isSeparated) throw new \Exception("Yada yada");
+
+        if ($this->isRetired) {
+            return $this->retiredAmount();
         }
+
+        $pay = 1;
+        // 20 lines of complex logic
+        // 20 lines of complex logic
+        $result = $pay;
+
+
         return $result;
     }
 
