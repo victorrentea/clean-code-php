@@ -2,7 +2,9 @@
 
 
 namespace victor\refactoring;
+class X {
 
+}
 class SplitLoop {
     /** @param Employee[] $employees */
     static function computeStats(array $employees) {
@@ -19,6 +21,9 @@ class SplitLoop {
         echo "avg age = $averageAge\navg sal = $averageSalary\n";
     }
 
+    private function internal() {
+        $var = 1;
+    }
     /**
      * @param array $employees
      * @return float|int
