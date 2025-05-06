@@ -3,17 +3,14 @@ namespace victor\refactoring\videoStore;
 
 class Customer
 {
-    private string $name;
-
     private array $rentals = array();
 
 
-    public function __construct(string $name) {
-        $this->name = $name;
+    public function __construct(private string $name) {
     }
 
 
-    public function addRental (Rental $rental): void
+    public function setRental (Rental $rental): void
     {
         $this->rentals[] = $rental;
     }
@@ -38,23 +35,23 @@ class Customer
         $result = 'Rental Record for ' . $this->getName() . "\n";
 
         foreach ($this->rentals as $rental) {
-            $amount = $this->calculateAmount($rental);
+            $rentalAmount = $this->calculateRentalAmount($rental);
             $points = $this->calculateFrequentRenterPoints($rental);
 
-            $result .= "\t" . $rental->getMovie()->getTitle() . "\t" . $amount . "\n";
+            $result .= sprintf("\t%s\t%.2f\n", $rental->getMovie()->getTitle(), $rentalAmount);
 
-            $totalAmount += $amount;
+            $totalAmount += $rentalAmount;
             $frequentRenterPoints += $points;
         }
 
-        $result .= 'You owed ' . $totalAmount . "\n";
-        $result .= 'You earned ' . $frequentRenterPoints . " frequent renter points\n";
+        $result .= sprintf("You owed %.2f\n", $totalAmount);
+        $result .= sprintf("You earned %d frequent renter points\n", $frequentRenterPoints);
 
         return $result;
     }
 
 
-    private function calculateAmount($rental): float
+    private function calculateRentalAmount($rental): float
     {
         $days = $rental->getDaysRented();
 
