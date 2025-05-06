@@ -1,7 +1,6 @@
 <?php
-namespace victor\refactoring\videostore;
 
-use http\Exception\InvalidArgumentException;
+namespace victor\refactoring\videostore;
 
 class Customer
 {
@@ -42,5 +41,4 @@ class Customer
 
         return $result;
     }
-
 }

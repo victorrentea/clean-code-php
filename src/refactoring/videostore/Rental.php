@@ -24,8 +24,8 @@ readonly class Rental
 
     public function getRentalAmount(): float
     {
-        $daysRented = $this->getDaysRented();
-        return match ($this->getMovie()->getPriceCode()) {
+        $daysRented = $this->daysRented;
+        return match ($this->movie->getPriceCode()) {
             PriceCode::REGULAR => 2 + max(0, $daysRented - self::MAX_RENTAL_REGULAR) * 1.5,
             PriceCode::NEW_RELEASE => $daysRented * 3,
             PriceCode::CHILDREN => 1.5 + max(0, $daysRented - self::MAX_RENTAL_CHILDREN) * 1.5,
@@ -34,7 +34,7 @@ readonly class Rental
 
     public function getFrequentRenterPoints(): int
     {
-        return ($this->getMovie()->getPriceCode() == PriceCode::NEW_RELEASE
+        return ($this->movie->getPriceCode() == PriceCode::NEW_RELEASE
             && $this->getDaysRented() > 1) ? 2 : 1;
     }
 }

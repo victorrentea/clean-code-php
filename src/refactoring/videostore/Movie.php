@@ -1,4 +1,5 @@
 <?php
+
 namespace victor\refactoring\videostore;
 
 readonly class Movie
