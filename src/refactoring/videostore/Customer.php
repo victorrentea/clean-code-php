@@ -39,8 +39,8 @@ class Customer
 
         $result = sprintf(self::RECORD_HEADER, $this->getName());
         $result .= $this->formatRentalLines($this->rentals);
-        $result .= sprintf(Constants::AMOUNT_OWED_FORMAT, $rentalSummary['totalAmount']);
-        $result .= sprintf(Constants::POINTS_EARNED_FORMAT, $rentalSummary['frequentRenterPoints']);
+        $result .= "You owed {$rentalSummary['totalAmount']}\n";
+        $result .= "You earned {$rentalSummary['frequentRenterPoints']} frequent renter points\n";
         return $result;
     }
 

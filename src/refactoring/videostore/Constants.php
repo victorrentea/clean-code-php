@@ -8,6 +8,4 @@ class Constants
     public const PRICE_CODE_REGULAR = 'REGULAR';
     public const PRICE_CODE_CHILDRENS = 'CHILDRENS';
 
-    public const AMOUNT_OWED_FORMAT = "You owed %s\n";
-    public const POINTS_EARNED_FORMAT = "You earned %d frequent renter points\n";
 }
