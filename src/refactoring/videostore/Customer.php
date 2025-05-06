@@ -3,35 +3,31 @@ namespace victor\refactoring\videostore;
 
 class Customer
 {
-    public function __construct(string $name) {
-        $this->name = $name;
+    /**
+     * @var Rental[] $rentals
+     */
+    private array $rentals = [];
 
+    public function __construct(private string $name) {
     }
 
-    public function addRental (Rental $rental) {
+    public function addRental(Rental $rental) : void
+    {
         $this->rentals[] = $rental;
     }
 
-
-    /**
-     * @return string
-     */
-    public function getName () {
+    public function getName() : string
+    {
         return $this->name;
     }
 
-
-    /**
-     * @param $name string
-     */
-    public function setName ($name) {
+    public function setName(string $name) : void
+    {
         $this->name = $name;
     }
 
-    /**
-     * @return string
-     */
-    public function statement () {
+    public function statement(): string
+    {
         $totalAmount 			= 0;
         $frequentRenterPoints 	= 0;
         $rentals 				= $this->rentals;
@@ -78,11 +74,4 @@ class Customer
 
         return $result;
     }
-
-
-    private $name;
-    /**
-     * @var Rental[]
-     */
-    private $rentals = array();
 }
