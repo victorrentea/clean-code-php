@@ -42,7 +42,9 @@ readonly class Interval{
     public function __construct(
         private int $start,
         private int $end
-    ){}
+    ){
+        if ($start > $end) {throw new \Exception("start larger than end");}
+    }
     public function doesIntersect(Interval $other): bool
     { // behavior next to state = OOP. IFF you can CHANGE this class
         return $this->start <= $other->end && $other->start <= $this->end;
@@ -97,6 +99,10 @@ class CarModel
     private $model;
     private $startYear;
     private $endYear;
+    // @Embedded
+    // private Interval yearInterval; // change the structure of this class to reduce the number of its attributes
+    // doable if this class belongs to my private internal DOMAIN MODEL, you should be able to adjust their structure without breakign anything outside
+    // don't if you marshal/unmarshall this object as JSON to your clients.
 
     public function __construct(int $startYear, int $endYear, string $model, string $make)
     {

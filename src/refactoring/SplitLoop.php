@@ -6,15 +6,8 @@ namespace victor\refactoring;
 class SplitLoop {
     /** @param Employee[] $employees */
     static function computeStats(array $employees) {
-        $totalAge = 0;
-        foreach ($employees as $e) {
-            $totalAge += $e->age;
-        }
-
-        $totalSalary = 0;
-        foreach ($employees as $e) {
-            $totalSalary += $e->salary;
-        }
+        $averageAge = new SplitLoop()->computeAverageAge($employees);
+        $averageSalary = self::computeAverageSalary($employees);
         // repeating a for loop will NOT produce performance issues.
         // a) collection is small => overhead = minimal
         // b) collection is large => Q: where did that collection come from?
@@ -23,12 +16,55 @@ class SplitLoop {
         //  > Redis (<1ms response)
         // if you bring over the network,  the overehad of that NETWORK
         // CALL WILL GREATLY OUTWEIGH the potential loss of performance
-        $averageAge = $totalAge / sizeof($employees);
-        $averageSalary = $totalSalary / sizeof($employees);
         echo "avg age = $averageAge\navg sal = $averageSalary\n";
     }
+
+    /**
+     * @param array $employees
+     * @return float|int
+     */
+    public static function computeAverageSalary(array $employees): int|float
+    {
+        $totalSalary = 0;
+        foreach ($employees as $e) {
+            $totalSalary += $e->salary;
+        }
+        // less efficient due to creating the intermediate array
+//        $totalSalary=array_sum(array_column($employees, 'salary'));
+        $averageSalary = $totalSalary / sizeof($employees);
+        return $averageSalary;
+    }
+
+    public function computeAverageAge(array $employees): int|float
+    {
+        // imperative style = OK
+//        $totalAge = 0;
+//        foreach ($employees as $e) {
+//            $totalAge += $e->age;
+//        }
+//        return $totalAge / sizeof($employees);
+
+        // FP style = OK
+//        return array_sum(array_map($employees, fn($emp)=>$emp->age)) / sizeof($employees);
+
+//        $totalAge = 0;
+//        array_walk($employees, function ($emp) use (&$totalAge) {
+//            $totalAge += $emp->age; // DATA MUTATION in a Functional-Style code
+//            // don't change data in callbacks
+//        }); // WRONG !!!
+//        return $totalAge / sizeof($employees);
+
+        array_walk($employees, function ($emp)  {
+            $this->totalAge += $emp->age; // DATA MUTATION in a Functional-Style code
+            // don't change data in callbacks
+        }); // WRONG !!!
+        return $this->totalAge / sizeof($employees);
+    }
+    // Temporary field, one of the worst species
+    private int $totalAge = 0; // WRONG!!! WORST!! escalating state to longer-lived just to be able to change it
+
 }
-//        $averageAge = array_average($employees, fn($emp)=>$emp->salary) // high cost
+
 
 SplitLoop::computeStats([new Employee(24, 1500), new Employee(30, 2500)]);
 
