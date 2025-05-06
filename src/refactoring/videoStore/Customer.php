@@ -1,34 +1,31 @@
 <?php
+
 namespace victor\refactoring\videoStore;
 
 class Customer
 {
-    private array $rentals = array();
+    /** @var Rental[] */
+    private array $rentals = [];
 
 
-    public function __construct(private string $name) {
+    public function __construct(private readonly string $name)
+    {
     }
 
 
-    public function setRental (Rental $rental): void
+    public function setRental(Rental $rental): void
     {
         $this->rentals[] = $rental;
     }
 
 
-    public function getName (): string
+    public function getName(): string
     {
         return $this->name;
     }
 
 
-    public function setName (string $name): void
-    {
-        $this->name = $name;
-    }
-
-
-    public function generateRentalStatement (): string
+    public function generateRentalStatement(): string
     {
         $totalAmount = 0;
         $frequentRenterPoints = 0;
