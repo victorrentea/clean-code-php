@@ -9,10 +9,12 @@ readonly class Rental
     ) {
     }
 
+
     public function getDaysRented(): int
     {
         return $this->daysRented;
     }
+
 
     public function getMovie(): Movie
     {

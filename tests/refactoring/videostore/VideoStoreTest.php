@@ -5,13 +5,18 @@ use PHPUnit\Framework\TestCase;
 
 class VideoStoreTest extends TestCase {
 
+    const MOVIE_TITLE_1 = 'Star Wars';
+    const MOVIE_TITLE_2 = 'Sofia';
+    const MOVIE_TITLE_3 = 'Inception';
+    const CUSTOMER_NAME = 'John';
+
+
     public function testRentalStatementFormat(): void
     {
-        $customer = new Customer('John');
-        $customer->addRental(new Rental(new Movie('Star Wars', PriceCodeEnum::NEW_RELEASE), 6));
-        $customer->addRental(new Rental(new Movie('Sofia', PriceCodeEnum::CHILDREN), 7));
-        $customer->addRental(new Rental(new Movie('Inception', PriceCodeEnum::REGULAR), 5));
-
+        $customer = new Customer(self::CUSTOMER_NAME);
+        $customer->addRental(new Rental(new Movie(self::MOVIE_TITLE_1,PriceCodeEnum::NEW_RELEASE), 6));
+        $customer->addRental(new Rental(new Movie(self::MOVIE_TITLE_2,PriceCodeEnum::CHILDREN), 7));
+        $customer->addRental(new Rental(new Movie(self::MOVIE_TITLE_3,PriceCodeEnum::REGULAR), 5));
 
         $this->assertEquals(
             "Rental Record for John\n" .
@@ -20,6 +25,6 @@ class VideoStoreTest extends TestCase {
             "\tInception\t6.5\n" .
             "You owed 32\n" .
             "You earned 4 frequent renter points\n",
-            $customer->statement());
+            $customer->getMovieRentalStatement());
     }
 }

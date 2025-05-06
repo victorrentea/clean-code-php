@@ -9,6 +9,7 @@ readonly class Movie
     ) {
     }
 
+
     public function getTitle(): string
     {
         return $this->title;
