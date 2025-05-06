@@ -5,6 +5,7 @@ class Customer
 {
     public function __construct(string $name) {
         $this->name = $name;
+
     }
 
     public function addRental (Rental $rental) {
