@@ -31,7 +31,7 @@ class Customer
 
         foreach ($this->rentals as $rental) {
             $rentalAmount = $rental->getRentalAmount();
-            $frequentRenterPoints += $this->getFrequentRenterPoints($rental);
+            $frequentRenterPoints += $rental->getFrequentRenterPoints();
 
             $result .= "\t" . $rental->getMovie()->getTitle() . "\t" . $rentalAmount . "\n";
             $totalAmount += $rentalAmount;
@@ -43,9 +43,4 @@ class Customer
         return $result;
     }
 
-    private function getFrequentRenterPoints(Rental $rental): int
-    {
-        return ($rental->getMovie()->getPriceCode() == PriceCode::NEW_RELEASE
-            && $rental->getDaysRented() > 1) ? 2: 1;
-    }
 }

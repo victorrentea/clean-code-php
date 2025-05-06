@@ -31,4 +31,10 @@ readonly class Rental
             PriceCode::CHILDREN => 1.5 + max(0, $daysRented - self::MAX_RENTAL_CHILDREN) * 1.5,
         };
     }
+
+    public function getFrequentRenterPoints(): int
+    {
+        return ($this->getMovie()->getPriceCode() == PriceCode::NEW_RELEASE
+            && $this->getDaysRented() > 1) ? 2 : 1;
+    }
 }
