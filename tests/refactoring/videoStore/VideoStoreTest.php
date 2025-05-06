@@ -1,5 +1,5 @@
 <?php
-namespace victor\refactoring\videostore;
+namespace victor\refactoring\videoStore;
 
 use PHPUnit\Framework\TestCase;
 
@@ -20,6 +20,6 @@ class VideoStoreTest extends TestCase {
             "\tInception\t6.5\n" .
             "You owed 32\n" .
             "You earned 4 frequent renter points\n",
-            $customer->statement());
+            $customer->generateRentalStatement());
     }
 }

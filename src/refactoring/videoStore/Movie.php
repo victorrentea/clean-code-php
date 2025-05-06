@@ -1,5 +1,5 @@
 <?php
-namespace victor\refactoring\videostore;
+namespace victor\refactoring\videoStore;
 
 class Movie
 {
