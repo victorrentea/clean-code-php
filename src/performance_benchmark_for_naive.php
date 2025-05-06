@@ -18,6 +18,18 @@ for ($i = 0; $i < 10000000; $i++) {
 
 echo "Start!\n";
 
+
+$startTime = microtime(true);
+$totalSalary = 0;
+$totalAge = 0;
+foreach ($employees as $employee) {
+    $totalSalary += $employee->salary;
+    $totalAge += $employee->age;
+}
+$endTime = microtime(true);
+$foreachTime = $endTime - $startTime;
+
+
 // Calculate total salary using a foreach loop
 $totalSalary = 0;
 $startTime = microtime(true);
@@ -42,16 +54,6 @@ echo "Total Age: $totalAge\n";
 echo "foreach salary: {$foreachSalaryTime} seconds\n";
 echo "foreach age: {$foreachAgeTime} seconds\n";
 
-
-$startTime = microtime(true);
-$totalSalary = 0;
-$totalAge = 0;
-foreach ($employees as $employee) {
-    $totalSalary += $employee->salary;
-    $totalAge += $employee->age;
-}
-$endTime = microtime(true);
-$foreachTime = $endTime - $startTime;
 
 // Output the results
 //echo "Total Salary: $totalSalary\n";
