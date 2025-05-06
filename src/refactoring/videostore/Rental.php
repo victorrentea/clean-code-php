@@ -5,8 +5,7 @@ namespace victor\refactoring\videostore;
 readonly class Rental
 {
 
-    const MAX_RENTAL_REGULAR = 2;
-    const MAX_RENTAL_CHILDREN = 3;
+    const REGULAR_DAYS_RENTED_FOR_EXTRA_FEE = 2;
 
     public function __construct(private Movie $movie, private int $daysRented)
     {
@@ -26,9 +25,9 @@ readonly class Rental
     {
         $daysRented = $this->daysRented;
         return match ($this->movie->getPriceCode()) {
-            PriceCode::REGULAR => 2 + max(0, $daysRented - self::MAX_RENTAL_REGULAR) * 1.5,
+            PriceCode::REGULAR => 2 + max(0, $daysRented - self::REGULAR_DAYS_RENTED_FOR_EXTRA_FEE) * 1.5,
             PriceCode::NEW_RELEASE => $daysRented * 3,
-            PriceCode::CHILDREN => 1.5 + max(0, $daysRented - self::MAX_RENTAL_CHILDREN) * 1.5,
+            PriceCode::CHILDREN => 1.5 + max(0, $daysRented - 3) * 1.5,
         };
     }
 
