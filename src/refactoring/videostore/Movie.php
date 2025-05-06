@@ -6,9 +6,7 @@ class Movie
     const NEW_RELEASE = "NEW_RELEASE";
     const REGULAR = "REGULAR";
     const CHILDRENS = "CHILDRENS";
-
     private $title;
-
     private $priceCode;
 
     /**
