@@ -1,36 +1,51 @@
-<?php
+<?php declare(strict_types = 1);
 namespace victor\refactoring\videostore;
-
 class Customer
 {
+    private string $name;
+    /**
+     * @var Rental[]
+     */
+    private array $rentals = array();
+
+    /**
+     * @param string $name
+     */
     public function __construct(string $name) {
         $this->name = $name;
     }
 
-    public function addRental (Rental $rental) {
+    /**
+     * @param Rental $rental
+     * @return Rental[]
+     */
+    public function addRental(Rental $rental): void
+    {
         $this->rentals[] = $rental;
     }
-
 
     /**
      * @return string
      */
-    public function getName () {
+    public function getName(): string
+    {
         return $this->name;
     }
 
-
     /**
-     * @param $name string
+     * @param string $name
+     * @return void
      */
-    public function setName ($name) {
+    public function setName(string $name): void
+    {
         $this->name = $name;
     }
 
     /**
      * @return string
      */
-    public function statement () {
+    public function statement(): string
+    {
         $totalAmount 			= 0;
         $frequentRenterPoints 	= 0;
         $rentals 				= $this->rentals;
@@ -77,11 +92,4 @@ class Customer
 
         return $result;
     }
-
-
-    private $name;
-    /**
-     * @var Rental[]
-     */
-    private $rentals = array();
 }

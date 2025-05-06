@@ -1,13 +1,13 @@
-<?php
-namespace victor\refactoring\videostore;
+<?php declare(strict_types = 1);
 
+namespace victor\refactoring\videostore;
 class Rental
 {
     /**
      * @var Movie
      */
-    private $movie;
-    private $daysRented;
+    private Movie $movie;
+    private int $daysRented;
 
     /**
      * Rental constructor.
@@ -20,19 +20,19 @@ class Rental
         $this->daysRented = $daysRented;
     }
 
-
     /**
      * @return int
      */
-    public function getDaysRented()
+    public function getDaysRented(): int
     {
         return $this->daysRented;
     }
 
     /**
      * @param int $daysRented
+     * @return void
      */
-    public function setDaysRented($daysRented)
+    public function setDaysRented(int $daysRented): void
     {
         $this->daysRented = $daysRented;
     }
@@ -40,12 +40,8 @@ class Rental
     /**
      * @return Movie
      */
-    public function getMovie()
+    public function getMovie(): Movie
     {
         return $this->movie;
     }
-
-
-
-
 }
