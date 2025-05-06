@@ -20,4 +20,9 @@ readonly class Movie
     {
         return $this->priceCode;
     }
+
+    public function isNewRelease(): bool
+    {
+        return $this->priceCode === PriceCode::NEW_RELEASE;
+    }
 }

@@ -27,26 +27,47 @@ class Customer
 
     public function generateRentalStatement(): string
     {
-        $totalAmount = 0;
+        return $this->generateHeader()
+            . $this->generateBody()
+            . $this->generateFooter();
+    }
+
+    public function computeTotalPoints(): int
+    {
         $frequentRenterPoints = 0;
-        $result = "Rental Record for {$this->getName()}\n";
-
-        foreach ($this->rentals as $rental) {
-            $result .= "\t{$rental->getMovie()->getTitle()}\t{$rental->calculateRentalAmount()}\n";
-        }
-
-        foreach ($this->rentals as $rental) {
-           $totalAmount += $rental->calculateRentalAmount();
-        }
-
         foreach ($this->rentals as $rental) {
             $frequentRenterPoints += $rental->calculateFrequentRenterPoints();
         }
+        return $frequentRenterPoints;
+    }
 
-        $result .= "You owed {$totalAmount}\n";
-        $result .= "You earned {$frequentRenterPoints} frequent renter points\n";
+    public function computeTotalAmount(): float
+    {
+        $totalAmount = 0;
+        foreach ($this->rentals as $rental) {
+            $totalAmount += $rental->calculateRentalAmount();
+        }
+        return $totalAmount;
+    }
 
-        return $result;
+    public function generateHeader(): string
+    {
+        return "Rental Record for {$this->getName()}\n";
+    }
+
+    public function generateBody(): string
+    {
+        $body = "";
+        foreach ($this->rentals as $rental) {
+            $body .= "\t{$rental->getMovie()->getTitle()}\t{$rental->calculateRentalAmount()}\n";
+        }
+        return $body;
+    }
+
+    public function generateFooter(): string
+    {
+        return "You owed {$this->computeTotalAmount()}\n" .
+            "You earned {$this->computeTotalPoints()} frequent renter points\n";
     }
 
 
