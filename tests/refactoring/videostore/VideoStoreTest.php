@@ -8,9 +8,9 @@ class VideoStoreTest extends TestCase {
     public function testRentalStatementFormat(): void
     {
         $customer = new Customer('John');
-        $customer->addRental(new Rental(new Movie('Star Wars', Movie::NEW_RELEASE), 6));
-        $customer->addRental(new Rental(new Movie('Sofia', Movie::CHILDRENS), 7));
-        $customer->addRental(new Rental(new Movie('Inception', Movie::REGULAR), 5));
+        $customer->addRental(new Rental(new Movie('Star Wars', PriceCodeEnum::NEW_RELEASE), 6));
+        $customer->addRental(new Rental(new Movie('Sofia', PriceCodeEnum::CHILDREN), 7));
+        $customer->addRental(new Rental(new Movie('Inception', PriceCodeEnum::REGULAR), 5));
 
 
         $this->assertEquals(
