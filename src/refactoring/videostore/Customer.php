@@ -25,7 +25,7 @@ class Customer
         $result = 'Rental Record for ' . $this->getName() . "\n";
 
         foreach ($this->rentals as $rental) {
-            $rentalAmount = $this->getRentalAmount($rental);
+            $rentalAmount = $rental->getRentalAmount();
             $frequentRenterPoints += $this->getFrequentRenterPoints($rental);
             $totalAmount += $rentalAmount;
             $result .= "\t" . $rental->getMovie()->getTitle() . "\t" . $rentalAmount . "\n";
@@ -38,33 +38,12 @@ class Customer
     }
 
 
-    private function calculateRentalAmount(int $days, float $value): float
-    {
-        return $days * $value;
-    }
-
-
-    private function getRentalAmount(Rental $rental): float
-    {
-        $daysRented = $rental->getDaysRented();
-        return match ($rental->getMovie()->getPriceCode()) {
-            PriceCodeEnum::REGULAR => ($daysRented > 2)
-                ? (2 +  $this->calculateRentalAmount($daysRented - 2, 1.5))
-                : 2 + $daysRented,
-            PriceCodeEnum::NEW_RELEASE => $this->calculateRentalAmount($daysRented, 3),
-            PriceCodeEnum::CHILDREN => ($daysRented > 3)
-                ? (1.5 + $this->calculateRentalAmount($daysRented - 3 , 1.5))
-                : 1.5 + $daysRented,
-        };
-    }
-
-
     private function getFrequentRenterPoints(Rental $rental): int
     {
         $frequentRenterPoints = 1;
         // add bonus for a two day new release rental
         if ($rental->getMovie()->getPriceCode() == PriceCodeEnum::NEW_RELEASE
-            && $rental->getDaysRented() > 1)
+            && $rental->getDaysRented() >= 2)
             $frequentRenterPoints++;
 
         return $frequentRenterPoints;
