@@ -62,6 +62,7 @@ echo "foreach salary + age: {$foreachTime} seconds\n";
 
 echo "Overhead of 1 foreach: " . ($foreachSalaryTime + $foreachAgeTime - $foreachTime) . " seconds\n";
 
+
 // biases:
 // - compare to time to download 10m employees from DB in prod-like env = Minutes?
 // - run on a server CPU (much stronger? than your local computer)
