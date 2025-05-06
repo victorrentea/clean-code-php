@@ -9,6 +9,7 @@ class emp
 
 }
 
+
 // Initialize the employees array
 $employees = [];
 // Add 10,000,000 employees with random age and salary
