@@ -3,6 +3,7 @@ namespace victor\refactoring\videostore;
 
 class Customer
 {
+
     public function __construct(string $name) {
         $this->name = $name;
     }
