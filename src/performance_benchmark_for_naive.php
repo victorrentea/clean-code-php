@@ -17,7 +17,7 @@ for ($i = 0; $i < 10000000; $i++) {
     $employees[] = new emp(rand(30000, 100000), rand(20, 60));
 }
 
-echo "Start!\n";
+echo "Start!!!!\n";
 
 
 $startTime = microtime(true);
