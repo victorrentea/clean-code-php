@@ -1,56 +1,36 @@
 <?php declare(strict_types = 1);
 
 namespace victor\refactoring\videostore;
+
+use victor\refactoring\videostore\Constants;
 class Movie
 {
-    public const NEW_RELEASE = "NEW_RELEASE";
-    public const REGULAR = "REGULAR";
-    public const CHILDRENS = "CHILDRENS";
     private string $title;
     private string $priceCode;
 
-    /**
-     * Movie constructor.
-     * @param string $title
-     * @param string $priceCode
-     */
     public function __construct(string $title, string $priceCode)
     {
         $this->title = $title;
         $this->priceCode = $priceCode;
     }
 
-    /**
-     * @return string
-     */
     public function getTitle(): string
     {
         return $this->title;
     }
 
-    /**
-     * @param mixed $title
-     * @return void
-     */
-    public function setTitle(mixed $title): void
+    public function getCharge(int $daysRented): float
     {
-        $this->title = $title;
+        return match ($this->priceCode) {
+            Constants::REGULAR => 2 + max(0, $daysRented - 2) * 1.5,
+            Constants::NEW_RELEASE => $daysRented * 3.0,
+            Constants::CHILDRENS => 1.5 + max(0, $daysRented - 3) * 1.5,
+            default => throw new \InvalidArgumentException("Invalid price code: {$this->priceCode}"),
+        };
     }
 
-    /**
-     * @return string
-     */
-    public function getPriceCode(): string
+    public function getFrequentRenterPoints(int $daysRented): int
     {
-        return $this->priceCode;
-    }
-
-    /**
-     * @param mixed $priceCode
-     * @return void
-     */
-    public function setPriceCode(mixed $priceCode): void
-    {
-        $this->priceCode = $priceCode;
+        return ($this->priceCode === Constants::NEW_RELEASE && $daysRented > 1) ? 2 : 1;
     }
 }

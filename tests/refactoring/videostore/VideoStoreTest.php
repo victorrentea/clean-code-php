@@ -2,15 +2,15 @@
 namespace victor\refactoring\videostore;
 
 use PHPUnit\Framework\TestCase;
-
+use victor\refactoring\videostore\Constants;
 class VideoStoreTest extends TestCase {
 
     public function testRentalStatementFormat(): void
     {
         $customer = new Customer('John');
-        $customer->addRental(new Rental(new Movie('Star Wars', Movie::NEW_RELEASE), 6));
-        $customer->addRental(new Rental(new Movie('Sofia', Movie::CHILDRENS), 7));
-        $customer->addRental(new Rental(new Movie('Inception', Movie::REGULAR), 5));
+        $customer->addRental(new Rental(new Movie('Star Wars', Constants::NEW_RELEASE), 6));
+        $customer->addRental(new Rental(new Movie('Sofia', Constants::CHILDRENS), 7));
+        $customer->addRental(new Rental(new Movie('Inception', Constants::REGULAR), 5));
 
 
         $this->assertEquals(
