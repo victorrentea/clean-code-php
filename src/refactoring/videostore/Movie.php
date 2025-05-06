@@ -3,7 +3,7 @@ namespace victor\refactoring\videostore;
 
 readonly class Movie
 {
-    public function __construct(private string $title, private string $priceCode)
+    public function __construct(private string $title, private PriceCode $priceCode)
     {
     }
 
@@ -12,7 +12,7 @@ readonly class Movie
         return $this->title;
     }
 
-    public function getPriceCode() : string
+    public function getPriceCode() : PriceCode
     {
         return $this->priceCode;
     }
