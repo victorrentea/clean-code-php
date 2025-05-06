@@ -22,15 +22,15 @@ class Movie
     public function getCharge(int $daysRented): float
     {
         return match ($this->priceCode) {
-            Constants::REGULAR => 2 + max(0, $daysRented - 2) * 1.5,
-            Constants::NEW_RELEASE => $daysRented * 3.0,
-            Constants::CHILDRENS => 1.5 + max(0, $daysRented - 3) * 1.5,
+            Constants::PRICE_CODE_REGULAR => 2 + max(0, $daysRented - 2) * 1.5,
+            Constants::PRICE_CODE_NEW_RELEASE => $daysRented * 3.0,
+            Constants::PRICE_CODE_CHILDRENS => 1.5 + max(0, $daysRented - 3) * 1.5,
             default => throw new \InvalidArgumentException("Invalid price code: {$this->priceCode}"),
         };
     }
 
     public function getFrequentRenterPoints(int $daysRented): int
     {
-        return ($this->priceCode === Constants::NEW_RELEASE && $daysRented > 1) ? 2 : 1;
+        return ($this->priceCode === Constants::PRICE_CODE_NEW_RELEASE && $daysRented > 1) ? 2 : 1;
     }
 }

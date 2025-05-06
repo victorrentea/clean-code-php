@@ -3,10 +3,11 @@
 namespace victor\refactoring\videostore;
 class Constants
 {
-    public const NEW_RELEASE = 'NEW_RELEASE';
-    public const REGULAR = 'REGULAR';
-    public const CHILDRENS = 'CHILDRENS';
-    public const RENTAL_RECORD_HEADER = "Rental Record for %s\n";
+    //  =================== Price Codes ===================
+    public const PRICE_CODE_NEW_RELEASE = 'NEW_RELEASE';
+    public const PRICE_CODE_REGULAR = 'REGULAR';
+    public const PRICE_CODE_CHILDRENS = 'CHILDRENS';
+
     public const AMOUNT_OWED_FORMAT = "You owed %s\n";
     public const POINTS_EARNED_FORMAT = "You earned %d frequent renter points\n";
 }
