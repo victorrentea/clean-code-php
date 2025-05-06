@@ -32,15 +32,15 @@ class Customer
         $result = "Rental Record for {$this->getName()}\n";
 
         foreach ($this->rentals as $rental) {
-            $result .= "\t{$rental->getMovie()->getTitle()}\t{$this->calculateRentalAmount($rental)}\n";
+            $result .= "\t{$rental->getMovie()->getTitle()}\t{$rental->calculateRentalAmount()}\n";
         }
 
         foreach ($this->rentals as $rental) {
-           $totalAmount += $this->calculateRentalAmount($rental);
+           $totalAmount += $rental->calculateRentalAmount();
         }
 
         foreach ($this->rentals as $rental) {
-            $frequentRenterPoints += $this->calculateFrequentRenterPoints($rental);
+            $frequentRenterPoints += $rental->calculateFrequentRenterPoints();
         }
 
         $result .= "You owed {$totalAmount}\n";
@@ -50,25 +50,4 @@ class Customer
     }
 
 
-    private function calculateRentalAmount(Rental $rental): float
-    {
-        $days = $rental->getDaysRented();
-
-        return match ($rental->getMovie()->getPriceCode()) {
-            PriceCode::REGULAR => 2 + max(0, ($days - 2) * 1.5),
-            PriceCode::NEW_RELEASE => $days * 3.0,
-            PriceCode::CHILDREN => 1.5 + max(0, ($days - 3) * 1.5),
-        };
-    }
-
-
-    private function calculateFrequentRenterPoints(Rental $rental): int
-    {
-        $points = 1;
-        if ($rental->getMovie()->getPriceCode() === PriceCode::NEW_RELEASE && $rental->getDaysRented() > 1) {
-            $points++;
-        }
-
-        return $points;
-    }
 }
