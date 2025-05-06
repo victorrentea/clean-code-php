@@ -53,10 +53,9 @@ class Customer
         $days = $rental->getDaysRented();
 
         return match ($rental->getMovie()->getPriceCode()) {
-            Movie::REGULAR => 2 + max(0, ($days - 2) * 1.5),
-            Movie::NEW_RELEASE => $days * 3.0,
-            Movie::CHILDRENS => 1.5 + max(0, ($days - 3) * 1.5),
-            default => throw new \InvalidArgumentException('Invalid price code'),
+            PriceCode::REGULAR => 2 + max(0, ($days - 2) * 1.5),
+            PriceCode::NEW_RELEASE => $days * 3.0,
+            PriceCode::CHILDREN => 1.5 + max(0, ($days - 3) * 1.5),
         };
     }
 
@@ -64,7 +63,7 @@ class Customer
     private function calculateFrequentRenterPoints(Rental $rental): int
     {
         $points = 1;
-        if ($rental->getMovie()->getPriceCode() === Movie::NEW_RELEASE && $rental->getDaysRented() > 1) {
+        if ($rental->getMovie()->getPriceCode() === PriceCode::NEW_RELEASE && $rental->getDaysRented() > 1) {
             $points++;
         }
 
