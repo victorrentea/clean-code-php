@@ -32,13 +32,15 @@ class Customer
         $result = "Rental Record for {$this->getName()}\n";
 
         foreach ($this->rentals as $rental) {
-            $rentalAmount = $this->calculateRentalAmount($rental);
-            $points = $this->calculateFrequentRenterPoints($rental);
+            $result .= "\t{$rental->getMovie()->getTitle()}\t{$this->calculateRentalAmount($rental)}\n";
+        }
 
-            $result .= "\t{$rental->getMovie()->getTitle()}\t{$rentalAmount}\n";
+        foreach ($this->rentals as $rental) {
+           $totalAmount += $this->calculateRentalAmount($rental);
+        }
 
-            $totalAmount += $rentalAmount;
-            $frequentRenterPoints += $points;
+        foreach ($this->rentals as $rental) {
+            $frequentRenterPoints += $this->calculateFrequentRenterPoints($rental);
         }
 
         $result .= "You owed {$totalAmount}\n";
