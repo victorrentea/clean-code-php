@@ -29,26 +29,26 @@ class Customer
     {
         $totalAmount = 0;
         $frequentRenterPoints = 0;
-        $result = 'Rental Record for ' . $this->getName() . "\n";
+        $result = "Rental Record for {$this->getName()}\n";
 
         foreach ($this->rentals as $rental) {
             $rentalAmount = $this->calculateRentalAmount($rental);
             $points = $this->calculateFrequentRenterPoints($rental);
 
-            $result .= sprintf("\t%s\t%.2f\n", $rental->getMovie()->getTitle(), $rentalAmount);
+            $result .= "\t{$rental->getMovie()->getTitle()}\t{$rentalAmount}\n";
 
             $totalAmount += $rentalAmount;
             $frequentRenterPoints += $points;
         }
 
-        $result .= sprintf("You owed %.2f\n", $totalAmount);
-        $result .= sprintf("You earned %d frequent renter points\n", $frequentRenterPoints);
+        $result .= "You owed {$totalAmount}\n";
+        $result .= "You earned {$frequentRenterPoints} frequent renter points\n";
 
         return $result;
     }
 
 
-    private function calculateRentalAmount($rental): float
+    private function calculateRentalAmount(Rental $rental): float
     {
         $days = $rental->getDaysRented();
 
@@ -56,12 +56,12 @@ class Customer
             Movie::REGULAR => 2 + max(0, ($days - 2) * 1.5),
             Movie::NEW_RELEASE => $days * 3.0,
             Movie::CHILDRENS => 1.5 + max(0, ($days - 3) * 1.5),
-            default => 0.0,
+            default => throw new \InvalidArgumentException('Invalid price code'),
         };
     }
 
 
-    private function calculateFrequentRenterPoints($rental): int
+    private function calculateFrequentRenterPoints(Rental $rental): int
     {
         $points = 1;
         if ($rental->getMovie()->getPriceCode() === Movie::NEW_RELEASE && $rental->getDaysRented() > 1) {
