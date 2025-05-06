@@ -39,7 +39,7 @@ class Customer
         foreach ($rentals as $each) {
             $thisAmount = 0;
 
-            // determines the amount for each lines 123
+            // determines the amount for each lines 12345
             switch ($each->getMovie()->getPriceCode()) {
                 case Movie::REGULAR:
                     $thisAmount += 2;
