@@ -18,11 +18,6 @@ class Customer
         $this->rentals[] = $rental;
     }
 
-    public function getName() : string
-    {
-        return $this->name;
-    }
-
     public function setName(string $name) : void
     {
         $this->name = $name;
@@ -33,7 +28,7 @@ class Customer
         $totalAmount 			= 0;
         $frequentRenterPoints 	= 0;
         $rentals 				= $this->rentals;
-        $result 			= 'Rental Record for ' . $this->getName() . "\n";
+        $result 			= 'Rental Record for ' . $this->name . "\n";
 
         foreach ($rentals as $rental) {
             $rentalAmount = 0;
@@ -41,17 +36,17 @@ class Customer
             // determines the amount for rental line
             $daysRented = $rental->getDaysRented();
             switch ($rental->getMovie()->getPriceCode()) {
-                case Movie::REGULAR:
+                case PriceCode::REGULAR:
                     $rentalAmount += 2;
                     if ($daysRented > self::MAX_RENTAL_REGULAR)
                         $rentalAmount += ($daysRented - self::MAX_RENTAL_REGULAR) * 1.5;
                     break;
-                case Movie::NEW_RELEASE:
+                case PriceCode::NEW_RELEASE:
                     $rentalAmount += $daysRented * 3;
                     if($daysRented > 1)
                         $frequentRenterPoints++;
                     break;
-                case Movie::CHILDREN:
+                case PriceCode::CHILDREN:
                     $rentalAmount += 1.5;
                     if ($daysRented > self::MAX_RENTAL_CHILDREN)
                         $rentalAmount += ($daysRented - self::MAX_RENTAL_CHILDREN) * 1.5;
